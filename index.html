@@ -2,58 +2,81 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Observatorio Público TOTAL</title>
-
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="manifest" href="manifest.json">
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="stylesheet"
- href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<style>
-body{font-family:system-ui;background:#0b132b;color:white;padding:10px}
-.card{background:#1c2541;padding:15px;border-radius:12px;margin:10px 0}
-</style>
+    <meta charset="UTF-8">
+    <title>Observatorio Público PRO</title>
+    <link rel="stylesheet" href="estilo.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
+    <div class="container">
+        <header>
+            <div class="status">● SISTEMA ACTIVO</div>
+            <h1>Observatorio de Transparencia</h1>
+            <p class="subtitle">Análisis de Datos del Estado • 18/02/2026 20:45</p>
+        </header>
 
-<h1>📊 Observatorio Público</h1>
-<p>Actualizado: 18/02/2026 20:32</p>
+        <div class="main-stats">
+            <div class="stat-card primary">
+                <span class="label">Total Subvencionado (Periodo)</span>
+                <h2 class="value">0.00 €</h2>
+                <div class="badge">Sincronizado</div>
+            </div>
+            <div class="stat-card">
+                <span class="label">Análisis de Sesgo</span>
+                <p>Pendiente de sincronización</p>
+            </div>
+        </div>
 
-<div class="card">
-Subvenciones totales: 0 €
-</div>
+        <div class="grid-layout">
+            <div class="panel chart-panel">
+                <h3>Evolución de Fondos Públicos</h3>
+                <canvas id="mainChart"></canvas>
+            </div>
+            
+            <div class="panel">
+                <h3>Alertas del Sistema</h3>
+                <p>No hay alertas críticas.</p>
+            </div>
+        </div>
 
-<div class="card">
-<b>Análisis político:</b><br>Cobertura institucional neutra.
-</div>
+        <div class="grid-layout">
+            <div class="panel">
+                <h3>Últimas Publicaciones BOE</h3>
+                <a href="https://www.boe.es/boe/dias/2026/02/18/" class="boe-link">Sumario...</a><a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3730" class="boe-link">Cuestión de inconstitucionalidad n.º 8318-2025, en relación con el artículo 5.2 ...</a><a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3731" class="boe-link">Conflicto entre órganos constitucionales n.º 9117-2025, en relación con la decis...</a><a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3732" class="boe-link">Conflicto entre órganos constitucionales n.º 192-2026, en relación con el acuerd...</a>
+            </div>
+            <div class="panel">
+                <h3>Documentación</h3>
+                <a href="datos/informe.pdf" class="btn">Descargar Informe PDF</a>
+                <a href="datos/api.json" class="btn secondary">Consultar API JSON</a>
+            </div>
+        </div>
+    </div>
 
-<div class="card">
-<b>Alertas:</b><br>
-Sin alertas
-</div>
-
-<h2>Evolución</h2>
-<canvas id="graf"></canvas>
-
-<script>
-new Chart(document.getElementById('graf'),{
-type:'line',
-data:{labels:['18/02/2026 20:32'],
-datasets:[{label:'Subvenciones',data:[0]}]}
-});
-</script>
-
-<h2>BOE relevante</h2>
-<p><a href='https://www.boe.es/boe/dias/2026/02/18/' target='_blank'>Sumario</a></p><p><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3730' target='_blank'>Cuestión de inconstitucionalidad n.º 8318-2025, en relación con el artículo 5.2 de la Ley Orgánica 1/2025, de 2 de enero, de medidas en materia de eficiencia del Servicio Público de Justicia.</a></p><p><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3731' target='_blank'>Conflicto entre órganos constitucionales n.º 9117-2025, en relación con la decisión de la Mesa del Congreso de los Diputados de no proceder a la inmediata conclusión de los plazos de enmiendas de todas las proposiciones de ley remitidas por el Senado que hayan superado la duración de una única prórroga, de conformidad con lo previsto en el artículo 91 del Reglamento del Congreso de los Diputados.</a></p><p><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3732' target='_blank'>Conflicto entre órganos constitucionales n.º 192-2026, en relación con el acuerdo de la Mesa del Congreso de los Diputados, de 11 de noviembre de 2025, de no proceder a la tramitación por el Pleno del Congreso de los Diputados de las enmiendas números 118 y 148 aprobadas por el Pleno del Senado por las que se incorporan un artículo 61 bis y una disposición transitoria undécima al Proyecto de Ley de Movilidad Sostenible, por haber expresado el Gobierno su disconformidad con la tramitación de las mismas.</a></p><p><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3733' target='_blank'>Conflicto entre órganos constitucionales n.º 554-2026, en relación con el acuerdo por el que el Gobierno expresa su disconformidad respecto a la tramitación de las enmiendas números 118 y 148 aprobadas por el Pleno del Senado, por las que se incorporan un artículo 61 bis (nuevo) y una disposición transitoria undécima (nueva) al Proyecto de Ley de Movilidad Sostenible.</a></p>
-
-<div class="card">
-<a href="datos/informe.pdf">📄 Informe PDF</a>
-</div>
-
+    <script>
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['18/02/2026 20:32', '18/02/2026 20:45'],
+                datasets: [{
+                    label: 'Presupuesto',
+                    data: [0, 0],
+                    borderColor: '#4CC9F0',
+                    backgroundColor: 'rgba(76, 201, 240, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { grid: { color: '#2d3748' }, ticks: { color: '#a0aec0' } },
+                    x: { grid: { display: false }, ticks: { color: '#a0aec0' } }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
