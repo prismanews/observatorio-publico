@@ -1,171 +1,162 @@
 import pandas as pd
 import requests
+import json
 from datetime import datetime
 
-# ======================================
-# DATASET REAL BDNS SUBVENCIONES ESPAÑA
-# ======================================
+# ======================================================
+# DATASET OFICIAL BDNS (Subvenciones públicas España)
+# ======================================================
 
-URL = "https://www.infosubvenciones.es/bdnstrans/GE/es/concesiones.csv"
+URL_SUBVENCIONES = (
+    "https://www.infosubvenciones.es/bdnstrans/GE/es/concesiones.csv"
+)
 
-print("Descargando dataset oficial...")
+print("Descargando dataset oficial BDNS...")
 
 try:
-    df = pd.read_csv(URL, sep=";", encoding="latin1", low_memory=False)
-except:
-    print("Error dataset → usando demo")
-    df = pd.DataFrame({
-        "Beneficiario": ["Empresa A","ONG B","Uni C","Empresa A"],
-        "Importe": [120000,50000,80000,60000],
-        "Provincia": ["Madrid","Barcelona","Valencia","Madrid"]
-    })
+    df = pd.read_csv(
+        URL_SUBVENCIONES,
+        sep=";",
+        encoding="latin1",
+        low_memory=False
+    )
+except Exception as e:
+    print("Error descargando dataset:", e)
+    exit()
 
-# ======================================
-# LIMPIEZA
-# ======================================
+
+# ======================================================
+# LIMPIEZA BÁSICA
+# ======================================================
+
+df = df.rename(columns=str.strip)
+
+if "Importe" not in df.columns:
+    print("Campo Importe no encontrado.")
+    exit()
 
 df["Importe"] = pd.to_numeric(df["Importe"], errors="coerce")
 df = df.dropna(subset=["Importe"])
 
-if "Provincia" not in df.columns:
-    df["Provincia"] = "Sin datos"
+# provincia suele venir como "Provincia Beneficiario"
+provincia_col = next(
+    (c for c in df.columns if "provincia" in c.lower()),
+    None
+)
 
-# ======================================
-# KPIs
-# ======================================
+beneficiario_col = next(
+    (c for c in df.columns if "beneficiario" in c.lower()),
+    None
+)
 
-total = df["Importe"].sum()
-media = df["Importe"].mean()
-maximo = df["Importe"].max()
+if not provincia_col or not beneficiario_col:
+    print("Columnas clave no detectadas.")
+    exit()
 
-# Ranking beneficiarios
-ranking = (
-    df.groupby("Beneficiario")["Importe"]
+
+# ======================================================
+# MÉTRICAS PRINCIPALES
+# ======================================================
+
+total_subvenciones = df["Importe"].sum()
+media_subvenciones = df["Importe"].mean()
+max_subvencion = df["Importe"].max()
+
+ranking_beneficiarios = (
+    df.groupby(beneficiario_col)["Importe"]
     .sum()
     .sort_values(ascending=False)
     .head(10)
 )
 
-# Provincias
-provincias = (
-    df.groupby("Provincia")["Importe"]
+ranking_provincias = (
+    df.groupby(provincia_col)["Importe"]
     .sum()
     .sort_values(ascending=False)
-    .head(15)
 )
 
-# Alertas simples
-alerta = ""
-if maximo > media * 10:
-    alerta = "⚠️ Posible subvención desproporcionada detectada."
+# JSON para mapa (heatmap provincias)
+mapa_provincias = ranking_provincias.reset_index().to_dict("records")
 
-# Fecha
+with open("mapa_subvenciones.json", "w", encoding="utf-8") as f:
+    json.dump(mapa_provincias, f, ensure_ascii=False, indent=2)
+
+
+# ======================================================
+# GENERACIÓN HTML DASHBOARD
+# ======================================================
+
 fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
-
-# ======================================
-# HTML DASHBOARD
-# ======================================
 
 html = f"""
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Observatorio Público</title>
+<title>Observatorio Transparencia Pública</title>
 <link rel="stylesheet" href="estilo.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
 
-<div class="container">
-
-<header class="obs-header">
-<h1 class="obs-header__title">📡 Observatorio Transparencia Pública</h1>
-<span class="obs-header__sync">Actualizado: {fecha}</span>
+<header>
+<h1>📡 Observatorio Transparencia Pública</h1>
+<p>Datos oficiales de subvenciones públicas en España</p>
+<p>Actualizado: {fecha}</p>
 </header>
 
-<div class="obs-card">
-
-<div class="obs-stats">
-<div class="obs-stats__item">
-<span class="obs-stats__label">Total subvenciones</span>
-<span class="obs-stats__value">{total:,.0f} €</span>
+<section class="stats">
+<div class="card">
+<h2>Total subvenciones</h2>
+<p>{total_subvenciones:,.0f} €</p>
 </div>
 
-<div class="obs-stats__item">
-<span class="obs-stats__label">Media</span>
-<span class="obs-stats__value">{media:,.0f} €</span>
+<div class="card">
+<h2>Media</h2>
+<p>{media_subvenciones:,.0f} €</p>
 </div>
 
-<div class="obs-stats__item">
-<span class="obs-stats__label">Máxima</span>
-<span class="obs-stats__value">{maximo:,.0f} €</span>
+<div class="card">
+<h2>Máxima</h2>
+<p>{max_subvencion:,.0f} €</p>
 </div>
-</div>
-"""
+</section>
 
-if alerta:
-    html += f'<div class="obs-alert">{alerta}</div>'
-
-html += """
-
-<h2>Ranking beneficiarios</h2>
+<section>
+<h2>🏆 Ranking beneficiarios</h2>
 <ul>
 """
 
-for b, i in ranking.items():
-    html += f"<li>{b}: {i:,.0f} €</li>"
-
-html += "</ul>"
+for nombre, importe in ranking_beneficiarios.items():
+    html += f"<li>{nombre}: {importe:,.0f} €</li>"
 
 html += """
+</ul>
+</section>
 
-<h2>Mapa subvenciones por provincia</h2>
-<canvas id="mapa"></canvas>
+<section>
+<h2>🗺️ Ranking provincias</h2>
+<ul>
+"""
 
-<h2>Evolución gasto</h2>
-<canvas id="grafico"></canvas>
+for prov, imp in ranking_provincias.head(15).items():
+    html += f"<li>{prov}: {imp:,.0f} €</li>"
 
-</div>
-</div>
+html += """
+</ul>
+<p>(Mapa interactivo en preparación)</p>
+</section>
 
-<script>
-
-const provincias = """ + str(list(provincias.index)) + """;
-const valores = """ + str(list(provincias.values)) + """;
-
-new Chart(document.getElementById('mapa'),{
-type:'bar',
-data:{
-labels:provincias,
-datasets:[{
-label:'Subvenciones €',
-data:valores
-}]
-}
-});
-
-new Chart(document.getElementById('grafico'),{
-type:'line',
-data:{
-labels:provincias,
-datasets:[{
-label:'Evolución',
-data:valores
-}]
-}
-});
-
-</script>
+<footer>
+Datos abiertos oficiales · BDNS · Proyecto ciudadano
+</footer>
 
 </body>
 </html>
 """
 
-with open("index.html","w",encoding="utf-8") as f:
+with open("index.html", "w", encoding="utf-8") as f:
     f.write(html)
 
-print("Observatorio actualizado correctamente")
+print("Observatorio generado correctamente")p
