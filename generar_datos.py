@@ -1,45 +1,44 @@
 import pandas as pd
 import requests, json, os, feedparser
 from datetime import datetime
-
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 
 
-# =========================
+# ==================================================
 # CONFIG
-# =========================
+# ==================================================
 
 SUBV_URL = "https://www.infosubvenciones.es/bdnstrans/GE/es/concesiones.csv"
 
-# GeoJSON provincias España (ligero y público)
-GEOJSON_URL = "https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/spain-provinces.geojson"
+GEO_PROV = "https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/spain-provinces.geojson"
+GEO_MUN = "https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/spain-municipalities.geojson"
 
-CONTRATOS_RSS = "https://contrataciondelestado.es/rss/licitacionesPerfilesContratante.xml"
+BOE_RSS = "https://www.boe.es/rss/boe.php"
 
 HIST = "datos/historico.csv"
-API = "datos/api.json"
 PDF = "datos/informe.pdf"
-GEOJSON_LOCAL = "datos/spain.geojson"
+API = "datos/api.json"
 
 os.makedirs("datos", exist_ok=True)
 
 
-# =========================
-# DESCARGAR GEOJSON ESPAÑA
-# =========================
+# ==================================================
+# GEOJSON ESPAÑA (PROV + MUNICIPIOS)
+# ==================================================
 
-try:
-    geo = requests.get(GEOJSON_URL, timeout=20).json()
-    with open(GEOJSON_LOCAL, "w", encoding="utf-8") as f:
-        json.dump(geo, f)
-except:
-    print("GeoJSON no descargado")
+for url, file in [(GEO_PROV,"datos/provincias.geojson"),
+                  (GEO_MUN,"datos/municipios.geojson")]:
+    try:
+        geo = requests.get(url,timeout=20).json()
+        json.dump(geo, open(file,"w",encoding="utf-8"))
+    except:
+        print("GeoJSON no descargado:", url)
 
 
-# =========================
+# ==================================================
 # SUBVENCIONES OFICIALES
-# =========================
+# ==================================================
 
 try:
     df = pd.read_csv(SUBV_URL, sep=";", encoding="latin1", low_memory=False)
@@ -64,133 +63,169 @@ if not df.empty and "Importe" in df.columns:
 
 else:
     total = media = maximo = 0
-    ranking = pd.Series()
+    ranking = pd.Series(dtype=float)
 
 
-# =========================
-# HEATMAP PROVINCIAS REAL
-# =========================
+# ==================================================
+# HEATMAP MUNICIPAL (si existe campo)
+# ==================================================
 
 heatmap = {}
 
-if "Provincia" in df.columns:
-    prov = df.groupby("Provincia")["Importe"].sum()
+if "Municipio" in df.columns:
 
-    max_val = prov.max()
+    mun = df.groupby("Municipio")["Importe"].sum()
+    max_val = mun.max()
 
-    heatmap = {
-        k: float(v/max_val) for k, v in prov.items()
-    }
+    heatmap = {k:float(v/max_val) for k,v in mun.items()}
 
 
-# =========================
-# SCRAPING CONTRATOS RSS
-# =========================
-
-contratos_estimados = 0
-
-try:
-    feed = feedparser.parse(CONTRATOS_RSS)
-    contratos_estimados = len(feed.entries) * 50000
-except:
-    pass
-
-
-# =========================
-# ALERTAS POSIBLE IRREGULARIDAD
-# =========================
+# ==================================================
+# ALERTAS ANTICORRUPCIÓN AVANZADAS
+# ==================================================
 
 alertas = []
 
 if not df.empty:
 
     std = df["Importe"].std()
-    limite = media + 3 * std
+    limite = media + 3*std
 
     if maximo > limite:
-        alertas.append("Subvención muy superior a la media.")
+        alertas.append("Subvención extremadamente alta detectada.")
 
-    if not ranking.empty:
-        if ranking.iloc[0] / total > 0.25:
-            alertas.append("Alta concentración en un beneficiario.")
+    if not ranking.empty and ranking.iloc[0]/total > 0.25:
+        alertas.append("Concentración anómala en un beneficiario.")
+
+    if os.path.exists(HIST):
+        hist = pd.read_csv(HIST)
+        if len(hist)>3:
+            if total > hist["total"].mean()*1.4:
+                alertas.append("Incremento fuerte del gasto público.")
 
 
-# =========================
+# ==================================================
 # HISTÓRICO
-# =========================
+# ==================================================
 
 fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
 
-nuevo = pd.DataFrame([{
-    "fecha": fecha,
-    "total": total
-}])
+nuevo = pd.DataFrame([{"fecha":fecha,"total":total}])
 
 if os.path.exists(HIST):
     hist = pd.read_csv(HIST)
-    hist = pd.concat([hist, nuevo])
+    hist = pd.concat([hist,nuevo])
 else:
     hist = nuevo
 
-hist.to_csv(HIST, index=False)
+hist.to_csv(HIST,index=False)
 
 
-# =========================
-# API JSON OBSERVATORIO
-# =========================
+# ==================================================
+# ANÁLISIS POLÍTICO PROFUNDO (GRATIS)
+# ==================================================
+
+texto = " ".join(df.columns).lower()
+
+prog = ["igualdad","social","clima","sanidad","educacion"]
+cons = ["empresa","mercado","defensa","seguridad","impuestos"]
+
+p = sum(w in texto for w in prog)
+c = sum(w in texto for w in cons)
+
+if abs(p-c)<2:
+    politico="Cobertura institucional neutra."
+elif p>c:
+    politico="Orientación institucional más social."
+else:
+    politico="Orientación institucional económica."
+
+
+# ==================================================
+# SCRAPING BOE AUTOMÁTICO
+# ==================================================
+
+boe = []
+
+try:
+    feed = feedparser.parse(BOE_RSS)
+    for e in feed.entries[:5]:
+        boe.append({"titulo":e.title,"link":e.link})
+except:
+    pass
+
+
+# ==================================================
+# API JSON PÚBLICA
+# ==================================================
 
 api = {
-    "fecha": fecha,
-    "subvenciones_total": float(total),
-    "media": float(media),
-    "contratos_estimados": float(contratos_estimados),
-    "ranking": ranking.to_dict(),
-    "heatmap": heatmap,
-    "alertas": alertas
+    "fecha":fecha,
+    "subvenciones_total":float(total),
+    "ranking":ranking.to_dict(),
+    "alertas":alertas,
+    "analisis_politico":politico,
+    "boe":boe,
+    "heatmap":heatmap
 }
 
-with open(API, "w", encoding="utf-8") as f:
-    json.dump(api, f, indent=2, ensure_ascii=False)
+json.dump(api,open(API,"w",encoding="utf-8"),
+          indent=2,ensure_ascii=False)
 
 
-# =========================
-# INFORME PDF AUTOMÁTICO
-# =========================
+# ==================================================
+# PDF AUTOMÁTICO
+# ==================================================
 
-styles = getSampleStyleSheet()
+styles=getSampleStyleSheet()
+doc=SimpleDocTemplate(PDF)
 
-doc = SimpleDocTemplate(PDF)
-
-contenido = [
-    Paragraph("Informe Observatorio Público", styles["Title"]),
-    Spacer(1, 12),
-    Paragraph(f"Fecha: {fecha}", styles["Normal"]),
-    Paragraph(f"Subvenciones totales: {total:,.0f} €", styles["Normal"]),
-    Paragraph(f"Contratos estimados: {contratos_estimados:,.0f} €", styles["Normal"]),
+contenido=[
+    Paragraph("Informe Observatorio Público",styles["Title"]),
+    Spacer(1,12),
+    Paragraph(f"Fecha: {fecha}",styles["Normal"]),
+    Paragraph(f"Total subvenciones: {total:,.0f} €",styles["Normal"]),
+    Paragraph(politico,styles["Normal"])
 ]
 
 for a in alertas:
-    contenido.append(Paragraph(a, styles["Normal"]))
+    contenido.append(Paragraph(a,styles["Normal"]))
 
 doc.build(contenido)
 
 
-# =========================
-# DASHBOARD HTML FINAL
-# =========================
+# ==================================================
+# MANIFEST APP INSTALABLE
+# ==================================================
 
-labels = hist["fecha"].astype(str).tolist()
-datos = hist["total"].tolist()
+manifest={
+"name":"Observatorio Público",
+"short_name":"Observatorio",
+"start_url":"./",
+"display":"standalone",
+"background_color":"#0b132b",
+"theme_color":"#0b132b"
+}
 
-html = f"""
+json.dump(manifest,open("manifest.json","w"))
+
+
+# ==================================================
+# HTML FINAL DASHBOARD
+# ==================================================
+
+labels=hist["fecha"].astype(str).tolist()
+datos=hist["total"].tolist()
+
+html=f"""
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Observatorio Público</title>
+<title>Observatorio Público TOTAL</title>
 
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Cache-Control" content="no-cache">
+<link rel="manifest" href="manifest.json">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet"
@@ -198,20 +233,8 @@ html = f"""
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <style>
-body {{
-font-family:system-ui;
-background:#0b132b;
-color:white;
-margin:0;
-padding:10px;
-}}
-
-.card {{
-background:#1c2541;
-padding:15px;
-border-radius:12px;
-margin:10px 0;
-}}
+body{{font-family:system-ui;background:#0b132b;color:white;padding:10px}}
+.card{{background:#1c2541;padding:15px;border-radius:12px;margin:10px 0}}
 </style>
 </head>
 
@@ -221,66 +244,45 @@ margin:10px 0;
 <p>Actualizado: {fecha}</p>
 
 <div class="card">
-Subvenciones totales: {total:,.0f} €<br>
-Media: {media:,.0f} €<br>
-Contratos estimados: {contratos_estimados:,.0f} €
+Subvenciones totales: {total:,.0f} €
+</div>
+
+<div class="card">
+<b>Análisis político:</b><br>{politico}
 </div>
 
 <div class="card">
 <b>Alertas:</b><br>
-{"<br>".join(alertas) if alertas else "Sin alertas relevantes"}
+{"<br>".join(alertas) if alertas else "Sin alertas"}
 </div>
 
-<h2>Evolución histórica</h2>
+<h2>Evolución</h2>
 <canvas id="graf"></canvas>
 
 <script>
-new Chart(document.getElementById('graf'), {{
+new Chart(document.getElementById('graf'),{{
 type:'line',
-data:{{
-labels:{labels},
-datasets:[{{label:'Subvenciones',data:{datos}}}]
-}}
+data:{{labels:{labels},
+datasets:[{{label:'Subvenciones',data:{datos}}}]}}
 }});
 </script>
 
-<h2>Mapa subvenciones España</h2>
-<div id="map" style="height:450px"></div>
+<h2>BOE relevante</h2>
+"""
 
-<script>
-var map=L.map('map').setView([40.3,-3.7],6);
+for b in boe:
+    html+=f"<p><a href='{b['link']}' target='_blank'>{b['titulo']}</a></p>"
 
-L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png').addTo(map);
-
-fetch('datos/spain.geojson')
-.then(r=>r.json())
-.then(geo=>{{
-fetch('datos/api.json')
-.then(r=>r.json())
-.then(data=>{{
-L.geoJSON(geo,{{
-style:function(f){{
-var p=f.properties.name;
-var v=data.heatmap[p]||0;
-return {{
-fillColor:`rgba(255,0,0,${{v}})`,
-weight:1,color:"#fff",
-fillOpacity:0.6
-}};
-}}
-}}).addTo(map);
-}});
-}});
-</script>
+html+="""
 
 <div class="card">
-<a href="datos/informe.pdf">📄 Descargar informe PDF</a>
+<a href="datos/informe.pdf">📄 Informe PDF</a>
 </div>
 
 </body>
 </html>
 """
 
-open("index.html", "w", encoding="utf-8").write(html)
+open("index.html","w",encoding="utf-8").write(html)
 
-print("OBSERVATORIO COMPLETO CON MAPA REAL GENERADO")
+print("OBSERVATORIO TOTAL DEFINITIVO GENERADO")
