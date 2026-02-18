@@ -159,4 +159,4 @@ Datos abiertos oficiales · BDNS · Proyecto ciudadano
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html)
 
-print("Observatorio generado correctamente")p
+print("Observatorio generado correctamente")
