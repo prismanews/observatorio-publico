@@ -1,42 +1,67 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="estilo.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-    <div class="container">
-        <header class="boe-header">
-            <h2>OBSERVATORIO DE TRANSPARENCIA</h2>
-            <p>Sincronización: 18/02/2026 21:31</p>
-        </header>
-        <div class="boe-card">
-            <div class="stat-group">
-                <div class="stat-box"><strong>0.00 €</strong><br><small>Total Detectado</small></div>
-                <div class="stat-box"><strong>18</strong><br><small>Registros</small></div>
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Observatorio Transparencia</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            :root { --bg: #f4f7f6; --dark: #0b132b; --accent: #5bc0be; --white: #ffffff; }
+            body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; color: var(--dark); }
+            .nav { background: var(--dark); color: white; padding: 1rem; text-align: center; font-weight: bold; letter-spacing: 1px; }
+            .container { max-width: 1100px; margin: 20px auto; padding: 0 20px; }
+            .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+            .module { background: var(--white); border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+            .tag { background: var(--accent); color: var(--dark); padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+            h3 { margin-top: 0; border-bottom: 2px solid var(--bg); padding-bottom: 10px; font-size: 1.1rem; }
+            .stat { font-size: 2rem; font-weight: 800; color: var(--dark); margin: 10px 0; }
+            .boe-link { display: block; padding: 10px; margin: 8px 0; background: var(--bg); border-radius: 6px; text-decoration: none; color: var(--dark); font-size: 0.9rem; transition: 0.2s; }
+            .boe-link:hover { border-left: 4px solid var(--accent); background: #ebf0ef; }
+            .footer { text-align: center; padding: 40px; font-size: 0.8rem; color: #888; }
+        </style>
+    </head>
+    <body>
+        <div class="nav">🛰️ OBSERVATORIO DE TRANSPARENCIA PÚBLICA</div>
+        <div class="container">
+            <p><small>Sincronización global: 18/02/2026 21:45</small></p>
+            
+            <div class="grid">
+                <div class="module">
+                    <span class="tag">FASE 1: GASTO DIRECTO</span>
+                    <h3>💰 Subvenciones Detectadas</h3>
+                    <div class="stat">0.00 €</div>
+                    <canvas id="chartSub"></canvas>
+                </div>
+
+                <div class="module">
+                    <span class="tag">FASE 2: ALERTAS LEGALES</span>
+                    <h3>📜 Últimas del BOE</h3>
+                    <a href="https://www.boe.es/boe/dias/2026/02/18/" class="boe-link"><strong>18/02</strong> - Sumario</a><a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3771" class="boe-link"><strong>18/02</strong> - Resolución de 16 de febrero de 2026, de la Secretaría de Estado de Justicia, por la que se publica el Convenio con la Comunidad de Castilla y León, relativo al establecimiento de un marco general de colaboración para la realización de la fase de formación en empresa u organismo equiparado por el alumnado de Formación Profesional de la Comunidad de Castilla y León, en los Institutos de Medicina Legal de Ávila, Burgos, Segovia y Soria, de León y Zamora y de Palencia, Salamanca y Valladolid.</a><a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3772" class="boe-link"><strong>18/02</strong> - Resolución de 17 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la calificación de la registradora de la propiedad de Gandía n.º 4, por la que se suspende la asignación de número de registro único de alquiler de corta duración turístico de una finca registral por constar en los estatutos de la propiedad horizontal que «las viviendas del edificio, únicamente podrán ser destinadas a dicho fin».</a><a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3773" class="boe-link"><strong>18/02</strong> - Resolución de 17 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación del registrador de la propiedad de Marbella n.º 3, por la que se suspende la asignación de un número de registro único de alquiler de corta duración turístico por constar en los estatutos de la propiedad horizontal que «asimismo las fincas procedentes de esta división horizontal no podrán dedicarse a almacén de sustancias explosivas, corrosivas o inflamables, ni ejercer en ellos industrias, comercios, escuelas, academias, ni en modo alguno cambiar su destino de vivienda a locales comerciales».</a><a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3774" class="boe-link"><strong>18/02</strong> - Resolución de 20 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la calificación negativa del registrador de la propiedad de Vera de solicitud para la asignación de número de registro de alquiler de corta duración respecto de una finca.</a>
+                </div>
+
+                <div class="module" style="opacity: 0.6; background: #eee;">
+                    <span class="tag" style="background:#ccc">FASE 4: FACT-CHECKING</span>
+                    <h3>🗳️ Promesas vs Realidad</h3>
+                    <p>Módulo en desarrollo. Requiere integración de NLP para análisis de programas electorales.</p>
+                </div>
             </div>
-            <div style="padding:20px; height: 400px;"><canvas id="myChart"></canvas></div>
-            <a href="datos/informe.pdf" class="btn-link">DESCARGAR INFORME PDF</a>
         </div>
-    </div>
-    <script>
-        new Chart(document.getElementById('myChart'), {
-            type: 'bar',
-            data: {
-                labels: ["Sin Datos"],
-                datasets: [{ 
-                    label: 'Euros', 
-                    data: [0.0], 
-                    backgroundColor: '#5bc0be' 
-                }]
-            },
-            options: { 
-                indexAxis: 'y',
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } }
-            }
-        });
-    </script>
-</body>
-</html>
+        <div class="footer">Datos obtenidos de BDNS y BOE.es - Automatizado con GitHub Actions</div>
+
+        <script>
+            new Chart(document.getElementById('chartSub'), {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{ 
+                        data: [], 
+                        backgroundColor: ['#0b132b', '#1c2541', '#3a506b', '#5bc0be', '#6fffe9'] 
+                    }]
+                },
+                options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } } }
+            });
+        </script>
+    </body>
+    </html>
+    
