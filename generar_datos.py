@@ -1,44 +1,54 @@
-import requests
 import pandas as pd
 from datetime import datetime
+import os
 
-URL_DATOS = "https://www.infosubvenciones.es/bdnstrans/GE/es/concesiones.csv"
+
+# ==============================
+# CONFIGURACIÓN
+# ==============================
+
+DATASET = "datos/subvenciones.csv"
+
+
+print("Cargando dataset local...")
+
+if not os.path.exists(DATASET):
+    print("Dataset no encontrado")
+    exit()
+
+df = pd.read_csv(DATASET, sep=";")
+
+
+# ==============================
+# LIMPIEZA
+# ==============================
+
+df["Importe"] = pd.to_numeric(df["Importe"], errors="coerce")
+df = df.dropna(subset=["Importe"])
+
+
+# ==============================
+# ANÁLISIS
+# ==============================
+
+total_subvenciones = df["Importe"].sum()
+
+top_beneficiarios = (
+    df.groupby("Beneficiario")["Importe"]
+    .sum()
+    .sort_values(ascending=False)
+    .head(15)
+)
+
+importe_medio = df["Importe"].mean()
+max_subvencion = df["Importe"].max()
 
 fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
 
-print("Descargando datos públicos...")
 
-try:
-    df = pd.read_csv(URL_DATOS, sep=";", encoding="latin1", low_memory=False)
-    
-    df = df.dropna(subset=["Importe"])
-    df["Importe"] = pd.to_numeric(df["Importe"], errors="coerce")
-    df = df.dropna(subset=["Importe"])
-
-    top_beneficiarios = (
-        df.groupby("Beneficiario")["Importe"]
-        .sum()
-        .sort_values(ascending=False)
-        .head(20)
-    )
-
-    total_subvenciones = df["Importe"].sum()
-
-    contenido = ""
-    for nombre, importe in top_beneficiarios.items():
-        contenido += f"""
-        <div class="card">
-            <b>{nombre}</b>
-            <span>{importe:,.0f} €</span>
-        </div>
-        """
-
-except Exception as e:
-    print("Error datos:", e)
-
-    total_subvenciones = "No disponible"
-    contenido = "<p>No se pudieron cargar datos públicos.</p>"
-
+# ==============================
+# GENERAR HTML
+# ==============================
 
 html = f"""
 <!DOCTYPE html>
@@ -58,17 +68,39 @@ html = f"""
 </header>
 
 <section class="stats">
-<h2>Total subvenciones</h2>
-<p class="big">{total_subvenciones}</p>
+<div class="card big">
+Total subvenciones:<br>
+<b>{total_subvenciones:,.0f} €</b>
+</div>
+
+<div class="card">
+Media subvención:<br>
+<b>{importe_medio:,.0f} €</b>
+</div>
+
+<div class="card">
+Mayor subvención:<br>
+<b>{max_subvencion:,.0f} €</b>
+</div>
 </section>
 
 <section>
 <h2>Top beneficiarios</h2>
-{contenido}
+"""
+
+for nombre, importe in top_beneficiarios.items():
+    html += f"""
+    <div class="card">
+        <b>{nombre}</b>
+        <span>{importe:,.0f} €</span>
+    </div>
+    """
+
+html += """
 </section>
 
 <footer>
-Proyecto ciudadano · Datos públicos oficiales
+Proyecto ciudadano · Datos públicos abiertos
 </footer>
 
 </body>
@@ -78,4 +110,4 @@ Proyecto ciudadano · Datos públicos oficiales
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html)
 
-print("index.html generado")
+print("Web generada correctamente")
