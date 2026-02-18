@@ -21,7 +21,7 @@ jobs:
       run: pip install pandas
 
     - name: Ejecutar script
-      run: python generar_observatorio.py
+      run: python generar_datos.py
 
     - name: Commit web
       run: |
