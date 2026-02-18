@@ -3,48 +3,84 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Observatorio Público</title>
+<title>Observatorio Público PRO</title>
 
-<link rel="stylesheet" href="estilo.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+font-family:system-ui;
+background:#0b132b;
+color:white;
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+.card {
+background:#1c2541;
+padding:20px;
+border-radius:12px;
+margin:15px 0;
+}
+
+.big {
+font-size:2em;
+font-weight:bold;
+}
+</style>
 </head>
 
 <body>
 
-<header>
 <h1>📊 Observatorio Público</h1>
-<p>Datos abiertos analizados automáticamente.</p>
-<p class="fecha">Actualizado: 18/02/2026 20:18</p>
-</header>
+<p>Actualizado: 18/02/2026 20:21</p>
 
-<section class="stats">
+<div class="card">
 <h2>Total subvenciones</h2>
 <p class="big">0 €</p>
-
-<div class="grid">
-<div>Media: 0 €</div>
-<div>Mayor: 0 €</div>
+<p>Media: 0 €</p>
+<p>Mayor ayuda: 0 €</p>
 </div>
-</section>
 
-<section>
+<div class="card">
 <h2>Insight automático</h2>
-<p>Nivel moderado de subvenciones.</p>
-</section>
+<p>Distribución relativamente equilibrada del gasto público.</p>
+</div>
 
-<section>
-<h2>Top beneficiarios</h2>
+<div class="card">
+<h2>Evolución histórica</h2>
+<canvas id="graf"></canvas>
+</div>
+
+<script>
+new Chart(document.getElementById('graf'), {
+type:'line',
+data:{
+labels:['18/02/2026 20:21'],
+datasets:[{label:'Total subvenciones', data:[0]}]
+}
+});
+</script>
+
+<div class="card">
+<h2>Ranking beneficiarios</h2>
 
 
-</section>
+</div>
+
+<div class="card">
+<a href="datos/informe.pdf" target="_blank">📄 Descargar informe PDF</a>
+</div>
 
 <footer>
-Proyecto ciudadano · Datos públicos oficiales
+Proyecto ciudadano · Datos públicos oficiales · Transparencia institucional
 </footer>
 
 </body>
