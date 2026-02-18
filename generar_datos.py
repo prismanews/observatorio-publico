@@ -1,53 +1,54 @@
 import pandas as pd
+import requests
 from datetime import datetime
-import os
-
 
 # ==============================
-# CONFIGURACIÓN
+# DATASET PÚBLICO REAL (España)
+# Base Nacional de Subvenciones
 # ==============================
 
-DATASET = "datos/subvenciones.csv"
+URL_DATOS = "https://www.infosubvenciones.es/bdnstrans/GE/es/concesiones.csv"
 
+print("Descargando dataset público oficial...")
 
-print("Cargando dataset local...")
-
-if not os.path.exists(DATASET):
-    print("Dataset no encontrado")
+try:
+    df = pd.read_csv(URL_DATOS, sep=";", encoding="latin1", low_memory=False)
+except Exception as e:
+    print("Error dataset:", e)
     exit()
 
-df = pd.read_csv(DATASET, sep=";")
-
-
 # ==============================
-# LIMPIEZA
+# LIMPIEZA PROFESIONAL
 # ==============================
 
 df["Importe"] = pd.to_numeric(df["Importe"], errors="coerce")
 df = df.dropna(subset=["Importe"])
 
+df = df[df["Importe"] > 0]
 
 # ==============================
-# ANÁLISIS
+# ANÁLISIS ÚTIL (NO SOLO SUMA)
 # ==============================
 
-total_subvenciones = df["Importe"].sum()
+total = df["Importe"].sum()
+media = df["Importe"].mean()
+maximo = df["Importe"].max()
 
-top_beneficiarios = (
+top = (
     df.groupby("Beneficiario")["Importe"]
     .sum()
     .sort_values(ascending=False)
-    .head(15)
+    .head(10)
 )
 
-importe_medio = df["Importe"].mean()
-max_subvencion = df["Importe"].max()
+# Insight automático potente
+top1 = top.iloc[0]
+concentracion = (top1 / total) * 100
 
 fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
 
-
 # ==============================
-# GENERAR HTML
+# GENERACIÓN WEB PROFESIONAL
 # ==============================
 
 html = f"""
@@ -59,36 +60,46 @@ html = f"""
 <link rel="stylesheet" href="estilo.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
+
 <body>
 
 <header>
 <h1>📊 Observatorio Público</h1>
-<p>Datos abiertos analizados automáticamente.</p>
+<p>Datos públicos analizados automáticamente.</p>
 <p class="fecha">Actualizado: {fecha}</p>
 </header>
 
+<section class="intro">
+<h2>¿Para qué sirve este observatorio?</h2>
+<ul>
+<li>Visualizar el destino de subvenciones públicas</li>
+<li>Detectar concentración de ayudas</li>
+<li>Facilitar transparencia ciudadana</li>
+<li>Traducir datos complejos en información clara</li>
+</ul>
+</section>
+
 <section class="stats">
-<div class="card big">
-Total subvenciones:<br>
-<b>{total_subvenciones:,.0f} €</b>
-</div>
+<h2>Total subvenciones analizadas</h2>
+<p class="big">{total:,.0f} €</p>
+<p>Media subvención: {media:,.0f} €</p>
+<p>Mayor subvención detectada: {maximo:,.0f} €</p>
+</section>
 
-<div class="card">
-Media subvención:<br>
-<b>{importe_medio:,.0f} €</b>
-</div>
-
-<div class="card">
-Mayor subvención:<br>
-<b>{max_subvencion:,.0f} €</b>
-</div>
+<section class="insight">
+<h2>Insight automático</h2>
+<p>
+El principal beneficiario concentra aproximadamente
+<b>{concentracion:.1f}%</b> del total analizado.
+Esto puede indicar concentración de financiación pública.
+</p>
 </section>
 
 <section>
 <h2>Top beneficiarios</h2>
 """
 
-for nombre, importe in top_beneficiarios.items():
+for nombre, importe in top.items():
     html += f"""
     <div class="card">
         <b>{nombre}</b>
@@ -100,7 +111,8 @@ html += """
 </section>
 
 <footer>
-Proyecto ciudadano · Datos públicos abiertos
+Fuente: Base Nacional de Subvenciones · Datos abiertos oficiales<br>
+Proyecto independiente de análisis ciudadano para la transparencia pública.
 </footer>
 
 </body>
@@ -110,4 +122,4 @@ Proyecto ciudadano · Datos públicos abiertos
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html)
 
-print("Web generada correctamente")
+print("Observatorio generado correctamente")
