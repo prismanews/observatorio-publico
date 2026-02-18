@@ -3,85 +3,57 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Observatorio Público PRO</title>
+<title>Observatorio Público TOTAL</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="manifest.json">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet"
+ href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <style>
-body {
-font-family:system-ui;
-background:#0b132b;
-color:white;
-max-width:900px;
-margin:auto;
-padding:20px;
-}
-
-.card {
-background:#1c2541;
-padding:20px;
-border-radius:12px;
-margin:15px 0;
-}
-
-.big {
-font-size:2em;
-font-weight:bold;
-}
+body{font-family:system-ui;background:#0b132b;color:white;padding:10px}
+.card{background:#1c2541;padding:15px;border-radius:12px;margin:10px 0}
 </style>
 </head>
 
 <body>
 
 <h1>📊 Observatorio Público</h1>
-<p>Actualizado: 18/02/2026 20:21</p>
+<p>Actualizado: 18/02/2026 20:32</p>
 
 <div class="card">
-<h2>Total subvenciones</h2>
-<p class="big">0 €</p>
-<p>Media: 0 €</p>
-<p>Mayor ayuda: 0 €</p>
+Subvenciones totales: 0 €
 </div>
 
 <div class="card">
-<h2>Insight automático</h2>
-<p>Distribución relativamente equilibrada del gasto público.</p>
+<b>Análisis político:</b><br>Cobertura institucional neutra.
 </div>
 
 <div class="card">
-<h2>Evolución histórica</h2>
+<b>Alertas:</b><br>
+Sin alertas
+</div>
+
+<h2>Evolución</h2>
 <canvas id="graf"></canvas>
-</div>
 
 <script>
-new Chart(document.getElementById('graf'), {
+new Chart(document.getElementById('graf'),{
 type:'line',
-data:{
-labels:['18/02/2026 20:21'],
-datasets:[{label:'Total subvenciones', data:[0]}]
-}
+data:{labels:['18/02/2026 20:32'],
+datasets:[{label:'Subvenciones',data:[0]}]}
 });
 </script>
 
-<div class="card">
-<h2>Ranking beneficiarios</h2>
-
-
-</div>
+<h2>BOE relevante</h2>
+<p><a href='https://www.boe.es/boe/dias/2026/02/18/' target='_blank'>Sumario</a></p><p><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3730' target='_blank'>Cuestión de inconstitucionalidad n.º 8318-2025, en relación con el artículo 5.2 de la Ley Orgánica 1/2025, de 2 de enero, de medidas en materia de eficiencia del Servicio Público de Justicia.</a></p><p><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3731' target='_blank'>Conflicto entre órganos constitucionales n.º 9117-2025, en relación con la decisión de la Mesa del Congreso de los Diputados de no proceder a la inmediata conclusión de los plazos de enmiendas de todas las proposiciones de ley remitidas por el Senado que hayan superado la duración de una única prórroga, de conformidad con lo previsto en el artículo 91 del Reglamento del Congreso de los Diputados.</a></p><p><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3732' target='_blank'>Conflicto entre órganos constitucionales n.º 192-2026, en relación con el acuerdo de la Mesa del Congreso de los Diputados, de 11 de noviembre de 2025, de no proceder a la tramitación por el Pleno del Congreso de los Diputados de las enmiendas números 118 y 148 aprobadas por el Pleno del Senado por las que se incorporan un artículo 61 bis y una disposición transitoria undécima al Proyecto de Ley de Movilidad Sostenible, por haber expresado el Gobierno su disconformidad con la tramitación de las mismas.</a></p><p><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3733' target='_blank'>Conflicto entre órganos constitucionales n.º 554-2026, en relación con el acuerdo por el que el Gobierno expresa su disconformidad respecto a la tramitación de las enmiendas números 118 y 148 aprobadas por el Pleno del Senado, por las que se incorporan un artículo 61 bis (nuevo) y una disposición transitoria undécima (nueva) al Proyecto de Ley de Movilidad Sostenible.</a></p>
 
 <div class="card">
-<a href="datos/informe.pdf" target="_blank">📄 Descargar informe PDF</a>
+<a href="datos/informe.pdf">📄 Informe PDF</a>
 </div>
-
-<footer>
-Proyecto ciudadano · Datos públicos oficiales · Transparencia institucional
-</footer>
 
 </body>
 </html>
