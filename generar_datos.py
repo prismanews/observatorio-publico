@@ -3,15 +3,15 @@ import json
 import os
 from datetime import datetime
 
-# ==============================
-# CONFIGURACIÓN
-# ==============================
+# ============================
+# CONFIG
+# ============================
 
 DATASET_URL = "https://www.infosubvenciones.es/bdnstrans/GE/es/concesiones.csv"
-HISTORICO = "datos/historico.csv"
-API_JSON = "datos/api.json"
+HIST = "datos/historico.csv"
+API = "datos/api.json"
 
-print("Descargando dataset oficial...")
+print("Descargando dataset oficial…")
 
 try:
     df = pd.read_csv(DATASET_URL, sep=";", encoding="latin1", low_memory=False)
@@ -19,99 +19,119 @@ except Exception as e:
     print("Error dataset:", e)
     exit()
 
-# ==============================
+# ============================
 # LIMPIEZA
-# ==============================
+# ============================
 
 df["Importe"] = pd.to_numeric(df["Importe"], errors="coerce")
 df = df.dropna(subset=["Importe"])
 df = df[df["Importe"] > 0]
 
-if "Beneficiario" not in df.columns:
-    df["Beneficiario"] = "No identificado"
+df["Beneficiario"] = df.get("Beneficiario", "No identificado")
 
-# ==============================
-# MÉTRICAS PRINCIPALES
-# ==============================
+# ============================
+# CLASIFICACIÓN SECTOR
+# ============================
+
+def sector(x):
+    x = str(x).lower()
+    if "universidad" in x:
+        return "Educación"
+    if "fundación" in x or "ong" in x:
+        return "Social"
+    if "ministerio" in x or "ayuntamiento" in x:
+        return "Administración"
+    if "sl" in x or "sa" in x:
+        return "Empresa"
+    return "Otros"
+
+df["Sector"] = df["Beneficiario"].apply(sector)
+
+sector_total = df.groupby("Sector")["Importe"].sum().sort_values(ascending=False)
+
+# ============================
+# MÉTRICAS CLAVE
+# ============================
 
 total = df["Importe"].sum()
 media = df["Importe"].mean()
 maximo = df["Importe"].max()
 
-top = (
-    df.groupby("Beneficiario")["Importe"]
-    .sum()
-    .sort_values(ascending=False)
-    .head(10)
-)
+top = df.groupby("Beneficiario")["Importe"].sum().sort_values(ascending=False).head(10)
 
 fecha = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-# ==============================
-# DETECCIÓN AVANZADA ANOMALÍAS
-# ==============================
-
-z = (df["Importe"] - media) / df["Importe"].std()
-anomalias = df[z > 3]
-
-alertas = []
-
-if len(anomalias) > 0:
-    alertas.append(f"{len(anomalias)} subvenciones estadísticamente anómalas.")
-
-if maximo > media * 15:
-    alertas.append("Subvención extremadamente alta detectada.")
-
-# ==============================
-# HISTÓRICO AUTOMÁTICO
-# ==============================
+# ============================
+# HISTÓRICO EVOLUCIÓN
+# ============================
 
 os.makedirs("datos", exist_ok=True)
 
-registro = pd.DataFrame([{
+nuevo = pd.DataFrame([{
     "fecha": fecha,
     "total": total,
-    "media": media,
-    "maximo": maximo
+    "media": media
 }])
 
-if os.path.exists(HISTORICO):
-    hist = pd.read_csv(HISTORICO)
-    hist = pd.concat([hist, registro])
+if os.path.exists(HIST):
+    hist = pd.read_csv(HIST)
+    hist = pd.concat([hist, nuevo])
 else:
-    hist = registro
+    hist = nuevo
 
-hist.to_csv(HISTORICO, index=False)
+hist.to_csv(HIST, index=False)
 
-# ==============================
-# EXPORT JSON (API)
-# ==============================
+# Comparación temporal
+insights = []
+
+if len(hist) > 1:
+    ultimo = hist.iloc[-2]["total"]
+    cambio = ((total - ultimo) / ultimo) * 100
+
+    if cambio > 10:
+        insights.append(f"Aumento notable del gasto público (+{cambio:.1f}%).")
+    elif cambio < -10:
+        insights.append(f"Reducción significativa del gasto ({cambio:.1f}%).")
+
+# Concentración
+concentracion = top.head(3).sum() / total * 100
+if concentracion > 40:
+    insights.append("Alta concentración de ayudas en pocos beneficiarios.")
+
+# Sector dominante
+sector_top = sector_total.index[0]
+insights.append(f"El sector dominante es: {sector_top}.")
+
+# ============================
+# EXPORT API
+# ============================
 
 api = {
     "fecha": fecha,
     "total": float(total),
     "media": float(media),
     "maximo": float(maximo),
+    "sectores": sector_total.to_dict(),
     "top": top.to_dict(),
-    "alertas": alertas
+    "insights": insights
 }
 
-with open(API_JSON, "w") as f:
+with open(API, "w") as f:
     json.dump(api, f, indent=2)
 
-# ==============================
-# HTML PRO++ DASHBOARD
-# ==============================
+# ============================
+# HTML DASHBOARD PRO++++
+# ============================
 
-hist_labels = hist["fecha"].astype(str).tolist()
-hist_totales = hist["total"].tolist()
+labels = hist["fecha"].astype(str).tolist()
+datos = hist["total"].tolist()
 
 html = f"""
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Observatorio Público PRO++</title>
+<title>Observatorio Público PRO++++</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -120,98 +140,60 @@ body {{
 font-family:system-ui;
 background:#0b132b;
 color:#fff;
-margin:0;
 padding:20px;
-}}
-
-header {{
-text-align:center;
-margin-bottom:40px;
-}}
-
-.grid {{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:20px;
 }}
 
 .card {{
 background:#1c2541;
 padding:20px;
+margin:10px 0;
 border-radius:12px;
 }}
 
 .insights {{
 background:#3a0f0f;
 padding:20px;
-margin-top:30px;
 border-radius:12px;
+margin-top:20px;
 }}
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>📊 Observatorio Público PRO++</h1>
+<h1>📊 Observatorio Público PRO++++</h1>
 <p>Datos abiertos oficiales analizados automáticamente.</p>
 <p>Actualizado: {fecha}</p>
-</header>
 
-<section class="grid">
 <div class="card">
-<h2>Total</h2>
-<p>{total:,.0f} €</p>
+<h2>Total subvenciones</h2>
+{total:,.0f} €
 </div>
 
 <div class="card">
 <h2>Media</h2>
-<p>{media:,.0f} €</p>
+{media:,.0f} €
 </div>
 
-<div class="card">
-<h2>Mayor</h2>
-<p>{maximo:,.0f} €</p>
-</div>
-</section>
-
-<h2>Evolución subvenciones</h2>
-<canvas id="grafica"></canvas>
+<h2>Evolución temporal</h2>
+<canvas id="graf"></canvas>
 
 <script>
-const ctx = document.getElementById('grafica');
-
-new Chart(ctx, {{
+new Chart(document.getElementById('graf'), {{
 type:'line',
 data:{{
-labels:{hist_labels},
-datasets:[{{
-label:'Total subvenciones',
-data:{hist_totales},
-borderWidth:2
-}}]
+labels:{labels},
+datasets:[{{label:'Total',data:{datos}}}]
 }}
 }});
 </script>
 
-<section>
-<h2>Top beneficiarios</h2>
-"""
-
-for n,v in top.items():
-    html += f"<p><b>{n}</b> — {v:,.0f} €</p>"
-
-html += "<section class='insights'><h2>Alertas</h2><ul>"
-
-for a in alertas:
-    html += f"<li>{a}</li>"
-
-html += """
-</ul></section>
-
-<footer>
-Proyecto ciudadano de transparencia · Datos oficiales
-</footer>
+<div class="insights">
+<h2>Insights automáticos</h2>
+<ul>
+{''.join(f"<li>{i}</li>" for i in insights)}
+</ul>
+</div>
 
 </body>
 </html>
@@ -220,4 +202,4 @@ Proyecto ciudadano de transparencia · Datos oficiales
 with open("index.html","w",encoding="utf-8") as f:
     f.write(html)
 
-print("Observatorio PRO++ generado")
+print("Observatorio PRO++++ generado")
