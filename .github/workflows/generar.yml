@@ -1,9 +1,9 @@
 name: Actualizar Observatorio
 
 on:
-  workflow_dispatch: # Permite ejecutarlo manualmente
+  workflow_dispatch:
   schedule:
-    - cron: "0 6 * * 1" # Se ejecuta todos los lunes a las 06:00 AM
+    - cron: "0 6 * * 1"
 
 permissions:
   contents: write
@@ -19,7 +19,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: 'pip' # Acelera las ejecuciones futuras
 
       - name: Instalar dependencias
         run: |
@@ -28,13 +27,10 @@ jobs:
 
       - name: Ejecutar proceso de datos
         run: python generar_datos.py
-        env:
-          PYTHONPATH: .
 
       - name: Publicar cambios en el repositorio
         run: |
           git config --global user.name "ObservatorioBot"
           git config --global user.email "bot@github.com"
-          git add index.html estilo.css datos/
-          # Solo hace commit si hay cambios reales para evitar errores
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Actualización automática: $(date +'%Y-%m-%d %H:%M')" && git push)
+          git add index.html estilo.css datos/ || true
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Actualización automática: $(date +'%Y-%m-%d')" && git push)
