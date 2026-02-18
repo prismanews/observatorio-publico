@@ -3,142 +3,137 @@ import requests, json, os, feedparser
 from datetime import datetime
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import A4
 
-# --- Configuración de rutas ---
+# --- Rutas y Directorios ---
+os.makedirs("datos", exist_ok=True)
 HIST = "datos/historico.csv"
 PDF = "datos/informe.pdf"
 API = "datos/api.json"
-os.makedirs("datos", exist_ok=True)
 
-# 1. INTENTO DE DESCARGA DE DATOS CON HEADERS (Para evitar el 0€)
+# 1. DESCARGA REALISTA (Evitamos el error 0)
 SUBV_URL = "https://www.infosubvenciones.es/bdnstrans/GE/es/concesiones.csv"
-headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+headers = {"User-Agent": "Mozilla/5.0"}
 
 try:
-    response = requests.get(SUBV_URL, headers=headers, timeout=30)
-    with open("datos/temp.csv", "wb") as f:
-        f.write(response.content)
-    df = pd.read_csv("datos/temp.csv", sep=";", encoding="latin1", low_memory=False)
+    # Descargamos el CSV oficial
+    r = requests.get(SUBV_URL, headers=headers, timeout=30)
+    with open("datos/data.csv", "wb") as f:
+        f.write(r.content)
+    
+    # Lectura cuidadosa: el CSV español usa encoding latin1 y separador ;
+    df = pd.read_csv("datos/data.csv", sep=";", encoding="latin1", on_bad_lines='skip', low_memory=False)
+    
+    # Limpieza de importes: Quitar puntos de miles y cambiar coma por punto decimal
+    if "Importe" in df.columns:
+        df["Importe"] = df["Importe"].astype(str).str.replace('.', '', regex=False).str.replace(',', '.', regex=False)
+        df["Importe"] = pd.to_numeric(df["Importe"], errors="coerce").fillna(0)
 except Exception as e:
-    print(f"Error descargando: {e}")
+    print(f"Error: {e}")
     df = pd.DataFrame()
 
-# 2. PROCESAMIENTO
-if not df.empty and "Importe" in df.columns:
-    df["Importe"] = pd.to_numeric(df["Importe"].str.replace(',', '.'), errors="coerce") # Corrección de decimales
-    df = df.dropna(subset=["Importe"])
-    total, media, maximo = df["Importe"].sum(), df["Importe"].mean(), df["Importe"].max()
-    ranking = df.groupby("Beneficiario")["Importe"].sum().sort_values(ascending=False).head(5)
-else:
-    total = media = maximo = 0
-    ranking = pd.Series(dtype=float)
+# 2. CÁLCULOS Y ALERTAS ANTICORRUPCIÓN
+total = df["Importe"].sum() if not df.empty else 0
+ranking = df.groupby("Beneficiario")["Importe"].sum().sort_values(ascending=False).head(5) if not df.empty else pd.Series()
 
-# 3. ANÁLISIS POLÍTICO Y ALERTAS
+alertas = []
+if not df.empty:
+    umbral = df["Importe"].mean() + (df["Importe"].std() * 3)
+    if df["Importe"].max() > umbral:
+        alertas.append("Detección de adjudicación individual fuera de rango estadístico.")
+    if len(df[df["Importe"] == 0]) / len(df) > 0.5:
+        alertas.append("Alta opacidad: gran cantidad de registros sin importe declarado.")
+
+# 3. MAPA POR PROVINCIAS (Simulado con datos de departamentos/provincias del CSV)
+mapa_data = {}
+if "Provincia" in df.columns:
+    mapa_data = df.groupby("Provincia")["Importe"].sum().to_dict()
+
+# 4. GENERAR PDF PROFESIONAL
+def generar_pdf():
+    doc = SimpleDocTemplate(PDF, pagesize=A4)
+    styles = getSampleStyleSheet()
+    story = [
+        Paragraph("Informe de Control de Transparencia", styles['Title']),
+        Spacer(1, 12),
+        Paragraph(f"Fecha de análisis: {datetime.now().strftime('%Y-%m-%d %H:%M')}", styles['Normal']),
+        Paragraph(f"Total Auditado: {total:,.2f} €", styles['Heading2']),
+        Spacer(1, 10),
+        Paragraph("Alertas detectadas:", styles['Heading3'])
+    ]
+    for al in alertas:
+        story.append(Paragraph(f"• {al}", styles['Normal']))
+    doc.build(story)
+
+generar_pdf()
+
+# 5. HTML CON DASHBOARD + MAPA + PWA
 fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
-politico = "Orientación Institucional Social" if total > 0 else "Pendiente de sincronización"
-alertas = ["Concentración de gasto detectada"] if not ranking.empty else []
+labels_graf = list(ranking.index)
+datos_graf = list(ranking.values)
 
-# 4. RSS BOE
-boe = []
-try:
-    feed = feedparser.parse("https://www.boe.es/rss/boe.php")
-    for e in feed.entries[:4]:
-        boe.append({"titulo": e.title[:80] + "...", "link": e.link})
-except: pass
-
-# 5. GUARDAR HISTÓRICO
-nuevo = pd.DataFrame([{"fecha": fecha, "total": total}])
-if os.path.exists(HIST):
-    hist = pd.concat([pd.read_csv(HIST), nuevo])
-else:
-    hist = nuevo
-hist.to_csv(HIST, index=False)
-
-# 6. HTML MODERNO
-labels = hist["fecha"].tolist()
-datos = hist["total"].tolist()
-
-html = f"""
+html_template = f"""
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Observatorio Público PRO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observatorio Público</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b132b">
     <link rel="stylesheet" href="estilo.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="status">● SISTEMA ACTIVO</div>
-            <h1>Observatorio de Transparencia</h1>
-            <p class="subtitle">Análisis de Datos del Estado • {fecha}</p>
+            <h1>🚀 Observatorio Pro</h1>
+            <p>Sincronización: {fecha}</p>
         </header>
 
-        <div class="main-stats">
-            <div class="stat-card primary">
-                <span class="label">Total Subvencionado (Periodo)</span>
-                <h2 class="value">{total:,.2f} €</h2>
-                <div class="badge">Sincronizado</div>
+        <div class="main-card">
+            <small>FONDO TOTAL DETECTADO</small>
+            <div class="total-big">{total:,.2f} €</div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3>📊 Top 5 Beneficiarios</h3>
+                <canvas id="chartRanking"></canvas>
             </div>
-            <div class="stat-card">
-                <span class="label">Análisis de Sesgo</span>
-                <p>{politico}</p>
+            <div class="card">
+                <h3>🔎 Alertas Anticorrupción</h3>
+                {"".join([f'<div class="alert">⚠️ {a}</div>' for a in alertas]) if alertas else "No hay alertas activas."}
             </div>
         </div>
 
-        <div class="grid-layout">
-            <div class="panel chart-panel">
-                <h3>Evolución de Fondos Públicos</h3>
-                <canvas id="mainChart"></canvas>
-            </div>
-            
-            <div class="panel">
-                <h3>Alertas del Sistema</h3>
-                {"".join([f'<div class="alert-item">{a}</div>' for a in alertas]) if alertas else '<p>No hay alertas críticas.</p>'}
-            </div>
+        <div class="card">
+            <h3>🗺️ Distribución Geográfica</h3>
+            <p>Sección en desarrollo: Datos vinculados a {len(mapa_data)} provincias.</p>
         </div>
 
-        <div class="grid-layout">
-            <div class="panel">
-                <h3>Últimas Publicaciones BOE</h3>
-                {"".join([f'<a href="{b["link"]}" class="boe-link">{b["titulo"]}</a>' for b in boe])}
-            </div>
-            <div class="panel">
-                <h3>Documentación</h3>
-                <a href="datos/informe.pdf" class="btn">Descargar Informe PDF</a>
-                <a href="datos/api.json" class="btn secondary">Consultar API JSON</a>
-            </div>
+        <div class="actions">
+            <a href="datos/informe.pdf" class="btn">📄 Descargar PDF</a>
+            <a href="https://github.com/prismanews/observatorio-publico" class="btn secondary">🛠️ Ver Dataset</a>
         </div>
     </div>
 
     <script>
-        const ctx = document.getElementById('mainChart').getContext('2d');
-        new Chart(ctx, {{
-            type: 'line',
+        new Chart(document.getElementById('chartRanking'), {{
+            type: 'bar',
             data: {{
-                labels: {labels},
+                labels: {json.dumps(labels_graf)},
                 datasets: [{{
-                    label: 'Presupuesto',
-                    data: {datos},
-                    borderColor: '#4CC9F0',
-                    backgroundColor: 'rgba(76, 201, 240, 0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 3
+                    label: 'Euros',
+                    data: {json.dumps(datos_graf)},
+                    backgroundColor: '#5bc0be'
                 }}]
             }},
-            options: {{
-                responsive: true,
-                plugins: {{ legend: {{ display: false }} }},
-                scales: {{
-                    y: {{ grid: {{ color: '#2d3748' }}, ticks: {{ color: '#a0aec0' }} }},
-                    x: {{ grid: {{ display: false }}, ticks: {{ color: '#a0aec0' }} }}
-                }}
-            }}
+            options: {{ indexAxis: 'y', plugins: {{ legend: {{ display: false }} }}, scales: {{ x: {{ ticks: {{ color: '#fff' }} }}, y: {{ ticks: {{ color: '#fff' }} }} }} }}
         }});
     </script>
 </body>
 </html>
 """
-open("index.html", "w", encoding="utf-8").write(html)
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html_template)
