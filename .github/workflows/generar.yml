@@ -18,7 +18,7 @@ jobs:
         python-version: 3.11
 
     - name: Instalar dependencias
-      run: pip install pandas requests
+      run: pip install pandas requests reportlab
 
     - name: Ejecutar script
       run: python generar_datos.py
