@@ -1,56 +1,41 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Observatorio Transparencia</title>
     <link rel="stylesheet" href="estilo.css">
-    <link rel="manifest" href="manifest.json">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
-        <header>
-            <div class="badge-live">DIRECTO</div>
-            <h1>Observatorio Público</h1>
-            <p>Monitor de Datos del Estado • 18/02/2026 20:53</p>
+        <header class="boe-header">
+            <h2>OBSERVATORIO DE TRANSPARENCIA</h2>
+            <p>Sincronización: 18/02/2026 21:30</p>
         </header>
-
-        <section class="main-card">
-            <small>DINERO PÚBLICO RASTREADO (HOY)</small>
-            <div class="total-amount">0.00 €</div>
-        </section>
-
-        <div class="grid">
-            <div class="panel">
-                <h3>📰 Resumen Diario del BOE</h3>
-                <div class="boe-list"><div class="boe-item"><b>🔍 Otros:</b> <a href="https://www.boe.es/boe/dias/2026/02/18/" target="_blank">Sumario</a></div><div class="boe-item"><b>📋 Normativa:</b> <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3730" target="_blank">Cuestión de inconstitucionalidad n.º 8318-2025, en relación con el artículo 5.2 de la Ley Orgánica 1/2025, de 2 de enero, de medidas en materia de eficiencia del Servicio Público de Justicia.</a></div><div class="boe-item"><b>📋 Normativa:</b> <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3731" target="_blank">Conflicto entre órganos constitucionales n.º 9117-2025, en relación con la decisión de la Mesa del Congreso de los Diputados de no proceder a la inmediata conclusión de los plazos de enmiendas de todas las proposiciones de ley remitidas por el Senado que hayan superado la duración de una única prórroga, de conformidad con lo previsto en el artículo 91 del Reglamento del Congreso de los Diputados.</a></div><div class="boe-item"><b>📋 Normativa:</b> <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3732" target="_blank">Conflicto entre órganos constitucionales n.º 192-2026, en relación con el acuerdo de la Mesa del Congreso de los Diputados, de 11 de noviembre de 2025, de no proceder a la tramitación por el Pleno del Congreso de los Diputados de las enmiendas números 118 y 148 aprobadas por el Pleno del Senado por las que se incorporan un artículo 61 bis y una disposición transitoria undécima al Proyecto de Ley de Movilidad Sostenible, por haber expresado el Gobierno su disconformidad con la tramitación de las mismas.</a></div><div class="boe-item"><b>📋 Normativa:</b> <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3733" target="_blank">Conflicto entre órganos constitucionales n.º 554-2026, en relación con el acuerdo por el que el Gobierno expresa su disconformidad respecto a la tramitación de las enmiendas números 118 y 148 aprobadas por el Pleno del Senado, por las que se incorporan un artículo 61 bis (nuevo) y una disposición transitoria undécima (nueva) al Proyecto de Ley de Movilidad Sostenible.</a></div><div class="boe-item"><b>🔍 Otros:</b> <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3734" target="_blank">Acuerdo concerniente al reconocimiento de la formación y titulación para la gente de mar procedente del Perú entre la Dirección General de Capitanías y Guardacostas en representación del Gobierno del Perú y la Dirección General de la Marina Mercante en representación del Gobierno de España, hecho en Madrid y Lima el 30 de julio de 2002.</a></div><div class="boe-item"><b>🔍 Otros:</b> <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3735" target="_blank">Acuerdo de entendimiento concerniente al reconocimiento mutuo de la formación y certificación de acuerdo a la regla 1/10 del Convenio Internacional sobre normas de formación, titulación y guardia para la gente de mar, 1978, enmendado (convenio STCW 78, enmendado) entre la Dirección General de la Marina Mercante de España y la Dirección Registral y de la Marina Mercante de la República Oriental del Uruguay, hecho en Madrid y Montevideo el 26 de septiembre y 31 de octubre de 2012.</a></div><div class="boe-item"><b>📋 Normativa:</b> <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3736" target="_blank">Real Decreto 129/2026, de 17 de febrero, por el que se dispone el cese de don Alberto Cerezo Sobrino como Embajador en Misión Especial para el Sahel.</a></div><div class="boe-item"><b>📋 Normativa:</b> <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3737" target="_blank">Orden EFD/98/2026, de 17 de febrero, por la que se nombra Director del Gabinete del Secretario de Estado de Educación a don Francisco Daniel Rueda Sagaseta.</a></div><div class="boe-item"><b>📋 Normativa:</b> <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3738" target="_blank">Orden EFD/99/2026, de 10 de febrero, por la que se corrigen errores en la Orden EFD/988/2025, de 28 de agosto, por la que, en estimación de recurso, se modifican la Orden EFD/1369/2023, de 18 de diciembre, dictada a propuesta de la Consejería de Educación, Ciencia y Universidades de la Comunidad de Madrid, y la Orden EFD/966/2024, de 16 de septiembre, dictada a propuesta de la Consejería de Desarrollo Educativo y Formación Profesional de la Comunidad Autónoma de Andalucía; por las que se nombra personal funcionario de carrera de cuerpos docentes como consecuencia de los procedimientos selectivos extraordinarios de estabilización convocados respectivamente por Resolución de 11 de noviembre de 2022 y por Resolución de 14 de noviembre de 2022.</a></div></div>
+        <div class="boe-card">
+            <div class="stat-group">
+                <div class="stat-box"><strong>0.00 €</strong><br><small>Total Detectado</small></div>
+                <div class="stat-box"><strong>18</strong><br><small>Registros</small></div>
             </div>
-            <div class="panel">
-                <h3>🏆 Mayores Adjudicatarios</h3>
-                <canvas id="rankingChart"></canvas>
-            </div>
+            <div style="padding:20px; height: 400px;"><canvas id="myChart"></canvas></div>
+            <a href="datos/informe.pdf" class="btn-link">DESCARGAR INFORME PDF</a>
         </div>
-
-        <footer class="actions">
-            <a href="datos/informe.pdf" class="btn-main">Descargar Informe Oficial PDF</a>
-        </footer>
     </div>
-
     <script>
-        const ctx = document.getElementById('rankingChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut',
+        new Chart(document.getElementById('myChart'), {
+            type: 'bar',
             data: {
-                labels: [],
-                datasets: [{
-                    data: [],
-                    backgroundColor: ['#4cc9f0', '#4361ee', '#3a0ca3', '#7209b7', '#f72585'],
-                    borderWidth: 0
+                labels: ["Sin Datos"],
+                datasets: [{ 
+                    label: 'Euros', 
+                    data: [0.0], 
+                    backgroundColor: '#5bc0be' 
                 }]
             },
-            options: { plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } } }
+            options: { 
+                indexAxis: 'y',
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }
+            }
         });
     </script>
 </body>
