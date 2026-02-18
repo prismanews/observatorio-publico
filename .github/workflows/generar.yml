@@ -1,36 +1,26 @@
 name: Actualizar Observatorio
-
 on:
   workflow_dispatch:
   schedule:
     - cron: "0 6 * * 1"
-
 permissions:
   contents: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout del código
-        uses: actions/checkout@v4
-
-      - name: Configurar Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
-      - name: Instalar dependencias
-        run: |
-          python -m pip install --upgrade pip
-          pip install pandas requests reportlab feedparser
-
-      - name: Ejecutar proceso de datos
+      - name: Instalacion
+        run: pip install pandas requests reportlab
+      - name: Proceso
         run: python generar_datos.py
-
-      - name: Publicar cambios en el repositorio
+      - name: Deploy
         run: |
-          git config --global user.name "ObservatorioBot"
-          git config --global user.email "bot@github.com"
-          git add index.html estilo.css datos/ || true
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Actualización automática: $(date +'%Y-%m-%d')" && git push)
+          git config user.name "Bot"
+          git config user.email "bot@github.com"
+          git add .
+          git commit -m "Update" || echo "No changes"
+          git push
