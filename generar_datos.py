@@ -1,23 +1,39 @@
 import pandas as pd
 import requests
 from datetime import datetime
+import os
+
+# PDF
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+
 
 # ===============================
-# DATASET OFICIAL SUBVENCIONES
+# CONFIG
 # ===============================
 
-URL_DATOS = "https://www.infosubvenciones.es/bdnstrans/GE/es/concesiones.csv"
+DATASET_URL = "https://www.infosubvenciones.es/bdnstrans/GE/es/concesiones.csv"
+HISTORICO = "datos/historico.csv"
+PDF_FILE = "datos/informe.pdf"
 
-print("Descargando dataset oficial...")
+os.makedirs("datos", exist_ok=True)
+
+
+# ===============================
+# DESCARGAR DATASET OFICIAL
+# ===============================
+
+print("Descargando dataset BDNS...")
 
 try:
-    df = pd.read_csv(URL_DATOS, sep=";", encoding="latin1", low_memory=False)
+    df = pd.read_csv(DATASET_URL, sep=";", encoding="latin1", low_memory=False)
 except Exception as e:
     print("Error dataset:", e)
     df = pd.DataFrame()
 
+
 # ===============================
-# LIMPIEZA
+# LIMPIEZA DATOS
 # ===============================
 
 if not df.empty and "Importe" in df.columns:
@@ -29,7 +45,7 @@ if not df.empty and "Importe" in df.columns:
     media = df["Importe"].mean()
     mayor = df["Importe"].max()
 
-    top = (
+    ranking = (
         df.groupby("Beneficiario")["Importe"]
         .sum()
         .sort_values(ascending=False)
@@ -38,88 +54,168 @@ if not df.empty and "Importe" in df.columns:
 
 else:
     total = media = mayor = 0
-    top = {}
+    ranking = {}
 
-# ===============================
-# INSIGHT AUTOMÁTICO
-# ===============================
-
-if total > 1_000_000_000:
-    insight = "Nivel muy alto de gasto público en subvenciones."
-elif total > 100_000_000:
-    insight = "Volumen relevante de ayudas públicas."
-else:
-    insight = "Nivel moderado de subvenciones."
-
-# ===============================
-# FECHA
-# ===============================
 
 fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
 
+
 # ===============================
-# HTML GENERADO
+# HISTÓRICO AUTOMÁTICO
 # ===============================
+
+nuevo = pd.DataFrame([{
+    "fecha": fecha,
+    "total": total,
+    "media": media
+}])
+
+if os.path.exists(HISTORICO):
+    hist = pd.read_csv(HISTORICO)
+    hist = pd.concat([hist, nuevo])
+else:
+    hist = nuevo
+
+hist.to_csv(HISTORICO, index=False)
+
+
+# ===============================
+# INSIGHTS AUTOMÁTICOS
+# ===============================
+
+concentracion = ranking.iloc[0] / total * 100 if total > 0 else 0
+
+if concentracion > 20:
+    insight = "Alta concentración de subvenciones en pocos beneficiarios."
+elif media > 200000:
+    insight = "Subvenciones medias elevadas: posible concentración institucional."
+else:
+    insight = "Distribución relativamente equilibrada del gasto público."
+
+
+# ===============================
+# INFORME PDF AUTOMÁTICO
+# ===============================
+
+styles = getSampleStyleSheet()
+doc = SimpleDocTemplate(PDF_FILE)
+
+contenido = [
+    Paragraph("Informe Observatorio Público", styles["Title"]),
+    Spacer(1, 12),
+    Paragraph(f"Fecha: {fecha}", styles["Normal"]),
+    Paragraph(f"Total subvenciones: {total:,.0f} €", styles["Normal"]),
+    Paragraph(f"Media: {media:,.0f} €", styles["Normal"]),
+    Paragraph(insight, styles["Normal"])
+]
+
+doc.build(contenido)
+
+
+# ===============================
+# DASHBOARD HTML FINAL
+# ===============================
+
+labels = hist["fecha"].astype(str).tolist()
+datos = hist["total"].tolist()
 
 html = f"""
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Observatorio Público</title>
+<title>Observatorio Público PRO</title>
 
-<link rel="stylesheet" href="estilo.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {{
+font-family:system-ui;
+background:#0b132b;
+color:white;
+max-width:900px;
+margin:auto;
+padding:20px;
+}}
+
+.card {{
+background:#1c2541;
+padding:20px;
+border-radius:12px;
+margin:15px 0;
+}}
+
+.big {{
+font-size:2em;
+font-weight:bold;
+}}
+</style>
 </head>
 
 <body>
 
-<header>
 <h1>📊 Observatorio Público</h1>
-<p>Datos abiertos analizados automáticamente.</p>
-<p class="fecha">Actualizado: {fecha}</p>
-</header>
+<p>Actualizado: {fecha}</p>
 
-<section class="stats">
+<div class="card">
 <h2>Total subvenciones</h2>
 <p class="big">{total:,.0f} €</p>
-
-<div class="grid">
-<div>Media: {media:,.0f} €</div>
-<div>Mayor: {mayor:,.0f} €</div>
+<p>Media: {media:,.0f} €</p>
+<p>Mayor ayuda: {mayor:,.0f} €</p>
 </div>
-</section>
 
-<section>
+<div class="card">
 <h2>Insight automático</h2>
 <p>{insight}</p>
-</section>
+</div>
 
-<section>
-<h2>Top beneficiarios</h2>
+<div class="card">
+<h2>Evolución histórica</h2>
+<canvas id="graf"></canvas>
+</div>
+
+<script>
+new Chart(document.getElementById('graf'), {{
+type:'line',
+data:{{
+labels:{labels},
+datasets:[{{label:'Total subvenciones', data:{datos}}}]
+}}
+}});
+</script>
+
+<div class="card">
+<h2>Ranking beneficiarios</h2>
 """
 
-for nombre, importe in top.items():
-    html += f"<div class='card'><b>{nombre}</b> — {importe:,.0f} €</div>"
+for n, v in ranking.items():
+    html += f"<p><b>{n}</b>: {v:,.0f} €</p>"
 
 html += """
 
-</section>
+</div>
+
+<div class="card">
+<a href="datos/informe.pdf" target="_blank">📄 Descargar informe PDF</a>
+</div>
 
 <footer>
-Proyecto ciudadano · Datos públicos oficiales
+Proyecto ciudadano · Datos públicos oficiales · Transparencia institucional
 </footer>
 
 </body>
 </html>
 """
 
+
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html)
 
-print("Web generada correctamente")
+
+print("Observatorio definitivo generado correctamente")
