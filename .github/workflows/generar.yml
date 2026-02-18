@@ -1,12 +1,12 @@
 name: Generar Observatorio
 
-permissions:
-  contents: write
-
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 6 * * *"
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -18,7 +18,7 @@ jobs:
       - name: Instalar Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: "3.11"
 
       - name: Instalar dependencias
         run: pip install pandas requests reportlab
@@ -26,10 +26,10 @@ jobs:
       - name: Ejecutar script
         run: python generar_datos.py
 
-      - name: Commit y publicar cambios
+      - name: Commit web
         run: |
           git config user.name github-actions
           git config user.email actions@github.com
-          git add .
+          git add index.html
           git commit -m "Auto update observatorio" || echo "No cambios"
           git push
