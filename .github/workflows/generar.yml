@@ -3,7 +3,7 @@ name: Actualizar Observatorio
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 6 * * *"
+    - cron: "0 6 * * *"   # todos los días 06:00 UTC
 
 permissions:
   contents: write
@@ -24,18 +24,15 @@ jobs:
 
       - name: Instalar dependencias
         run: |
-          pip install pandas
-          pip install requests
-          pip install reportlab
-          pip install feedparser
+          pip install pandas requests reportlab feedparser
 
       - name: Generar observatorio
         run: python generar_datos.py
 
       - name: Subir cambios
         run: |
-          git config user.name "Bot"
-          git config user.email "bot@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "Update observatorio" || echo "No changes"
+          git commit -m "Auto update observatorio" || echo "No changes"
           git push
