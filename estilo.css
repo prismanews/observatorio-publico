@@ -1,88 +1,16 @@
 :root {
   --primary: #0b132b;
-  --secondary: #1c2541;
   --accent: #5bc0be;
   --bg: #f0f2f5;
   --white: #ffffff;
-  --error: #e74c3c;
 }
 
-body {
-  background-color: var(--bg);
-  font-family: 'Segoe UI', Roboto, sans-serif;
-  margin: 0;
-  padding: 20px;
-  color: var(--primary);
-}
-
-.container { max-width: 1000px; margin: 0 auto; }
-
-/* Cabecera estilo App */
-.boe-header {
-  background: var(--primary);
-  color: var(--white);
-  padding: 2rem;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.boe-header h2 { margin: 0; letter-spacing: 2px; font-size: 1.5rem; }
-
-/* Tarjeta Principal */
-.boe-card {
-  background: var(--white);
-  border-radius: 0 0 12px 12px;
-  padding: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-}
-
-.stat-group {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.stat-box {
-  flex: 1;
-  background: var(--bg);
-  padding: 20px;
-  border-radius: 12px;
-  text-align: center;
-  border: 1px solid #e1e4e8;
-}
-
-.stat-label { font-size: 0.75rem; text-transform: uppercase; color: #666; font-weight: bold; }
-.stat-value { display: block; font-size: 1.8rem; font-weight: 800; color: var(--primary); }
-.money::after { content: " €"; font-size: 1rem; }
-
-/* Alertas */
-.error-msg {
-  background: #fff5f5;
-  color: var(--error);
-  padding: 12px;
-  border-left: 4px solid var(--error);
-  margin-bottom: 10px;
-  font-size: 0.9rem;
-  border-radius: 4px;
-}
-
-/* Botones */
-.btn-link {
-  display: block;
-  background: var(--accent);
-  color: var(--primary);
-  text-align: center;
-  padding: 15px;
-  text-decoration: none;
-  border-radius: 8px;
-  font-weight: bold;
-  margin-top: 20px;
-  transition: 0.3s;
-}
-
-.btn-link:hover { filter: brightness(0.9); transform: translateY(-2px); }
-
-/* Adaptabilidad móvil */
-@media (max-width: 600px) {
-  .stat-group, .grid { grid-template-columns: 1fr !important; flex-direction: column; }
-}
+body { background: var(--bg); font-family: sans-serif; padding: 20px; color: var(--primary); }
+.container { max-width: 900px; margin: 0 auto; }
+.boe-header { background: var(--primary); color: white; padding: 20px; border-radius: 12px 12px 0 0; text-align: center; }
+.boe-card { background: white; padding: 20px; border-radius: 0 0 12px 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.stat-group { display: flex; gap: 15px; margin: 20px 0; }
+.stat-box { flex: 1; background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #ddd; }
+.stat-value { display: block; font-size: 1.5rem; font-weight: bold; }
+.error-msg { background: #fff5f5; color: #e74c3c; padding: 10px; border-left: 4px solid #e74c3c; margin-top: 10px; font-size: 0.9rem; }
+.btn-link { display: block; background: var(--accent); color: var(--primary); text-align: center; padding: 12px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 15px; }
