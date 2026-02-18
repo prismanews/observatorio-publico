@@ -1,47 +1,26 @@
-name: Generar Observatorio Público
-
+name: Actualizar Observatorio
 on:
   workflow_dispatch:
   schedule:
-    # Ejecuta cada lunes a las 06:00 UTC
     - cron: "0 6 * * 1"
-
 permissions:
   contents: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-
-      # 1. Descargar repositorio
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      # 2. Instalar Python
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
-      # 3. Instalar dependencias necesarias
-      - name: Instalar librerías
-        run: |
-          pip install pandas
-          pip install requests
-          pip install reportlab
-          pip install feedparser
-
-      # 4. Ejecutar tu script Observatorio
-      - name: Generar Observatorio
+      - name: Instalar dependencias
+        run: pip install pandas requests reportlab feedparser
+      - name: Ejecutar proceso
         run: python generar_datos.py
-
-      # 5. Commit automático resultados
-      - name: Commit cambios
+      - name: Publicar cambios
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          git config user.name "ObservatorioBot"
+          git config user.email "bot@github.com"
           git add .
-          git commit -m "Actualización automática Observatorio" || echo "Sin cambios"
+          git commit -m "Actualización: $(date +'%Y-%m-%d')" || echo "Sin cambios"
           git push
