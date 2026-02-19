@@ -2,53 +2,37 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
-<meta charset="UTF-8">
-<title>Observatorio de Transparencia Pública</title>
-
-<link rel="canonical" href="https://prismanews.github.io/observatorio-publico/">
-
-<meta name="description" content="Observatorio independiente de transparencia pública: subvenciones, BOE simplificado y análisis institucional en España.">
-<meta name="keywords" content="subvenciones públicas España, BOE explicado, transparencia pública, datos abiertos España">
-<meta name="robots" content="index, follow">
-
-<meta property="og:title" content="Observatorio de Transparencia Pública">
-<meta property="og:description" content="Datos públicos explicados: subvenciones, normativa BOE y transparencia institucional.">
-<meta property="og:url" content="https://prismanews.github.io/observatorio-publico/">
-<meta property="og:type" content="website">
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet" href="estilo.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observatorio Público</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
-
 <body>
-<div class="container">
-
-<header class="obs-header">
-<h1>Observatorio de Transparencia Pública</h1>
-<span>Última actualización: 19 February 2026 · 08:01 UTC</span>
-</header>
-
-<section class="obs-card">
-
-<h2>📊 Dashboard</h2>
-<canvas id="graficoSubvenciones"></canvas>
-
-<h2>🚨 Alertas subvenciones</h2>
-<ul id="alertas"></ul>
-
-<h2>📜 BOE simplificado</h2>
-<ul>
-<li><b>[General]</b> Sumario</li><li><b>[Legislación]</b> Real Decreto-ley 5/2026, de 17 de febrero, por el que se adoptan medidas urgentes en respuesta a los daños causados por diversos fenómenos meteorológicos adversos, de especial afectación en las comunidades autónomas de Andalucía y Extremadura.</li><li><b>[General]</b> Acuerdo concerniente al reconocimiento de la formación y titulación para la gente de mar entre la Subsecretaría de intereses marítimos de la Armada Argentina en representación del Gobierno de Argentina y la Dirección General de la Marina Mercante en representación del Gobierno del Reino de España, hecho en Madrid y Buenos Aires el 12 y 26 de julio de 2002.</li><li><b>[General]</b> Acuerdo concerniente al reconocimiento de la formación y titulación para la gente de mar procedente de México entre la Dirección General de Marina Mercante de México en representación del Gobierno de México y la Dirección General de la Marina Mercante de España en representación del Gobierno de España, hecho en Madrid y Ciudad de México el 18 y 30 de julio de 2002.</li><li><b>[General]</b> Aplicación provisional del Acuerdo Internacional entre el Reino de España y la Organización de las Naciones Unidas para la Educación, la Ciencia y la Cultura (UNESCO) relativo a la designación de la Fundación Tres Culturas del Mediterráneo como Centro de Categoría 2 auspiciado por la UNESCO, hecho en París el 28 de enero de 2026.</li><li><b>[General]</b> Resolución de 11 de febrero de 2026, de la Secretaría General de Financiación Autonómica y Local, por la que se desarrolla la información a suministrar por las Corporaciones Locales relativa al esfuerzo fiscal de 2024 y su comprobación en las Delegaciones de Economía y Hacienda.</li><li><b>[Normativa]</b> Real Decreto 126/2026, de 18 de febrero, por el que se fija el salario mínimo interprofesional para 2026.</li><li><b>[Normativa]</b> Real Decreto 123/2026, de 11 de febrero, por el que se nombra Presidente del Tribunal Superior de Justicia de Illes Balears a don Carlos Gómez Martínez.</li><li><b>[General]</b> Acuerdo de 25 de noviembre de 2025, de la Comisión Permanente del Consejo General del Poder Judicial, por el que se declara la jubilación forzosa del Magistrado don Ángel Luis Sanabria Parejo.</li><li><b>[General]</b> Orden PJC/103/2026, de 9 de febrero, por la que se nombra personal funcionario del Cuerpo de Tramitación Procesal y Administrativa de la Administración de Justicia, turno libre, a las personas que han superado el proceso selectivo convocado por Orden JUS/1288/2022, de 22 de diciembre.</li>
-
-</ul>
-
-<script src="dashboard.js"></script>
-
-</section>
-</div>
+    <div class="container">
+        <header class="obs-header">
+            <h1>Observatorio Público</h1>
+            <p>Monitoreo en tiempo real de la administración</p>
+            <a href="datos/informe_transparencia.pdf" class="btn-pdf" download>📥 Descargar Informe PDF</a>
+        </header>
+        
+        <div class="main-grid">
+            <div class="obs-card">
+                <h2>🚨 Alertas de Riesgo</h2>
+                <div id="alertas-box"></div>
+            </div>
+            <div class="obs-card">
+                <h2>📍 Mapa Municipal de Actividad</h2>
+                <div id="map" style="height: 300px;"></div>
+            </div>
+            <div class="obs-card" style="grid-column: span 2;">
+                <h2>📜 BOE Analizado Automáticamente</h2>
+                <div id="boe-lista"></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="dashboard.js"></script>
 </body>
 </html>
