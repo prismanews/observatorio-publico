@@ -1,7 +1,9 @@
 import os
 import json
+import requests
 import pandas as pd
 import feedparser
+from io import StringIO
 from datetime import datetime
 
 os.makedirs("datos", exist_ok=True)
@@ -9,32 +11,59 @@ os.makedirs("datos", exist_ok=True)
 print("Iniciando generación del Observatorio...")
 
 # =========================================================
-# 1️⃣ SUBVENCIONES BDNS
+# 1️⃣ SUBVENCIONES BDNS (ROBUSTO)
 # =========================================================
 
 subvenciones = []
 
 try:
     url = "https://www.infosubvenciones.es/bdnstrans/GE/es/convocatorias.csv"
-    df = pd.read_csv(url, sep=";", encoding="latin1")
 
-    df = df.rename(columns={
-        "Descripcion": "objeto",
-        "Importe": "importe",
-        "Organo": "organismo"
-    })
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
 
-    df = df[["organismo", "objeto", "importe"]].dropna()
-    df["importe"] = pd.to_numeric(df["importe"], errors="coerce")
+    r = requests.get(url, headers=headers, timeout=30)
 
-    df = df.sort_values("importe", ascending=False).head(20)
+    if r.status_code == 200:
 
-    subvenciones = df.to_dict(orient="records")
+        df = pd.read_csv(
+            StringIO(r.text),
+            sep=";",
+            encoding="latin1",
+            on_bad_lines="skip"
+        )
 
-    print("Subvenciones BDNS integradas")
+        df.columns = [c.strip() for c in df.columns]
+
+        columnas_necesarias = {"Organo", "Descripcion", "Importe"}
+
+        if columnas_necesarias.issubset(set(df.columns)):
+
+            df = df.rename(columns={
+                "Organo": "organismo",
+                "Descripcion": "objeto",
+                "Importe": "importe"
+            })
+
+            df["importe"] = pd.to_numeric(df["importe"], errors="coerce")
+
+            df = df[["organismo", "objeto", "importe"]].dropna()
+
+            df = df.sort_values("importe", ascending=False).head(20)
+
+            subvenciones = df.to_dict(orient="records")
+
+            print(f"BDNS integrada: {len(subvenciones)} registros")
+
+        else:
+            print("BDNS: columnas no coinciden")
+
+    else:
+        print("BDNS error HTTP:", r.status_code)
 
 except Exception as e:
-    print("Error BDNS (continúa ejecución):", e)
+    print("Error BDNS:", e)
 
 
 # =========================================================
@@ -54,10 +83,10 @@ try:
             "resumen": entry.title[:160] + "..."
         })
 
-    print("BOE RSS integrado")
+    print(f"BOE integrado: {len(boe_docs)} registros")
 
 except Exception as e:
-    print("Error BOE (continúa ejecución):", e)
+    print("Error BOE:", e)
 
 
 # =========================================================
@@ -77,14 +106,17 @@ with open("datos/boe.json", "w", encoding="utf-8") as f:
 
 total_subv = len(subvenciones)
 importe_total = sum(
-    s.get("importe", 0) for s in subvenciones if isinstance(s.get("importe"), (int, float))
+    s.get("importe", 0)
+    for s in subvenciones
+    if isinstance(s.get("importe"), (int, float))
 )
 
 timestamp = datetime.utcnow()
 timestamp_str = timestamp.strftime("%d %B %Y · %H:%M UTC")
 
+
 # =========================================================
-# 5️⃣ GENERAR HTML PROFESIONAL
+# 5️⃣ GENERAR HTML
 # =========================================================
 
 html = f"""
@@ -134,15 +166,15 @@ html = f"""
 <ul>
 """
 
-for s in subvenciones[:10]:
-    html += f"<li><b>{s.get('organismo','')}</b>: {s.get('importe',0):,.0f} € — {s.get('objeto','')}</li>"
+if subvenciones:
+    for s in subvenciones[:10]:
+        html += f"<li><b>{s['organismo']}</b>: {s['importe']:,.0f} € — {s['objeto']}</li>"
+else:
+    html += "<li>No se pudieron cargar subvenciones en esta actualización.</li>"
 
 html += "</ul>"
 
-html += """
-<h2>BOE reciente</h2>
-<ul>
-"""
+html += "<h2>BOE reciente</h2><ul>"
 
 for b in boe_docs[:10]:
     html += f"<li><a href='{b['link']}' target='_blank'>{b['titulo']}</a></li>"
@@ -152,7 +184,7 @@ html += """
 </ul>
 
 <p style="margin-top:40px;font-size:0.85rem;color:#666;">
-Datos oficiales: BDNS · BOE · Procesado automáticamente
+Fuentes oficiales: BDNS · BOE · Procesado automáticamente
 </p>
 
 </section>
