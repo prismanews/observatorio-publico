@@ -107,7 +107,7 @@ html = f"""
 <meta name="description" content="Observatorio independiente de subvenciones públicas, BOE simplificado y transparencia institucional.">
 <meta name="keywords" content="subvenciones públicas, BOE explicado, transparencia pública, gasto público España">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<link rel="canonical" href="https://prismanews.github.io/observatorio-publico/">
 <link rel="stylesheet" href="estilo.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
