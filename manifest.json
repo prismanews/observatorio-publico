@@ -1,6 +1,6 @@
 {
-  "name": "Observatorio de Transparencia",
-  "short_name": "ObsPub",
+  "name": "Observatorio Anticorrupción",
+  "short_name": "AntiCorr",
   "start_url": "/observatorio-publico/",
   "display": "standalone",
   "background_color": "#f8fafc",

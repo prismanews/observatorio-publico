@@ -1,16 +1,109 @@
 [
   {
     "tipo": "CRÍTICA",
-    "msg": "Subvención anómala: Fundación Guecho",
-    "motivo": "Importe de 43.381.253€ muy superior a la media",
-    "impacto": "ALTO",
-    "fecha": "2026-02-19"
+    "icono": "🔴",
+    "msg": "SUBVENCIÓN EXTREMA: Empresa Municipal Vigo",
+    "motivo": "Importe de 77.534.370€ - 408% sobre la media",
+    "impacto": "MUY ALTO",
+    "fecha": "2025-12-09",
+    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2024-2178",
+    "municipio": "Vigo",
+    "importe": 77534370,
+    "categoria": "outlier"
   },
   {
     "tipo": "CRÍTICA",
-    "msg": "Subvención anómala: Ayuntamiento de Valencia",
-    "motivo": "Importe de 46.394.736€ muy superior a la media",
+    "icono": "🔴",
+    "msg": "SUBVENCIÓN EXTREMA: Fundación San Cristóbal de La...",
+    "motivo": "Importe de 76.907.969€ - 403% sobre la media",
+    "impacto": "MUY ALTO",
+    "fecha": "2025-04-28",
+    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2023-9869",
+    "municipio": "San Cristóbal de La Laguna",
+    "importe": 76907969,
+    "categoria": "outlier"
+  },
+  {
+    "tipo": "CRÍTICA",
+    "icono": "🔴",
+    "msg": "SUBVENCIÓN EXTREMA: Universidad de Calviá",
+    "motivo": "Importe de 75.410.739€ - 394% sobre la media",
+    "impacto": "MUY ALTO",
+    "fecha": "2025-07-22",
+    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2026-7697",
+    "municipio": "Calviá",
+    "importe": 75410739,
+    "categoria": "outlier"
+  },
+  {
+    "tipo": "CRÍTICA",
+    "icono": "🔴",
+    "msg": "SUBVENCIÓN EXTREMA: Fundación Murcia",
+    "motivo": "Importe de 74.941.839€ - 391% sobre la media",
+    "impacto": "MUY ALTO",
+    "fecha": "2025-10-06",
+    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2025-7708",
+    "municipio": "Murcia",
+    "importe": 74941839,
+    "categoria": "outlier"
+  },
+  {
+    "tipo": "CRÍTICA",
+    "icono": "🔴",
+    "msg": "SUBVENCIÓN EXTREMA: Confederación de El Puerto de...",
+    "motivo": "Importe de 73.597.515€ - 382% sobre la media",
+    "impacto": "MUY ALTO",
+    "fecha": "2025-02-27",
+    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2023-8522",
+    "municipio": "El Puerto de Santa María",
+    "importe": 73597515,
+    "categoria": "outlier"
+  },
+  {
+    "tipo": "CRÍTICA",
+    "icono": "🔴",
+    "msg": "SUBVENCIÓN EXTREMA: Empresa Municipal Elda",
+    "motivo": "Importe de 72.756.789€ - 376% sobre la media",
+    "impacto": "MUY ALTO",
+    "fecha": "2025-04-28",
+    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2026-2788",
+    "municipio": "San Sebastián de los Reyes",
+    "importe": 72756789,
+    "categoria": "outlier"
+  },
+  {
+    "tipo": "CRÍTICA",
+    "icono": "🔴",
+    "msg": "SUBVENCIÓN EXTREMA: Empresa Municipal Ciudad Real",
+    "motivo": "Importe de 71.010.891€ - 365% sobre la media",
+    "impacto": "MUY ALTO",
+    "fecha": "2025-07-19",
+    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2025-2613",
+    "municipio": "Ciudad Real",
+    "importe": 71010891,
+    "categoria": "outlier"
+  },
+  {
+    "tipo": "CRÍTICA",
+    "icono": "🔴",
+    "msg": "SUBVENCIÓN EXTREMA: Fundación Avilés",
+    "motivo": "Importe de 69.060.594€ - 352% sobre la media",
+    "impacto": "MUY ALTO",
+    "fecha": "2026-01-03",
+    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2023-2011",
+    "municipio": "Avilés",
+    "importe": 69060594,
+    "categoria": "outlier"
+  },
+  {
+    "tipo": "AVISO",
+    "icono": "🏛️",
+    "msg": "BENEFICIARIO MULTIMINISTERIO: Fundación Avilés",
+    "motivo": "Recibe de 3 ministerios diferentes",
     "impacto": "ALTO",
-    "fecha": "2026-02-19"
+    "fecha": "2026-02-19",
+    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2026-2962",
+    "municipio": "Avilés",
+    "categoria": "multiministerio"
   }
 ]

@@ -6,8 +6,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ObsPub">
-    <title>Observatorio de Transparencia Pública</title>
-    <meta name="description" content="Seguimiento de transparencia, subvenciones y gasto público en España">
+    <title>Observatorio Anticorrupción</title>
+    <meta name="description" content="Mapa de riesgos de corrupción en subvenciones públicas">
     <meta name="theme-color" content="#0f172a">
     
     <link rel="manifest" href="manifest.json">
@@ -44,8 +44,44 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        .data-table td:first-child {
-            max-width: 100px;
+        .clickable {
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .clickable:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+        .alerta-item a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .enlace-detalle {
+            display: inline-block;
+            margin-top: 8px;
+            color: var(--secondary);
+            font-size: 0.8rem;
+            text-decoration: none;
+        }
+        .enlace-detalle:hover {
+            text-decoration: underline;
+        }
+        .leyenda-mapa {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .leyenda-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .color-box {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -54,10 +90,10 @@
     
     <div class="container">
         <header class="obs-header">
-            <h1>🏛️ Observatorio de Transparencia</h1>
-            <p>Monitorizando 154 municipios españoles</p>
+            <h1>🕵️ Observatorio Anticorrupción</h1>
+            <p>154 municipios · 9 alertas activas · 3,055,400,716€ en subvenciones</p>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <span class="badge" style="background: #10b981; padding: 6px 12px;">19/02/2026 10:32</span>
+                <span class="badge" style="background: #10b981; padding: 6px 12px;">19/02/2026 10:47</span>
                 <a href="datos/informe_transparencia.pdf" class="btn" download>
                     📥 Informe PDF
                 </a>
@@ -70,187 +106,148 @@
         <div class="obs-card" style="margin-bottom: 16px; padding: 12px;">
             <div class="stat-grid">
                 <div class="stat-item">
-                    <div class="stat-value">2</div>
+                    <div class="stat-value">9</div>
                     <div class="stat-label">Alertas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Críticas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">200</div>
+                    <div class="stat-label">Subvenciones</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">40</div>
                     <div class="stat-label">BOE</div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-value">150</div>
-                    <div class="stat-label">Subvenciones</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">1,066,871,990€</div>
-                    <div class="stat-label">Total</div>
-                </div>
             </div>
         </div>
 
         <div class="tabs">
-            <div class="tab active" onclick="showTab('resumen')">📊 Resumen</div>
+            <div class="tab active" onclick="showTab('mapa')">🗺️ Mapa de Riesgos</div>
             <div class="tab" onclick="showTab('alertas')">🚨 Alertas</div>
             <div class="tab" onclick="showTab('subvenciones')">💰 Subvenciones</div>
             <div class="tab" onclick="showTab('boe')">📜 BOE</div>
-            <div class="tab" onclick="showTab('promesas')">🗳️ Promesas</div>
         </div>
 
         <div class="main-grid">
-            <div id="resumen" class="tab-content" style="display: grid; gap: 16px;">
+            <div id="mapa" class="tab-content" style="display: grid; gap: 16px;">
                 <div class="obs-card">
-                    <h2>🚨 Alertas de Riesgo</h2>
-                    <div class="alertas-container">
-                        
-                        <div class="alerta-item critica">
-                            <span class="alerta-tipo">CRÍTICA</span>
-                            <div class="alerta-msg">Subvención anómala: Fundación Guecho</div>
-                            <div class="alerta-motivo">Importe de 43.381.253€ muy superior a la media</div>
-                            <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
-                                Impacto: ALTO
-                            </div>
-                        </div>
-                        
-                        <div class="alerta-item critica">
-                            <span class="alerta-tipo">CRÍTICA</span>
-                            <div class="alerta-msg">Subvención anómala: Ayuntamiento de Valencia</div>
-                            <div class="alerta-motivo">Importe de 46.394.736€ muy superior a la media</div>
-                            <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
-                                Impacto: ALTO
-                            </div>
-                        </div>
-                        
+                    <h2>🗺️ Mapa de Riesgo de Corrupción</h2>
+                    <div id="map" style="height: 400px;"></div>
+                    <div class="leyenda-mapa">
+                        <div class="leyenda-item"><span class="color-box" style="background:#10b981;"></span> Riesgo bajo</div>
+                        <div class="leyenda-item"><span class="color-box" style="background:#eab308;"></span> Riesgo medio</div>
+                        <div class="leyenda-item"><span class="color-box" style="background:#f59e0b;"></span> Riesgo alto</div>
+                        <div class="leyenda-item"><span class="color-box" style="background:#ef4444;"></span> Riesgo muy alto</div>
+                        <div class="leyenda-item">⚠️ Municipio con alerta activa</div>
                     </div>
-                </div>
-
-                <div class="obs-card">
-                    <h2>📍 Mapa Municipal</h2>
-                    <div id="map" style="height: 280px;"></div>
                     <p style="font-size:0.8rem; color:var(--text-light); margin-top:8px;">
-                        154 municipios monitorizados
+                        Intensidad del color = nivel de riesgo · Haz clic en cualquier municipio para ver detalles
                     </p>
                 </div>
 
+                <!-- Alertas destacadas -->
                 <div class="obs-card">
-                    <h2>💰 Subvenciones Recientes</h2>
-                    <div style="overflow-x: auto;">
-                        <table class="data-table">
-                            <thead><tr><th>Beneficiario</th><th>Importe</th><th>Municipio</th></tr></thead>
-                            <tbody>
-                                
-                                <tr>
-                                    <td>Diputación de Gandía</td>
-                                    <td>185,738€</td>
-                                    <td>Tarragona</td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>Empresa Municipal...</td>
-                                    <td>783,264€</td>
-                                    <td>Jaén</td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>Empresa Municipal...</td>
-                                    <td>1,250,346€</td>
-                                    <td>Albacete</td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>Fundación Guecho</td>
-                                    <td>43,381,253€</td>
-                                    <td>Mataró</td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>Diputación de...</td>
-                                    <td>760,579€</td>
-                                    <td>Marbella</td>
-                                </tr>
-                                
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="obs-card">
-                    <h2>💶 Gasto Público</h2>
-                    <div style="overflow-x: auto;">
-                        <table class="data-table">
-                            <thead><tr><th>Concepto</th><th>Importe</th><th>Variación</th></tr></thead>
-                            <tbody>
-                                
-                                <tr>
-                                    <td>Sanidad</td>
-                                    <td>12,450,000,000€</td>
-                                    <td style="color: green">+5.2%</td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>Educación</td>
-                                    <td>8,720,000,000€</td>
-                                    <td style="color: green">+3.1%</td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>Transportes</td>
-                                    <td>6,540,000,000€</td>
-                                    <td style="color: red">-1.4%</td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>Defensa</td>
-                                    <td>9,870,000,000€</td>
-                                    <td style="color: green">+7.8%</td>
-                                </tr>
-                                
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="obs-card">
-                    <h2>📜 Último BOE</h2>
-                    <div>
+                    <h2>🚨 Alertas Críticas</h2>
+                    <div class="alertas-container">
                         
-                        <div style="padding: 12px; background: var(--bg); border-radius: 8px;">
-                            <span class="badge" style="background: #3b82f6;">ADMINISTRATIVO</span>
-                            <div style="margin-top:8px; font-weight:500;">Sumario</div>
-                            <a href="https://www.boe.es/boe/dias/2026/02/19/" target="_blank" style="color:var(--secondary); display:inline-block; margin-top:8px;">
-                                🔗 Ver en BOE →
-                            </a>
-                        </div>
-                        
-                    </div>
-                </div>
-
-                <div class="obs-card">
-                    <h2>🗳️ Promesas</h2>
-                    <div>
-                        
-                        <div style="margin-bottom:12px;">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                                <span>Creación de 500,000...</span>
-                                <span class="badge" style="background:orange">45%</span>
+                        <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2024-2178" target="_blank" style="text-decoration: none; color: inherit;">
+                            <div class="alerta-item critica">
+                                <span class="alerta-tipo">🔴 CRÍTICA</span>
+                                <div class="alerta-msg">SUBVENCIÓN EXTREMA: Empresa Municipal Vigo</div>
+                                <div class="alerta-motivo">Importe de 77.534.370€ - 408% sobre la media</div>
+                                <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
+                                    Impacto: MUY ALTO · Vigo
+                                </div>
+                                <span class="enlace-detalle">Investigar →</span>
                             </div>
-                            <div class="progress"><div class="progress-bar" style="width:45%"></div></div>
-                        </div>
+                        </a>
                         
-                        <div style="margin-bottom:12px;">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                                <span>100,000 viviendas...</span>
-                                <span class="badge" style="background:orange">12%</span>
+                        <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2023-9869" target="_blank" style="text-decoration: none; color: inherit;">
+                            <div class="alerta-item critica">
+                                <span class="alerta-tipo">🔴 CRÍTICA</span>
+                                <div class="alerta-msg">SUBVENCIÓN EXTREMA: Fundación San Cristóbal de La...</div>
+                                <div class="alerta-motivo">Importe de 76.907.969€ - 403% sobre la media</div>
+                                <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
+                                    Impacto: MUY ALTO · San Cristóbal de La Laguna
+                                </div>
+                                <span class="enlace-detalle">Investigar →</span>
                             </div>
-                            <div class="progress"><div class="progress-bar" style="width:12%"></div></div>
-                        </div>
+                        </a>
                         
-                        <div style="margin-bottom:12px;">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                                <span>Reducción listas de...</span>
-                                <span class="badge" style="background:orange">28%</span>
+                        <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2026-7697" target="_blank" style="text-decoration: none; color: inherit;">
+                            <div class="alerta-item critica">
+                                <span class="alerta-tipo">🔴 CRÍTICA</span>
+                                <div class="alerta-msg">SUBVENCIÓN EXTREMA: Universidad de Calviá</div>
+                                <div class="alerta-motivo">Importe de 75.410.739€ - 394% sobre la media</div>
+                                <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
+                                    Impacto: MUY ALTO · Calviá
+                                </div>
+                                <span class="enlace-detalle">Investigar →</span>
                             </div>
-                            <div class="progress"><div class="progress-bar" style="width:28%"></div></div>
-                        </div>
+                        </a>
+                        
+                        <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2025-7708" target="_blank" style="text-decoration: none; color: inherit;">
+                            <div class="alerta-item critica">
+                                <span class="alerta-tipo">🔴 CRÍTICA</span>
+                                <div class="alerta-msg">SUBVENCIÓN EXTREMA: Fundación Murcia</div>
+                                <div class="alerta-motivo">Importe de 74.941.839€ - 391% sobre la media</div>
+                                <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
+                                    Impacto: MUY ALTO · Murcia
+                                </div>
+                                <span class="enlace-detalle">Investigar →</span>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2023-8522" target="_blank" style="text-decoration: none; color: inherit;">
+                            <div class="alerta-item critica">
+                                <span class="alerta-tipo">🔴 CRÍTICA</span>
+                                <div class="alerta-msg">SUBVENCIÓN EXTREMA: Confederación de El Puerto de...</div>
+                                <div class="alerta-motivo">Importe de 73.597.515€ - 382% sobre la media</div>
+                                <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
+                                    Impacto: MUY ALTO · El Puerto de Santa María
+                                </div>
+                                <span class="enlace-detalle">Investigar →</span>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2026-2788" target="_blank" style="text-decoration: none; color: inherit;">
+                            <div class="alerta-item critica">
+                                <span class="alerta-tipo">🔴 CRÍTICA</span>
+                                <div class="alerta-msg">SUBVENCIÓN EXTREMA: Empresa Municipal Elda</div>
+                                <div class="alerta-motivo">Importe de 72.756.789€ - 376% sobre la media</div>
+                                <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
+                                    Impacto: MUY ALTO · San Sebastián de los Reyes
+                                </div>
+                                <span class="enlace-detalle">Investigar →</span>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2025-2613" target="_blank" style="text-decoration: none; color: inherit;">
+                            <div class="alerta-item critica">
+                                <span class="alerta-tipo">🔴 CRÍTICA</span>
+                                <div class="alerta-msg">SUBVENCIÓN EXTREMA: Empresa Municipal Ciudad Real</div>
+                                <div class="alerta-motivo">Importe de 71.010.891€ - 365% sobre la media</div>
+                                <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
+                                    Impacto: MUY ALTO · Ciudad Real
+                                </div>
+                                <span class="enlace-detalle">Investigar →</span>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2023-2011" target="_blank" style="text-decoration: none; color: inherit;">
+                            <div class="alerta-item critica">
+                                <span class="alerta-tipo">🔴 CRÍTICA</span>
+                                <div class="alerta-msg">SUBVENCIÓN EXTREMA: Fundación Avilés</div>
+                                <div class="alerta-motivo">Importe de 69.060.594€ - 352% sobre la media</div>
+                                <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
+                                    Impacto: MUY ALTO · Avilés
+                                </div>
+                                <span class="enlace-detalle">Investigar →</span>
+                            </div>
+                        </a>
                         
                     </div>
                 </div>
@@ -285,48 +282,69 @@
 
         function showTab(tabName) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
             event.target.classList.add('active');
-            console.log('Tab:', tabName);
+            document.getElementById(tabName).style.display = 'grid';
         }
 
         document.getElementById('refreshBtn')?.addEventListener('click', () => location.reload());
 
+        // Inicializar mapa
         var map = L.map('map').setView([40.4168, -3.7038], 6);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap'
         }).addTo(map);
         
+        // Cargar GeoJSON con datos de riesgo
         fetch('datos/municipios.geojson')
             .then(r => r.json())
             .then(data => {
-                const importes = data.features.map(f => f.properties.importe_total || 0);
-                const maxImporte = Math.max(...importes);
-                
                 L.geoJSON(data, {
                     style: (feature) => {
-                        const importe = feature.properties.importe_total || 0;
-                        const intensidad = maxImporte > 0 ? importe / maxImporte : 0;
                         return {
-                            fillColor: `rgba(59, 130, 246, ${0.2 + intensidad * 0.5})`,
+                            fillColor: feature.properties.color_riesgo || '#10b981',
                             fillOpacity: 0.7,
                             color: '#2563eb',
-                            weight: 1.5,
-                            opacity: 0.8
+                            weight: feature.properties.tiene_alerta ? 3 : 1.5,
+                            opacity: 0.8,
+                            dashArray: feature.properties.tiene_alerta ? '5, 5' : null
                         };
                     },
                     onEachFeature: (feature, layer) => {
-                        const props = feature.properties;
-                        const importe = props.importe_total || 0;
-                        const numSub = props.subvenciones || 0;
+                        const p = feature.properties;
+                        const alertaIcon = p.tiene_alerta ? ' ⚠️' : '';
                         layer.bindPopup(`
-                            <b>${props.name}</b><br>
-                            <span style="color:#2563eb;">${numSub} subvenciones</span><br>
-                            <b>${importe.toLocaleString('es-ES')}€</b>
+                            <b>${p.name}${alertaIcon}</b><br>
+                            <span style="color:#2563eb;">${p.subvenciones} subvenciones</span><br>
+                            <b>${p.importe_total.toLocaleString('es-ES')}€</b><br>
+                            <span style="color:${p.color_riesgo};">Riesgo: ${p.nivel_riesgo}</span><br>
+                            <small>${p.beneficiarios} beneficiarios · ${p.ministerios} ministerios</small><br>
+                            <a href="${p.url_info}" target="_blank" style="color:#2563eb;">Ver ayuntamiento →</a>
                         `);
                     }
                 }).addTo(map);
                 
-                document.querySelector('p').innerHTML = `${data.features.length} municipios monitorizados`;
+                // Añadir marcadores para alertas críticas
+                const alertasCriticas = [{"tipo": "CRÍTICA", "icono": "🔴", "msg": "SUBVENCIÓN EXTREMA: Empresa Municipal Vigo", "motivo": "Importe de 77.534.370€ - 408% sobre la media", "impacto": "MUY ALTO", "fecha": "2025-12-09", "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2024-2178", "municipio": "Vigo", "importe": 77534370, "categoria": "outlier"}, {"tipo": "CRÍTICA", "icono": "🔴", "msg": "SUBVENCIÓN EXTREMA: Fundación San Cristóbal de La...", "motivo": "Importe de 76.907.969€ - 403% sobre la media", "impacto": "MUY ALTO", "fecha": "2025-04-28", "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2023-9869", "municipio": "San Cristóbal de La Laguna", "importe": 76907969, "categoria": "outlier"}, {"tipo": "CRÍTICA", "icono": "🔴", "msg": "SUBVENCIÓN EXTREMA: Universidad de Calviá", "motivo": "Importe de 75.410.739€ - 394% sobre la media", "impacto": "MUY ALTO", "fecha": "2025-07-22", "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2026-7697", "municipio": "Calviá", "importe": 75410739, "categoria": "outlier"}, {"tipo": "CRÍTICA", "icono": "🔴", "msg": "SUBVENCIÓN EXTREMA: Fundación Murcia", "motivo": "Importe de 74.941.839€ - 391% sobre la media", "impacto": "MUY ALTO", "fecha": "2025-10-06", "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2025-7708", "municipio": "Murcia", "importe": 74941839, "categoria": "outlier"}, {"tipo": "CRÍTICA", "icono": "🔴", "msg": "SUBVENCIÓN EXTREMA: Confederación de El Puerto de...", "motivo": "Importe de 73.597.515€ - 382% sobre la media", "impacto": "MUY ALTO", "fecha": "2025-02-27", "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2023-8522", "municipio": "El Puerto de Santa María", "importe": 73597515, "categoria": "outlier"}, {"tipo": "CRÍTICA", "icono": "🔴", "msg": "SUBVENCIÓN EXTREMA: Empresa Municipal Elda", "motivo": "Importe de 72.756.789€ - 376% sobre la media", "impacto": "MUY ALTO", "fecha": "2025-04-28", "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2026-2788", "municipio": "San Sebastián de los Reyes", "importe": 72756789, "categoria": "outlier"}, {"tipo": "CRÍTICA", "icono": "🔴", "msg": "SUBVENCIÓN EXTREMA: Empresa Municipal Ciudad Real", "motivo": "Importe de 71.010.891€ - 365% sobre la media", "impacto": "MUY ALTO", "fecha": "2025-07-19", "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2025-2613", "municipio": "Ciudad Real", "importe": 71010891, "categoria": "outlier"}, {"tipo": "CRÍTICA", "icono": "🔴", "msg": "SUBVENCIÓN EXTREMA: Fundación Avilés", "motivo": "Importe de 69.060.594€ - 352% sobre la media", "impacto": "MUY ALTO", "fecha": "2026-01-03", "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2023-2011", "municipio": "Avilés", "importe": 69060594, "categoria": "outlier"}];
+                alertasCriticas.forEach(a => {
+                    // Buscar coordenadas del municipio
+                    const feature = data.features.find(f => f.properties.name === a.municipio);
+                    if (feature && feature.geometry.coordinates[0][0]) {
+                        const coords = feature.geometry.coordinates[0][0];
+                        L.marker([coords[1], coords[0]], {
+                            icon: L.divIcon({
+                                html: '🔴',
+                                className: 'marcador-alerta',
+                                iconSize: [20, 20]
+                            })
+                        }).addTo(map).bindPopup(`
+                            <b>⚠️ ALERTA CRÍTICA</b><br>
+                            ${a.msg}<br>
+                            <small>${a.motivo}</small><br>
+                            <a href="${a.url}" target="_blank">Investigar →</a>
+                        `);
+                    }
+                });
             });
     </script>
 </body>

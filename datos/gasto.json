@@ -4,48 +4,39 @@
     "importe": 12450000000,
     "ministerio": "Ministerio de Sanidad",
     "variacion_anual": "+5.2%",
-    "partidas": 234
+    "partidas": 234,
+    "url": "https://www.sanidad.gob.es/estadisticas/presupuestos.htm"
   },
   {
     "concepto": "Educación",
     "importe": 8720000000,
     "ministerio": "Ministerio de Educación",
     "variacion_anual": "+3.1%",
-    "partidas": 189
+    "partidas": 189,
+    "url": "https://www.educacion.gob.es/presupuestos.html"
   },
   {
     "concepto": "Transportes",
     "importe": 6540000000,
     "ministerio": "Ministerio de Transportes",
     "variacion_anual": "-1.4%",
-    "partidas": 156
+    "partidas": 156,
+    "url": "https://www.transportes.gob.es/presupuestos"
   },
   {
     "concepto": "Defensa",
     "importe": 9870000000,
     "ministerio": "Ministerio de Defensa",
     "variacion_anual": "+7.8%",
-    "partidas": 98
+    "partidas": 98,
+    "url": "https://www.defensa.gob.es/presupuestos"
   },
   {
     "concepto": "Ciencia",
     "importe": 3450000000,
     "ministerio": "Ministerio de Ciencia",
     "variacion_anual": "+12.3%",
-    "partidas": 76
-  },
-  {
-    "concepto": "Justicia",
-    "importe": 2340000000,
-    "ministerio": "Ministerio de Justicia",
-    "variacion_anual": "+2.1%",
-    "partidas": 45
-  },
-  {
-    "concepto": "Transición Ecológica",
-    "importe": 5670000000,
-    "ministerio": "Ministerio para la Transición Ecológica",
-    "variacion_anual": "+15.7%",
-    "partidas": 112
+    "partidas": 76,
+    "url": "https://www.ciencia.gob.es/presupuestos"
   }
 ]

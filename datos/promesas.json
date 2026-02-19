@@ -6,7 +6,8 @@
     "fecha_limite": "2027-12-31",
     "cumplimiento": 45,
     "evidencia": "EPA muestra creación de 225,000 empleos",
-    "fuente": "INE"
+    "fuente": "INE",
+    "url": "https://www.ine.es/prensa/epa_prensa.htm"
   },
   {
     "promesa": "100,000 viviendas públicas",
@@ -15,7 +16,8 @@
     "fecha_limite": "2027-12-31",
     "cumplimiento": 12,
     "evidencia": "12,000 viviendas iniciadas",
-    "fuente": "MITMA"
+    "fuente": "MITMA",
+    "url": "https://www.mitma.gob.es/vivienda"
   },
   {
     "promesa": "Reducción listas de espera sanitarias",
@@ -24,7 +26,8 @@
     "fecha_limite": "2026-12-31",
     "cumplimiento": 28,
     "evidencia": "Reducción del 15% en espera quirúrgica",
-    "fuente": "Ministerio de Sanidad"
+    "fuente": "Ministerio de Sanidad",
+    "url": "https://www.sanidad.gob.es/estadisticas/listasEspera.htm"
   },
   {
     "promesa": "Becas universales para FP",
@@ -33,7 +36,8 @@
     "fecha_limite": "2026-09-01",
     "cumplimiento": 62,
     "evidencia": "62,000 nuevas becas concedidas",
-    "fuente": "Ministerio de Educación"
+    "fuente": "Ministerio de Educación",
+    "url": "https://www.educacion.gob.es/becas"
   },
   {
     "promesa": "Reducción de impuestos a PYMEs",
@@ -42,15 +46,7 @@
     "fecha_limite": "2025-12-31",
     "cumplimiento": 98,
     "evidencia": "Tipo reducido del 25% al 23%",
-    "fuente": "AEAT"
-  },
-  {
-    "promesa": "Energía 100% renovable",
-    "partido": "SUMAR",
-    "fecha_promesa": "2023-07-23",
-    "fecha_limite": "2030-12-31",
-    "cumplimiento": 34,
-    "evidencia": "34% de la generación es renovable",
-    "fuente": "REE"
+    "fuente": "AEAT",
+    "url": "https://sede.agenciatributaria.gob.es"
   }
 ]
