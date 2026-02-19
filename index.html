@@ -15,37 +15,49 @@
     <link rel="stylesheet" href="estilo.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        /* Pull to refresh indicator */
         .pull-indicator {
             height: 0;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-light);
-            font-size: 0.8rem;
+            background: var(--primary);
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
             transition: height 0.2s;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         .pull-indicator.show {
-            height: 40px;
+            height: 44px;
         }
-        /* Ajuste para iPhone 13 */
         @media (max-width: 390px) {
             .obs-header h1 { font-size: 1.5rem; }
             .stat-value { font-size: 1.4rem; }
             .btn { padding: 10px 12px; }
         }
+        .data-table td {
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .data-table td:first-child {
+            max-width: 100px;
+        }
     </style>
 </head>
 <body>
-    <div class="pull-indicator" id="pullIndicator">Suelta para actualizar</div>
+    <div class="pull-indicator" id="pullIndicator">⟳ Suelta para actualizar los datos</div>
     
     <div class="container">
         <header class="obs-header">
             <h1>🏛️ Observatorio de Transparencia</h1>
-            <p>Monitorizando la actividad del sector público español</p>
+            <p>Monitorizando 154 municipios españoles</p>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <span class="badge" style="background: #10b981; padding: 6px 12px;">19/02/2026 10:15</span>
+                <span class="badge" style="background: #10b981; padding: 6px 12px;">19/02/2026 10:31</span>
                 <a href="datos/informe_transparencia.pdf" class="btn" download>
                     📥 Informe PDF
                 </a>
@@ -55,11 +67,10 @@
             </div>
         </header>
 
-        <!-- Estadísticas rápidas -->
         <div class="obs-card" style="margin-bottom: 16px; padding: 12px;">
             <div class="stat-grid">
                 <div class="stat-item">
-                    <div class="stat-value">4</div>
+                    <div class="stat-value">0</div>
                     <div class="stat-label">Alertas</div>
                 </div>
                 <div class="stat-item">
@@ -67,17 +78,16 @@
                     <div class="stat-label">BOE</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value">100</div>
+                    <div class="stat-value">150</div>
                     <div class="stat-label">Subvenciones</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value">668,973,312€</div>
+                    <div class="stat-value">760,328,407€</div>
                     <div class="stat-label">Total</div>
                 </div>
             </div>
         </div>
 
-        <!-- Tabs navegación -->
         <div class="tabs">
             <div class="tab active" onclick="showTab('resumen')">📊 Resumen</div>
             <div class="tab" onclick="showTab('alertas')">🚨 Alertas</div>
@@ -86,64 +96,23 @@
             <div class="tab" onclick="showTab('promesas')">🗳️ Promesas</div>
         </div>
 
-        <!-- Contenido principal -->
         <div class="main-grid">
-            <!-- Sección Resumen (visible por defecto) -->
             <div id="resumen" class="tab-content" style="display: grid; gap: 16px;">
-                <!-- Alertas (horizontal scroll) -->
                 <div class="obs-card">
                     <h2>🚨 Alertas de Riesgo</h2>
                     <div class="alertas-container">
                         
-                        <div class="alerta-item aviso">
-                            <span class="alerta-tipo">AVISO</span>
-                            <div class="alerta-msg">Beneficiario con múltiples ministerios: Confederación de Valladolid......</div>
-                            <div class="alerta-motivo">Recibe de 3 ministerios diferentes</div>
-                            <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
-                                Impacto: MEDIO
-                            </div>
-                        </div>
-                        
-                        <div class="alerta-item aviso">
-                            <span class="alerta-tipo">AVISO</span>
-                            <div class="alerta-msg">Beneficiario con múltiples ministerios: Universidad de Málaga......</div>
-                            <div class="alerta-motivo">Recibe de 3 ministerios diferentes</div>
-                            <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
-                                Impacto: MEDIO
-                            </div>
-                        </div>
-                        
-                        <div class="alerta-item aviso">
-                            <span class="alerta-tipo">AVISO</span>
-                            <div class="alerta-msg">Beneficiario con múltiples ministerios: Ayuntamiento de Madrid......</div>
-                            <div class="alerta-motivo">Recibe de 4 ministerios diferentes</div>
-                            <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
-                                Impacto: MEDIO
-                            </div>
-                        </div>
-                        
-                        <div class="alerta-item aviso">
-                            <span class="alerta-tipo">AVISO</span>
-                            <div class="alerta-msg">Beneficiario con múltiples ministerios: Diputación de Córdoba......</div>
-                            <div class="alerta-motivo">Recibe de 3 ministerios diferentes</div>
-                            <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
-                                Impacto: MEDIO
-                            </div>
-                        </div>
-                        
                     </div>
                 </div>
 
-                <!-- Mapa -->
                 <div class="obs-card">
                     <h2>📍 Mapa Municipal</h2>
-                    <div id="map"></div>
+                    <div id="map" style="height: 280px;"></div>
                     <p style="font-size:0.8rem; color:var(--text-light); margin-top:8px;">
-                        Intensidad = volumen de subvenciones
+                        154 municipios monitorizados
                     </p>
                 </div>
 
-                <!-- Subvenciones recientes -->
                 <div class="obs-card">
                     <h2>💰 Subvenciones Recientes</h2>
                     <div style="overflow-x: auto;">
@@ -153,32 +122,32 @@
                                 
                                 <tr>
                                     <td>Ayuntamiento de...</td>
-                                    <td>2,841,820€</td>
-                                    <td>Bilbao</td>
+                                    <td>2,837,596€</td>
+                                    <td>Granadilla de A...</td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>Confederación d...</td>
-                                    <td>1,244,668€</td>
-                                    <td>Gijón</td>
+                                    <td>Confederación de...</td>
+                                    <td>4,251,988€</td>
+                                    <td>El Puerto de Sa...</td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>Empresa Municip...</td>
-                                    <td>8,459,009€</td>
-                                    <td>Zaragoza</td>
+                                    <td>Empresa Municipal...</td>
+                                    <td>1,867,519€</td>
+                                    <td>Leganés</td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>Fundación Madri...</td>
-                                    <td>288,541€</td>
-                                    <td>Córdoba</td>
+                                    <td>Ayuntamiento de...</td>
+                                    <td>2,402,116€</td>
+                                    <td>Pamplona</td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>Empresa Municip...</td>
-                                    <td>242,124€</td>
-                                    <td>Alicante</td>
+                                    <td>Fundación Baracaldo</td>
+                                    <td>297,441€</td>
+                                    <td>Calviá</td>
                                 </tr>
                                 
                             </tbody>
@@ -186,7 +155,6 @@
                     </div>
                 </div>
 
-                <!-- Gasto Público -->
                 <div class="obs-card">
                     <h2>💶 Gasto Público</h2>
                     <div style="overflow-x: auto;">
@@ -223,44 +191,44 @@
                     </div>
                 </div>
 
-                <!-- BOE -->
                 <div class="obs-card">
                     <h2>📜 Último BOE</h2>
                     <div>
                         
-                        <div style="padding: 8px; background: var(--bg); border-radius: 8px;">
+                        <div style="padding: 12px; background: var(--bg); border-radius: 8px;">
                             <span class="badge" style="background: #3b82f6;">ADMINISTRATIVO</span>
-                            <div style="margin-top:4px;">Sumario...</div>
-                            <a href="https://www.boe.es/boe/dias/2026/02/19/" target="_blank" style="color:var(--secondary);">Ver en BOE →</a>
+                            <div style="margin-top:8px; font-weight:500;">Sumario</div>
+                            <a href="https://www.boe.es/boe/dias/2026/02/19/" target="_blank" style="color:var(--secondary); display:inline-block; margin-top:8px;">
+                                🔗 Ver en BOE →
+                            </a>
                         </div>
                         
                     </div>
                 </div>
 
-                <!-- Promesas -->
                 <div class="obs-card">
                     <h2>🗳️ Promesas</h2>
                     <div>
                         
-                        <div style="margin-bottom:8px;">
-                            <div style="display:flex; justify-content:space-between;">
-                                <span>Creación de 500,000 emple...</span>
+                        <div style="margin-bottom:12px;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                                <span>Creación de 500,000...</span>
                                 <span class="badge" style="background:orange">45%</span>
                             </div>
                             <div class="progress"><div class="progress-bar" style="width:45%"></div></div>
                         </div>
                         
-                        <div style="margin-bottom:8px;">
-                            <div style="display:flex; justify-content:space-between;">
-                                <span>100,000 viviendas pública...</span>
+                        <div style="margin-bottom:12px;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                                <span>100,000 viviendas...</span>
                                 <span class="badge" style="background:orange">12%</span>
                             </div>
                             <div class="progress"><div class="progress-bar" style="width:12%"></div></div>
                         </div>
                         
-                        <div style="margin-bottom:8px;">
-                            <div style="display:flex; justify-content:space-between;">
-                                <span>Reducción listas de esper...</span>
+                        <div style="margin-bottom:12px;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                                <span>Reducción listas de...</span>
                                 <span class="badge" style="background:orange">28%</span>
                             </div>
                             <div class="progress"><div class="progress-bar" style="width:28%"></div></div>
@@ -274,59 +242,73 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Pull to refresh
         let startY = 0;
+        let pulling = false;
         const pullIndicator = document.getElementById('pullIndicator');
         
         document.addEventListener('touchstart', (e) => {
             startY = e.touches[0].pageY;
+            pulling = window.scrollY === 0;
         }, {passive: true});
         
         document.addEventListener('touchmove', (e) => {
-            if (window.scrollY === 0 && e.touches[0].pageY > startY + 50) {
+            if (pulling && window.scrollY === 0 && e.touches[0].pageY > startY + 40) {
                 pullIndicator.classList.add('show');
             }
         }, {passive: true});
         
         document.addEventListener('touchend', () => {
             if (pullIndicator.classList.contains('show')) {
-                location.reload();
+                pullIndicator.innerHTML = '⟳ Actualizando...';
+                setTimeout(() => location.reload(), 300);
             }
             pullIndicator.classList.remove('show');
         });
 
-        // Tabs móvil
         function showTab(tabName) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
-            
-            // Aquí puedes implementar cambio de contenido si quieres
             console.log('Tab:', tabName);
         }
 
-        // Botón refresh
         document.getElementById('refreshBtn')?.addEventListener('click', () => location.reload());
 
-        // Mapa Leaflet
         var map = L.map('map').setView([40.4168, -3.7038], 6);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
         
-        // Cargar GeoJSON
         fetch('datos/municipios.geojson')
             .then(r => r.json())
             .then(data => {
+                const importes = data.features.map(f => f.properties.importe_total || 0);
+                const maxImporte = Math.max(...importes);
+                
                 L.geoJSON(data, {
-                    style: {
-                        fillColor: '#3b82f6',
-                        fillOpacity: 0.2,
-                        color: '#2563eb',
-                        weight: 1
+                    style: (feature) => {
+                        const importe = feature.properties.importe_total || 0;
+                        const intensidad = maxImporte > 0 ? importe / maxImporte : 0;
+                        return {
+                            fillColor: `rgba(59, 130, 246, ${0.2 + intensidad * 0.5})`,
+                            fillOpacity: 0.7,
+                            color: '#2563eb',
+                            weight: 1.5,
+                            opacity: 0.8
+                        };
                     },
                     onEachFeature: (feature, layer) => {
-                        const nombre = feature.properties.name;
-                        layer.bindPopup(`<b>${nombre}</b><br>Ver detalles`);
+                        const props = feature.properties;
+                        const importe = props.importe_total || 0;
+                        const numSub = props.subvenciones || 0;
+                        layer.bindPopup(`
+                            <b>${props.name}</b><br>
+                            <span style="color:#2563eb;">${numSub} subvenciones</span><br>
+                            <b>${importe.toLocaleString('es-ES')}€</b>
+                        `);
                     }
                 }).addTo(map);
+                
+                document.querySelector('p').innerHTML = `${data.features.length} municipios monitorizados`;
             });
     </script>
 </body>
