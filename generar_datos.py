@@ -1,161 +1,94 @@
-import os
-import json
-import requests
-import feedparser
+import os, json, requests, feedparser
 from datetime import datetime
 
 os.makedirs("datos", exist_ok=True)
 
-print("Generando Observatorio...")
-
-# =========================================================
-# 1️⃣ SUBVENCIONES AUTOMÁTICAS (datos abiertos)
-# =========================================================
-
-subvenciones = []
-alertas = []
-
-try:
-    url = "https://datos.gob.es/apidata/catalog/dataset?q=subvenciones"
-    r = requests.get(url, timeout=30)
-
-    if r.status_code == 200:
-        datasets = r.json().get("result", {}).get("items", [])
-
-        for d in datasets[:15]:
-            registro = {
-                "organismo": d.get("publisher", {}).get("label", "Organismo público"),
-                "objeto": d.get("title", ""),
-                "importe": 0
-            }
-
-            subvenciones.append(registro)
-
-            if "millones" in registro["objeto"].lower():
-                alertas.append(registro)
-
-except Exception as e:
-    print("Error subvenciones:", e)
-
-
-# =========================================================
-# 2️⃣ BOE SIMPLIFICADO
-# =========================================================
-
+# 1. SCRAPING BOE & ANÁLISIS POLÍTICO SEMÁNTICO
 boe_docs = []
+feed = feedparser.parse("https://www.boe.es/rss/boe.php")
 
-try:
-    feed = feedparser.parse("https://www.boe.es/rss/boe.php")
+for entry in feed.entries[:25]:
+    texto = entry.title.lower()
+    # Análisis heurístico de sesgo/temática
+    if any(w in texto for w in ["ayuda", "subvención", "concesión"]): cat, color = "ECONOMÍA", "success"
+    elif any(w in texto for w in ["ley", "reforma", "decreto"]): cat, color = "LEGISLATIVO", "accent"
+    else: cat, color = "ADMINISTRATIVO", "primary"
+    
+    boe_docs.append({
+        "titulo": entry.title,
+        "link": entry.link,
+        "categoria": cat,
+        "resumen": entry.title.split(":")[0]
+    })
 
-    for entry in feed.entries[:20]:
-
-        titulo_lower = entry.title.lower()
-
-        categoria = "General"
-
-        if "subvencion" in titulo_lower:
-            categoria = "Subvenciones"
-        elif "ley" in titulo_lower:
-            categoria = "Legislación"
-        elif "presupuesto" in titulo_lower:
-            categoria = "Economía"
-        elif "real decreto" in titulo_lower:
-            categoria = "Normativa"
-
-        resumen = entry.title.split(":")[0]
-
-        boe_docs.append({
-            "titulo": entry.title,
-            "link": entry.link,
-            "categoria": categoria,
-            "resumen": resumen
+# 2. ALERTAS ANTICORRUPCIÓN (Outliers)
+alertas = []
+# Simulación de detección basada en palabras clave de alto riesgo y volumen
+for doc in boe_docs:
+    if "directa" in doc['titulo'].lower() or "millones" in doc['titulo'].lower():
+        alertas.append({
+            "tipo": "RIESGO ALTO",
+            "motivo": "Adjudicación o cuantía anómala detectada",
+            "doc": doc['resumen']
         })
 
-except Exception as e:
-    print("Error BOE:", e)
+# 3. GENERAR MANIFEST PARA PWA
+manifest = {
+    "name": "Observatorio Público",
+    "short_name": "Observatorio",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#0f172a",
+    "theme_color": "#0f172a",
+    "icons": [{"src": "https://cdn-icons-png.flaticon.com/512/1055/1055644.png", "sizes": "512x512", "type": "image/png"}]
+}
+json.dump(manifest, open("manifest.json", "w"), indent=2)
 
+# 4. GUARDAR DATOS
+json.dump(boe_docs, open("datos/boe.json", "w"), ensure_ascii=False)
+json.dump(alertas, open("datos/alertas.json", "w"), ensure_ascii=False)
 
-# =========================================================
-# 3️⃣ GUARDAR JSON
-# =========================================================
-
-json.dump(subvenciones, open("datos/subvenciones.json", "w", encoding="utf-8"),
-          ensure_ascii=False, indent=2)
-
-json.dump(alertas, open("datos/alertas.json", "w", encoding="utf-8"),
-          ensure_ascii=False, indent=2)
-
-json.dump(boe_docs, open("datos/boe.json", "w", encoding="utf-8"),
-          ensure_ascii=False, indent=2)
-
-
-# =========================================================
-# 4️⃣ HTML + SEO COMPLETO
-# =========================================================
-
-timestamp = datetime.utcnow().strftime("%d %B %Y · %H:%M UTC")
-
-html = f"""
+# 5. GENERAR INDEX.HTML PROFESIONAL
+timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
+html_template = f"""
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
-<meta charset="UTF-8">
-<title>Observatorio de Transparencia Pública</title>
-
-<link rel="canonical" href="https://prismanews.github.io/observatorio-publico/">
-
-<meta name="description" content="Observatorio independiente de transparencia pública: subvenciones, BOE simplificado y análisis institucional en España.">
-<meta name="keywords" content="subvenciones públicas España, BOE explicado, transparencia pública, datos abiertos España">
-<meta name="robots" content="index, follow">
-
-<meta property="og:title" content="Observatorio de Transparencia Pública">
-<meta property="og:description" content="Datos públicos explicados: subvenciones, normativa BOE y transparencia institucional.">
-<meta property="og:url" content="https://prismanews.github.io/observatorio-publico/">
-<meta property="og:type" content="website">
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet" href="estilo.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observatorio Público | Transparencia Real</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
-<div class="container">
+    <div class="container">
+        <header>
+            <h1>Observatorio de Transparencia Pública</h1>
+            <p>Datos actualizados: {timestamp}</p>
+        </header>
 
-<header class="obs-header">
-<h1>Observatorio de Transparencia Pública</h1>
-<span>Última actualización: {timestamp}</span>
-</header>
+        <div class="grid-layout">
+            <section class="obs-card">
+                <h2>🚨 Alertas de Riesgo</h2>
+                <div id="alertas-container"></div>
+            </section>
 
-<section class="obs-card">
+            <section class="obs-card">
+                <h2>📍 Mapa de Actividad Municipal</h2>
+                <div id="map"></div>
+            </section>
 
-<h2>📊 Dashboard</h2>
-<canvas id="graficoSubvenciones"></canvas>
-
-<h2>🚨 Alertas subvenciones</h2>
-<ul id="alertas"></ul>
-
-<h2>📜 BOE simplificado</h2>
-<ul>
-"""
-
-for b in boe_docs[:10]:
-    html += f"<li><b>[{b['categoria']}]</b> {b['resumen']}</li>"
-
-html += """
-
-</ul>
-
-<script src="dashboard.js"></script>
-
-</section>
-</div>
+            <section class="obs-card" style="grid-column: span 2;">
+                <h2>📜 Últimas Resoluciones BOE (Analizadas)</h2>
+                <div id="boe-lista"></div>
+            </section>
+        </div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="dashboard.js"></script>
 </body>
 </html>
 """
-
-open("index.html", "w", encoding="utf-8").write(html)
-
-print("Observatorio actualizado")
+with open("index.html", "w", encoding="utf-8") as f: f.write(html_template)
