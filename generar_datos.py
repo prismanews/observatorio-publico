@@ -659,30 +659,36 @@ json.dump(promesas, open("datos/promesas.json", "w", encoding="utf-8"), indent=2
 # ============================================
 logging.info("📄 Generando PDF...")
 
-doc = SimpleDocTemplate("datos/informe_transparencia.pdf", pagesize=A4)
-styles = getSampleStyleSheet()
-story = []
+try:
+    doc = SimpleDocTemplate("datos/informe_transparencia.pdf", pagesize=A4)
+    styles = getSampleStyleSheet()
+    story = []
 
-story.append(Paragraph("Informe de Transparencia Pública", styles['Title']))
-story.append(Spacer(1, 20))
-story.append(Paragraph(f"Fecha: {datetime.now().strftime('%d/%m/%Y %H:%M')}", styles['Normal']))
-story.append(Spacer(1, 20))
+    story.append(Paragraph("Informe de Transparencia Pública", styles['Title']))
+    story.append(Spacer(1, 20))
+    story.append(Paragraph(f"Fecha: {datetime.now().strftime('%d/%m/%Y %H:%M')}", styles['Normal']))
+    story.append(Spacer(1, 20))
 
-# Resumen
-story.append(Paragraph("Resumen Ejecutivo", styles['Heading2']))
-story.append(Spacer(1, 10))
-story.append(Paragraph(f"""
-Se han analizado {len(boe_docs)} documentos del BOE, 
-{len(subvenciones)} subvenciones por importe total de {sum(s['importe'] for s in subvenciones):,}€,
-y se han detectado {len(alertas)} alertas de riesgo.
-""", styles['Normal']))
+    # Resumen
+    story.append(Paragraph("Resumen Ejecutivo", styles['Heading2']))
+    story.append(Spacer(1, 10))
+    story.append(Paragraph(f"""
+    Se han analizado {len(boe_docs)} documentos del BOE, 
+    {len(subvenciones)} subvenciones por importe total de {sum(s['importe'] for s in subvenciones):,}€,
+    y se han detectado {len(alertas)} alertas de riesgo.
+    """, styles['Normal']))
 
-doc.build(story)
+    doc.build(story)
+    logging.info("✅ PDF generado correctamente")
+except Exception as e:
+    logging.error(f"Error generando PDF: {e}")
 
 # ============================================
-# 11. MANIFEST PWA
+# 11. MANIFEST PWA (CORREGIDO)
 # ============================================
-manifest = {{
+logging.info("📱 Generando manifest PWA...")
+
+manifest = {
     "name": "Observatorio de Transparencia",
     "short_name": "ObsPub",
     "start_url": "/observatorio-publico/",
@@ -690,14 +696,16 @@ manifest = {{
     "background_color": "#f8fafc",
     "theme_color": "#0f172a",
     "icons": [
-        {{
+        {
             "src": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
             "sizes": "192x192",
             "type": "image/png"
-        }}
+        }
     ]
-}}
-json.dump(manifest, open("manifest.json", "w"), indent=2)
+}
+
+with open("manifest.json", "w", encoding="utf-8") as f:
+    json.dump(manifest, f, indent=2, ensure_ascii=False)
 
 logging.info("✅ ¡PROCESO COMPLETADO CON ÉXITO!")
 print(f"\n📊 RESUMEN FINAL:")
