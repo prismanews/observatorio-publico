@@ -3,84 +3,218 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Observatorio Público · Gasto Municipal</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="estilo.css">
+<meta name="description"
+content="Consulta cómo gasta tu ayuntamiento según tu código postal. Observatorio público del gasto municipal en España.">
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===== RESET ===== */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Inter',sans-serif;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#0f172a;
+color:white;
+overflow-x:hidden;
+}
+
+/* Fondo moderno */
+.background{
+position:fixed;
+width:100%;
+height:100%;
+background:
+radial-gradient(circle at 20% 30%, #2563eb 0%, transparent 40%),
+radial-gradient(circle at 80% 70%, #7c3aed 0%, transparent 40%);
+opacity:.25;
+z-index:0;
+}
+
+/* Card principal */
+.container{
+position:relative;
+z-index:1;
+max-width:750px;
+width:100%;
+padding:3rem 2rem;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(20px);
+border-radius:24px;
+border:1px solid rgba(255,255,255,0.1);
+}
+
+/* Header */
+h1{
+font-size:2.4rem;
+font-weight:800;
+margin-bottom:.3rem;
+}
+
+.tagline{
+opacity:.8;
+margin-bottom:2rem;
+}
+
+/* Input */
+.search-box{
+position:relative;
+}
+
+input{
+width:100%;
+padding:1rem 1.4rem;
+border-radius:999px;
+border:none;
+outline:none;
+font-size:1rem;
+color:black;
+}
+
+/* Sugerencias */
+.sugerencias{
+position:absolute;
+width:100%;
+background:white;
+color:black;
+border-radius:12px;
+margin-top:.4rem;
+overflow:hidden;
+box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.item-sugerencia{
+padding:.8rem 1rem;
+cursor:pointer;
+}
+
+.item-sugerencia:hover{
+background:#f1f5f9;
+}
+
+/* Resultado */
+.card{
+margin-top:2rem;
+padding:2rem;
+background:white;
+color:black;
+border-radius:16px;
+}
+
+.badge{
+display:inline-block;
+margin-top:1rem;
+padding:.4rem 1rem;
+background:#2563eb;
+color:white;
+border-radius:999px;
+font-size:.8rem;
+}
+
+.footer{
+margin-top:3rem;
+font-size:.8rem;
+opacity:.6;
+text-align:center;
+}
+
+</style>
 </head>
+
 <body>
 
 <div class="background"></div>
 
 <div class="container">
 
-    <div class="header">
-        <h1>Observatorio Público</h1>
-        <p class="tagline">Transparencia y análisis del gasto municipal en España</p>
-    </div>
+<h1>Observatorio Público</h1>
+<p class="tagline">
+Consulta el gasto municipal por código postal en España
+</p>
 
-    <div class="search-box">
-        <input type="text" id="busqueda" placeholder="Introduce código postal o municipio..." autocomplete="off">
-        <div id="sugerencias" class="sugerencias"></div>
-    </div>
+<div class="search-box">
+<input id="busqueda"
+placeholder="Código postal o municipio..."
+autocomplete="off">
+<div id="sugerencias" class="sugerencias"></div>
+</div>
 
-    <div class="resultado" id="resultado"></div>
+<div id="resultado"></div>
 
-    <div class="footer">
-        Datos simulados con fines ilustrativos · Proyecto Prisma News
-    </div>
+<div class="footer">
+Datos simulados · Proyecto Prisma News
+</div>
 
 </div>
 
 <script>
 
-// Simulación inicial (luego lo conectamos a JSON real)
-let codigos = [
-    { cp: "28001", municipio: "Madrid", provincia: "Madrid" },
-    { cp: "08001", municipio: "Barcelona", provincia: "Barcelona" },
-    { cp: "41001", municipio: "Sevilla", provincia: "Sevilla" },
-    { cp: "46001", municipio: "Valencia", provincia: "Valencia" },
-    { cp: "29001", municipio: "Málaga", provincia: "Málaga" },
-    { cp: "15001", municipio: "A Coruña", provincia: "A Coruña" },
-    { cp: "28942", municipio: "Fuenlabrada", provincia: "Madrid" }
+/*
+Esto es solo una muestra.
+Luego puedes sustituirlo por JSON real.
+*/
+const codigos = [
+["28001","Madrid","Madrid"],
+["08001","Barcelona","Barcelona"],
+["41001","Sevilla","Sevilla"],
+["46001","Valencia","Valencia"],
+["29001","Málaga","Málaga"],
+["15001","A Coruña","A Coruña"],
+["28942","Fuenlabrada","Madrid"]
 ];
 
 const input = document.getElementById("busqueda");
 const sugerencias = document.getElementById("sugerencias");
+const resultado = document.getElementById("resultado");
 
-input.addEventListener("input", function() {
-    const valor = this.value.toLowerCase();
-    sugerencias.innerHTML = "";
+input.addEventListener("input", () => {
 
-    if (valor.length < 2) return;
+const texto = input.value.toLowerCase();
+sugerencias.innerHTML = "";
 
-    const filtrados = codigos.filter(item =>
-        item.cp.includes(valor) ||
-        item.municipio.toLowerCase().includes(valor)
-    );
+if(texto.length < 2) return;
 
-    filtrados.slice(0, 8).forEach(item => {
-        const div = document.createElement("div");
-        div.classList.add("item-sugerencia");
-        div.textContent = `${item.cp} · ${item.municipio} (${item.provincia})`;
-        div.onclick = () => mostrarResultado(item);
-        sugerencias.appendChild(div);
-    });
+const filtrados = codigos.filter(c =>
+c[0].includes(texto) ||
+c[1].toLowerCase().includes(texto)
+).slice(0,8);
+
+filtrados.forEach(c => {
+
+const div = document.createElement("div");
+div.className = "item-sugerencia";
+div.textContent = `${c[0]} · ${c[1]} (${c[2]})`;
+
+div.onclick = () => {
+input.value = `${c[0]} - ${c[1]}`;
+sugerencias.innerHTML = "";
+
+resultado.innerHTML = `
+<div class="card">
+<h2>${c[1]}</h2>
+<span>${c[2]}</span>
+<div class="badge">Análisis generado</div>
+</div>
+`;
+};
+
+sugerencias.appendChild(div);
+
 });
 
-function mostrarResultado(item) {
-    sugerencias.innerHTML = "";
-    input.value = `${item.cp} - ${item.municipio}`;
-
-    document.getElementById("resultado").innerHTML = `
-        <div class="card">
-            <h2>${item.municipio}</h2>
-            <span>${item.provincia}</span>
-            <div class="badge">Análisis generado</div>
-        </div>
-    `;
-}
+});
 
 </script>
 
