@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "tipo": "CRÍTICA",
+    "msg": "Subvención anómala: Fundación Guecho",
+    "motivo": "Importe de 43.381.253€ muy superior a la media",
+    "impacto": "ALTO",
+    "fecha": "2026-02-19"
+  },
+  {
+    "tipo": "CRÍTICA",
+    "msg": "Subvención anómala: Ayuntamiento de Valencia",
+    "motivo": "Importe de 46.394.736€ muy superior a la media",
+    "impacto": "ALTO",
+    "fecha": "2026-02-19"
+  }
+]
