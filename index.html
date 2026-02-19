@@ -5,9 +5,8 @@
 <meta charset="UTF-8">
 <title>Observatorio Público</title>
 <link rel="stylesheet" href="estilo.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
@@ -15,71 +14,40 @@
 <div class="container">
 
 <header class="obs-header">
-<h1 class="obs-header__title">📡 Observatorio Transparencia Pública</h1>
-<span class="obs-header__sync">Actualizado: 18/02/2026 21:53</span>
+<h1 class="obs-header__title">Observatorio de Transparencia Pública</h1>
+<span class="obs-header__sync">
+Última actualización: 19 February 2026 · 07:16 UTC
+</span>
 </header>
 
-<div class="obs-card">
+<section class="obs-card">
 
 <div class="obs-stats">
-<div class="obs-stats__item">
-<span class="obs-stats__label">Total subvenciones</span>
-<span class="obs-stats__value">310,000 €</span>
-</div>
 
 <div class="obs-stats__item">
-<span class="obs-stats__label">Media</span>
-<span class="obs-stats__value">77,500 €</span>
+<span class="obs-stats__label">Subvenciones analizadas</span>
+<span class="obs-stats__value">2</span>
 </div>
 
 <div class="obs-stats__item">
-<span class="obs-stats__label">Máxima</span>
-<span class="obs-stats__value">120,000 €</span>
-</div>
+<span class="obs-stats__label">Importe total</span>
+<span class="obs-stats__value">120,151 €</span>
 </div>
 
+</div>
 
-<h2>Ranking beneficiarios</h2>
+<h2>Detalle subvenciones</h2>
 <ul>
-<li>Empresa A: 180,000 €</li><li>Uni C: 80,000 €</li><li>ONG B: 50,000 €</li></ul>
+<li><b>Ministerio de Cultura</b>: 95,043 € — Proyectos culturales</li><li><b>Comunidad Autónoma</b>: 25,108 € — Innovación digital</li>
 
-<h2>Mapa subvenciones por provincia</h2>
-<canvas id="mapa"></canvas>
+</ul>
 
-<h2>Evolución gasto</h2>
-<canvas id="grafico"></canvas>
+<p style="margin-top:40px;font-size:0.85rem;color:#666;">
+Datos generados automáticamente · Proyecto Observatorio Público
+</p>
 
+</section>
 </div>
-</div>
-
-<script>
-
-const provincias = ['Madrid', 'Valencia', 'Barcelona'];
-const valores = [np.int64(180000), np.int64(80000), np.int64(50000)];
-
-new Chart(document.getElementById('mapa'),{
-type:'bar',
-data:{
-labels:provincias,
-datasets:[{
-label:'Subvenciones €',
-data:valores
-}]
-}
-});
-
-new Chart(document.getElementById('grafico'),{
-type:'line',
-data:{
-labels:provincias,
-datasets:[{
-label:'Evolución',
-data:valores
-}]
-}
-});
-
-</script>
 
 </body>
 </html>
