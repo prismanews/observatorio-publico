@@ -1,40 +1,40 @@
 :root {
-    --primary: #0f172a;
+    --primary: #0b132b;
     --accent: #3b82f6;
-    --bg: #f8fafc;
+    --bg: #f4f6f9;
     --danger: #ef4444;
 }
 
-body { background: var(--bg); font-family: 'Inter', sans-serif; margin: 0; color: #334155; }
-.container { max-width: 1200px; margin: auto; padding: 20px; }
+body { background: var(--bg); font-family: system-ui, sans-serif; margin: 0; padding: 10px; }
+.container { max-width: 1200px; margin: auto; }
 
 .obs-header {
     background: var(--primary); color: white; padding: 30px;
-    border-radius: 16px; text-align: center; margin-bottom: 25px;
+    border-radius: 12px; text-align: center; margin-bottom: 20px;
 }
 
 .main-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 20px;
 }
 
 .obs-card {
-    background: white; padding: 20px; border-radius: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    background: white; padding: 20px; border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
 .btn-pdf {
     display: inline-block; background: var(--accent); color: white;
-    padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold;
+    padding: 10px 15px; border-radius: 8px; text-decoration: none; margin-top: 10px;
 }
 
 .alerta-item {
     padding: 12px; border-left: 4px solid var(--danger);
-    background: #fff1f2; margin-bottom: 10px; border-radius: 4px;
+    background: #fff1f2; margin-bottom: 10px; font-size: 0.85rem;
 }
 
 .badge {
-    font-size: 0.7rem; padding: 4px 8px; border-radius: 6px;
+    font-size: 0.65rem; padding: 3px 7px; border-radius: 5px;
     color: white; font-weight: bold; text-transform: uppercase;
 }
