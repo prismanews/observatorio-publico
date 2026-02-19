@@ -31,7 +31,6 @@ try:
 
             subvenciones.append(registro)
 
-            # ALERTA AUTOMÁTICA (ejemplo base)
             if "millones" in registro["objeto"].lower():
                 alertas.append(registro)
 
@@ -50,26 +49,26 @@ try:
 
     for entry in feed.entries[:20]:
 
-        titulo = entry.title.lower()
+        titulo_lower = entry.title.lower()
 
         categoria = "General"
 
-        if "subvencion" in titulo:
+        if "subvencion" in titulo_lower:
             categoria = "Subvenciones"
-        elif "ley" in titulo:
+        elif "ley" in titulo_lower:
             categoria = "Legislación"
-        elif "presupuesto" in titulo:
+        elif "presupuesto" in titulo_lower:
             categoria = "Economía"
-        elif "real decreto" in titulo:
+        elif "real decreto" in titulo_lower:
             categoria = "Normativa"
 
-        resumen_simple = entry.title.split(":")[0]
+        resumen = entry.title.split(":")[0]
 
         boe_docs.append({
             "titulo": entry.title,
             "link": entry.link,
             "categoria": categoria,
-            "resumen": resumen_simple
+            "resumen": resumen
         })
 
 except Exception as e:
@@ -91,7 +90,7 @@ json.dump(boe_docs, open("datos/boe.json", "w", encoding="utf-8"),
 
 
 # =========================================================
-# 4️⃣ HTML + SEO + DASHBOARD
+# 4️⃣ HTML + SEO COMPLETO
 # =========================================================
 
 timestamp = datetime.utcnow().strftime("%d %B %Y · %H:%M UTC")
@@ -104,10 +103,19 @@ html = f"""
 <meta charset="UTF-8">
 <title>Observatorio de Transparencia Pública</title>
 
-<meta name="description" content="Observatorio independiente de subvenciones públicas, BOE simplificado y transparencia institucional.">
-<meta name="keywords" content="subvenciones públicas, BOE explicado, transparencia pública, gasto público España">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="canonical" href="https://prismanews.github.io/observatorio-publico/">
+
+<meta name="description" content="Observatorio independiente de transparencia pública: subvenciones, BOE simplificado y análisis institucional en España.">
+<meta name="keywords" content="subvenciones públicas España, BOE explicado, transparencia pública, datos abiertos España">
+<meta name="robots" content="index, follow">
+
+<meta property="og:title" content="Observatorio de Transparencia Pública">
+<meta property="og:description" content="Datos públicos explicados: subvenciones, normativa BOE y transparencia institucional.">
+<meta property="og:url" content="https://prismanews.github.io/observatorio-publico/">
+<meta property="og:type" content="website">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link rel="stylesheet" href="estilo.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
