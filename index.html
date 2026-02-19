@@ -2,9 +2,17 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
-<title>Observatorio Público</title>
+<title>Observatorio de Transparencia Pública</title>
+
+<meta name="description" content="Observatorio independiente de subvenciones públicas, BOE simplificado y transparencia institucional.">
+<meta name="keywords" content="subvenciones públicas, BOE explicado, transparencia pública, gasto público España">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="canonical" href="https://prismanews.github.io/observatorio-publico/">
 <link rel="stylesheet" href="estilo.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
@@ -12,11 +20,26 @@
 
 <header class="obs-header">
 <h1>Observatorio de Transparencia Pública</h1>
-<span>Última actualización: 19 February 2026 · 07:41 UTC</span>
+<span>Última actualización: 19 February 2026 · 07:52 UTC</span>
 </header>
 
 <section class="obs-card">
 
-<h2>Subvenciones detectadas</h2>
+<h2>📊 Dashboard</h2>
+<canvas id="graficoSubvenciones"></canvas>
+
+<h2>🚨 Alertas subvenciones</h2>
+<ul id="alertas"></ul>
+
+<h2>📜 BOE simplificado</h2>
 <ul>
-</ul><h2>BOE reciente</h2><ul><li><a href='https://www.boe.es/boe/dias/2026/02/19/'>Sumario</a></li><li><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3810'>Real Decreto-ley 5/2026, de 17 de febrero, por el que se adoptan medidas urgentes en respuesta a los daños causados por diversos fenómenos meteorológicos adversos, de especial afectación en las comunidades autónomas de Andalucía y Extremadura.</a></li><li><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3811'>Acuerdo concerniente al reconocimiento de la formación y titulación para la gente de mar entre la Subsecretaría de intereses marítimos de la Armada Argentina en representación del Gobierno de Argentina y la Dirección General de la Marina Mercante en representación del Gobierno del Reino de España, hecho en Madrid y Buenos Aires el 12 y 26 de julio de 2002.</a></li><li><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3812'>Acuerdo concerniente al reconocimiento de la formación y titulación para la gente de mar procedente de México entre la Dirección General de Marina Mercante de México en representación del Gobierno de México y la Dirección General de la Marina Mercante de España en representación del Gobierno de España, hecho en Madrid y Ciudad de México el 18 y 30 de julio de 2002.</a></li><li><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3813'>Aplicación provisional del Acuerdo Internacional entre el Reino de España y la Organización de las Naciones Unidas para la Educación, la Ciencia y la Cultura (UNESCO) relativo a la designación de la Fundación Tres Culturas del Mediterráneo como Centro de Categoría 2 auspiciado por la UNESCO, hecho en París el 28 de enero de 2026.</a></li><li><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3814'>Resolución de 11 de febrero de 2026, de la Secretaría General de Financiación Autonómica y Local, por la que se desarrolla la información a suministrar por las Corporaciones Locales relativa al esfuerzo fiscal de 2024 y su comprobación en las Delegaciones de Economía y Hacienda.</a></li><li><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3815'>Real Decreto 126/2026, de 18 de febrero, por el que se fija el salario mínimo interprofesional para 2026.</a></li><li><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3816'>Real Decreto 123/2026, de 11 de febrero, por el que se nombra Presidente del Tribunal Superior de Justicia de Illes Balears a don Carlos Gómez Martínez.</a></li><li><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3817'>Acuerdo de 25 de noviembre de 2025, de la Comisión Permanente del Consejo General del Poder Judicial, por el que se declara la jubilación forzosa del Magistrado don Ángel Luis Sanabria Parejo.</a></li><li><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3818'>Orden PJC/103/2026, de 9 de febrero, por la que se nombra personal funcionario del Cuerpo de Tramitación Procesal y Administrativa de la Administración de Justicia, turno libre, a las personas que han superado el proceso selectivo convocado por Orden JUS/1288/2022, de 22 de diciembre.</a></li><li><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3819'>Orden PJC/104/2026, de 9 de febrero, por la que se otorga destino al personal funcionario del Cuerpo de Tramitación Procesal y Administrativa de la Administración de Justicia, turno libre, que superó el proceso selectivo convocado por Orden JUS/1288/2022, de 22 de diciembre.</a></li><li><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3820'>Orden INT/105/2026, de 12 de febrero, por la que se nombra para el Mando de la 3.ª Zona de la Guardia Civil, Comunidad Autónoma de Extremadura (Badajoz) al General de Brigada don Andrés Manuel Velarde Tazón.</a></li><li><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3821'>Resolución de 17 de febrero de 2026, de la Secretaría de Estado de Función Pública, por la que se nombra personal funcionario de carrera, por el sistema de promoción interna, del Cuerpo General Administrativo de la Administración del Estado.</a></li><li><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3822'>Resolución de 12 de febrero de 2026, de la Dirección General de la Función Pública, por la que se publica la adjudicación de puesto de trabajo reservado al personal funcionario de administración local con habilitación de carácter nacional, por el sistema de libre designación.</a></li><li><a href='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3823'>Orden de 9 de febrero de 2026, del Departamento de Justicia y Derechos Humanos, por la que se otorga destino al personal funcionario del Cuerpo de Tramitación Procesal y Administrativa de la Administración de Justicia, turno libre, que superó el proceso selectivo convocado por Orden JUS/1288/2022, de 22 de diciembre.</a></li></ul></section></div></body></html>
+<li><b>[General]</b> Sumario</li><li><b>[Legislación]</b> Real Decreto-ley 5/2026, de 17 de febrero, por el que se adoptan medidas urgentes en respuesta a los daños causados por diversos fenómenos meteorológicos adversos, de especial afectación en las comunidades autónomas de Andalucía y Extremadura.</li><li><b>[General]</b> Acuerdo concerniente al reconocimiento de la formación y titulación para la gente de mar entre la Subsecretaría de intereses marítimos de la Armada Argentina en representación del Gobierno de Argentina y la Dirección General de la Marina Mercante en representación del Gobierno del Reino de España, hecho en Madrid y Buenos Aires el 12 y 26 de julio de 2002.</li><li><b>[General]</b> Acuerdo concerniente al reconocimiento de la formación y titulación para la gente de mar procedente de México entre la Dirección General de Marina Mercante de México en representación del Gobierno de México y la Dirección General de la Marina Mercante de España en representación del Gobierno de España, hecho en Madrid y Ciudad de México el 18 y 30 de julio de 2002.</li><li><b>[General]</b> Aplicación provisional del Acuerdo Internacional entre el Reino de España y la Organización de las Naciones Unidas para la Educación, la Ciencia y la Cultura (UNESCO) relativo a la designación de la Fundación Tres Culturas del Mediterráneo como Centro de Categoría 2 auspiciado por la UNESCO, hecho en París el 28 de enero de 2026.</li><li><b>[General]</b> Resolución de 11 de febrero de 2026, de la Secretaría General de Financiación Autonómica y Local, por la que se desarrolla la información a suministrar por las Corporaciones Locales relativa al esfuerzo fiscal de 2024 y su comprobación en las Delegaciones de Economía y Hacienda.</li><li><b>[Normativa]</b> Real Decreto 126/2026, de 18 de febrero, por el que se fija el salario mínimo interprofesional para 2026.</li><li><b>[Normativa]</b> Real Decreto 123/2026, de 11 de febrero, por el que se nombra Presidente del Tribunal Superior de Justicia de Illes Balears a don Carlos Gómez Martínez.</li><li><b>[General]</b> Acuerdo de 25 de noviembre de 2025, de la Comisión Permanente del Consejo General del Poder Judicial, por el que se declara la jubilación forzosa del Magistrado don Ángel Luis Sanabria Parejo.</li><li><b>[General]</b> Orden PJC/103/2026, de 9 de febrero, por la que se nombra personal funcionario del Cuerpo de Tramitación Procesal y Administrativa de la Administración de Justicia, turno libre, a las personas que han superado el proceso selectivo convocado por Orden JUS/1288/2022, de 22 de diciembre.</li>
+
+</ul>
+
+<script src="dashboard.js"></script>
+
+</section>
+</div>
+</body>
+</html>
