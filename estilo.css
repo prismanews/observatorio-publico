@@ -5,36 +5,36 @@
     --danger: #ef4444;
 }
 
-body { background: var(--bg); font-family: 'Inter', sans-serif; margin: 0; }
-.container { max-width: 1100px; margin: auto; padding: 20px; }
+body { background: var(--bg); font-family: 'Inter', sans-serif; margin: 0; color: #334155; }
+.container { max-width: 1200px; margin: auto; padding: 20px; }
 
 .obs-header {
-    background: var(--primary); color: white; padding: 40px;
+    background: var(--primary); color: white; padding: 30px;
     border-radius: 16px; text-align: center; margin-bottom: 25px;
 }
 
 .main-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 20px;
 }
 
 .obs-card {
-    background: white; padding: 25px; border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    background: white; padding: 20px; border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
 }
 
 .btn-pdf {
     display: inline-block; background: var(--accent); color: white;
-    padding: 10px 20px; border-radius: 8px; text-decoration: none; margin-top: 15px;
+    padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold;
 }
 
 .alerta-item {
-    padding: 10px; border-left: 4px solid var(--danger);
-    background: #fff1f2; margin-bottom: 10px; font-size: 0.9rem;
+    padding: 12px; border-left: 4px solid var(--danger);
+    background: #fff1f2; margin-bottom: 10px; border-radius: 4px;
 }
 
 .badge {
-    font-size: 0.7rem; padding: 3px 8px; border-radius: 10px;
-    color: white; font-weight: bold;
+    font-size: 0.7rem; padding: 4px 8px; border-radius: 6px;
+    color: white; font-weight: bold; text-transform: uppercase;
 }
