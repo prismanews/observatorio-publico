@@ -1,71 +1,28 @@
 [
   {
     "tipo": "AVISO",
-    "msg": "Concentración de subvenciones: Confederación de Málaga...",
-    "motivo": "Ha recibido 5 subvenciones en el último año",
-    "impacto": "ALTO",
-    "recomendacion": "Revisar posibles conflictos de interés",
-    "fecha": "2026-02-19"
-  },
-  {
-    "tipo": "AVISO",
-    "msg": "Beneficiario con múltiples ministerios: Empresa Municipal Bilbao...",
+    "msg": "Beneficiario con múltiples ministerios: Confederación de Valladolid...",
     "motivo": "Recibe de 3 ministerios diferentes",
     "impacto": "MEDIO",
     "fecha": "2026-02-19"
   },
   {
     "tipo": "AVISO",
-    "msg": "Beneficiario con múltiples ministerios: Diputación de Bilbao...",
+    "msg": "Beneficiario con múltiples ministerios: Universidad de Málaga...",
     "motivo": "Recibe de 3 ministerios diferentes",
     "impacto": "MEDIO",
     "fecha": "2026-02-19"
   },
   {
     "tipo": "AVISO",
-    "msg": "Beneficiario con múltiples ministerios: Confederación de Málaga...",
+    "msg": "Beneficiario con múltiples ministerios: Ayuntamiento de Madrid...",
     "motivo": "Recibe de 4 ministerios diferentes",
     "impacto": "MEDIO",
     "fecha": "2026-02-19"
   },
   {
     "tipo": "AVISO",
-    "msg": "Beneficiario con múltiples ministerios: Confederación de Murcia...",
-    "motivo": "Recibe de 3 ministerios diferentes",
-    "impacto": "MEDIO",
-    "fecha": "2026-02-19"
-  },
-  {
-    "tipo": "AVISO",
-    "msg": "Beneficiario con múltiples ministerios: Universidad de Barcelona...",
-    "motivo": "Recibe de 3 ministerios diferentes",
-    "impacto": "MEDIO",
-    "fecha": "2026-02-19"
-  },
-  {
-    "tipo": "AVISO",
-    "msg": "Beneficiario con múltiples ministerios: Confederación de Zaragoza...",
-    "motivo": "Recibe de 3 ministerios diferentes",
-    "impacto": "MEDIO",
-    "fecha": "2026-02-19"
-  },
-  {
-    "tipo": "AVISO",
-    "msg": "Beneficiario con múltiples ministerios: Ayuntamiento de Sevilla...",
-    "motivo": "Recibe de 3 ministerios diferentes",
-    "impacto": "MEDIO",
-    "fecha": "2026-02-19"
-  },
-  {
-    "tipo": "AVISO",
-    "msg": "Beneficiario con múltiples ministerios: Empresa Municipal Palma...",
-    "motivo": "Recibe de 3 ministerios diferentes",
-    "impacto": "MEDIO",
-    "fecha": "2026-02-19"
-  },
-  {
-    "tipo": "AVISO",
-    "msg": "Beneficiario con múltiples ministerios: Empresa Municipal Sevilla...",
+    "msg": "Beneficiario con múltiples ministerios: Diputación de Córdoba...",
     "motivo": "Recibe de 3 ministerios diferentes",
     "impacto": "MEDIO",
     "fecha": "2026-02-19"
