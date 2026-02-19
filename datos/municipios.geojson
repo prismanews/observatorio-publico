@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"name": "Madrid"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-3.8, 40.4], [-3.6, 40.4], [-3.6, 40.5], [-3.8, 40.5], [-3.8, 40.4]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Barcelona"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[2.1, 41.3], [2.2, 41.3], [2.2, 41.4], [2.1, 41.4], [2.1, 41.3]]]
+      }
+    }
+  ]
+}
