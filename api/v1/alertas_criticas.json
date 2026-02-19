@@ -88,55 +88,5 @@
     "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2024-1698",
     "municipio": "MÚLTIPLES",
     "categoria": "red_empresarial"
-  },
-  {
-    "tipo": "AVISO",
-    "icono": "⚠️",
-    "msg": "CONCENTRACIÓN: Construcciones Martínez SL",
-    "motivo": "5 subvenciones en el último año",
-    "impacto": "ALTO",
-    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2023-4688",
-    "municipio": "Málaga",
-    "categoria": "concentracion"
-  },
-  {
-    "tipo": "AVISO",
-    "icono": "⚠️",
-    "msg": "CONCENTRACIÓN: Innovación Digital 2023 SL",
-    "motivo": "5 subvenciones en el último año",
-    "impacto": "ALTO",
-    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2025-7192",
-    "municipio": "La Rioja",
-    "categoria": "concentracion"
-  },
-  {
-    "tipo": "AVISO",
-    "icono": "⚠️",
-    "msg": "CONCENTRACIÓN: Consultoría Estratégica GP",
-    "motivo": "6 subvenciones en el último año",
-    "impacto": "ALTO",
-    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2023-2631",
-    "municipio": "Cáceres",
-    "categoria": "concentracion"
-  },
-  {
-    "tipo": "AVISO",
-    "icono": "⚠️",
-    "msg": "CONCENTRACIÓN: Tecnologías del Futuro SL",
-    "motivo": "5 subvenciones en el último año",
-    "impacto": "ALTO",
-    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2026-5113",
-    "municipio": "Bizkaia/Vizcaya",
-    "categoria": "concentracion"
-  },
-  {
-    "tipo": "AVISO",
-    "icono": "⚠️",
-    "msg": "CONCENTRACIÓN: Fundación Toledo",
-    "motivo": "6 subvenciones en el último año",
-    "impacto": "ALTO",
-    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2025-9481",
-    "municipio": "Toledo",
-    "categoria": "concentracion"
   }
 ]

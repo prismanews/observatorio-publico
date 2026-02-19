@@ -2,337 +2,250 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="ObsPub">
     <title>Observatorio Anticorrupción</title>
-    <meta name="description" content="Mapa de riesgos de corrupción en subvenciones públicas">
-    <meta name="theme-color" content="#0f172a">
-    
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
     <link rel="stylesheet" href="estilo.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .pull-indicator {
-            height: 0;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--primary);
-            color: white;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: height 0.2s;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .pull-indicator.show {
-            height: 44px;
-        }
-        @media (max-width: 390px) {
-            .obs-header h1 { font-size: 1.5rem; }
-            .stat-value { font-size: 1.4rem; }
-            .btn { padding: 10px 12px; }
-        }
-        .data-table td {
-            max-width: 120px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .clickable {
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-        .clickable:hover {
-            opacity: 0.8;
-            text-decoration: underline;
-        }
-        .alerta-item a {
-            text-decoration: none;
-            color: inherit;
-        }
-        .enlace-detalle {
-            display: inline-block;
-            margin-top: 8px;
-            color: var(--secondary);
-            font-size: 0.8rem;
-            text-decoration: none;
-        }
-        .enlace-detalle:hover {
-            text-decoration: underline;
+        .grafico-container {
+            height: 200px;
+            margin: 20px 0;
         }
         .leyenda-mapa {
             display: flex;
             gap: 15px;
-            margin-top: 10px;
-            font-size: 0.8rem;
             flex-wrap: wrap;
-        }
-        .leyenda-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            font-size: 0.8rem;
+            margin: 10px 0;
         }
         .color-box {
             width: 15px;
             height: 15px;
             border-radius: 3px;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
-    <div class="pull-indicator" id="pullIndicator">⟳ Suelta para actualizar los datos</div>
+    <div class="pull-indicator" id="pullIndicator">⟳ Actualizar</div>
     
     <div class="container">
         <header class="obs-header">
             <h1>🕵️ Observatorio Anticorrupción</h1>
-            <p>154 municipios · 8 alertas activas · 2,843,699,360€ en subvenciones</p>
+            <p>52 municipios · 14 alertas · 2,671,219,661€</p>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <span class="badge" style="background: #10b981; padding: 6px 12px;">19/02/2026 10:47</span>
-                <a href="datos/informe_transparencia.pdf" class="btn" download>
-                    📥 Informe PDF
-                </a>
-                <button class="btn btn-outline" id="refreshBtn" style="background: rgba(255,255,255,0.2);">
-                    🔄
-                </button>
+                <span class="badge">19/02/2026 12:43</span>
+                <a href="datos/informe_transparencia.pdf" class="btn">📥 PDF</a>
+                <button class="btn btn-outline" id="refreshBtn">🔄</button>
             </div>
         </header>
 
-        <div class="obs-card" style="margin-bottom: 16px; padding: 12px;">
-            <div class="stat-grid">
-                <div class="stat-item">
-                    <div class="stat-value">8</div>
-                    <div class="stat-label">Alertas</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">7</div>
-                    <div class="stat-label">Críticas</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">200</div>
-                    <div class="stat-label">Subvenciones</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">40</div>
-                    <div class="stat-label">BOE</div>
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('mapa')">🗺️ Mapa</div>
+            <div class="tab" onclick="showTab('alertas')">🚨 Alertas</div>
+            <div class="tab" onclick="showTab('promesas')">📊 Promesas</div>
+            <div class="tab" onclick="showTab('redes')">🕸️ Redes</div>
+        </div>
+
+        <div id="mapa" class="tab-content">
+            <div class="obs-card">
+                <h2>🗺️ Riesgo por Municipio</h2>
+                <div id="map" style="height: 400px;"></div>
+                <div class="leyenda-mapa">
+                    <span><span class="color-box" style="background:#10b981;"></span> Bajo</span>
+                    <span><span class="color-box" style="background:#eab308;"></span> Medio</span>
+                    <span><span class="color-box" style="background:#f59e0b;"></span> Alto</span>
+                    <span><span class="color-box" style="background:#ef4444;"></span> Muy alto</span>
+                    <span>⚠️ Alerta activa</span>
                 </div>
             </div>
         </div>
 
-        <div class="tabs">
-            <div class="tab active" onclick="showTab('mapa')">🗺️ Mapa de Riesgos</div>
-            <div class="tab" onclick="showTab('alertas')">🚨 Alertas</div>
-            <div class="tab" onclick="showTab('subvenciones')">💰 Subvenciones</div>
-            <div class="tab" onclick="showTab('boe')">📜 BOE</div>
+        <div id="alertas" class="tab-content" style="display:none;">
+            <div class="obs-card">
+                <h2>🚨 Alertas Críticas</h2>
+                <div class="alertas-container">
+                    
+                    <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2023-1148" target="_blank" class="alerta-link">
+                        <div class="alerta-item critica">
+                            <span class="alerta-tipo">🔴 CRÍTICA</span>
+                            <div class="alerta-msg">SUBVENCIÓN EXTREMA: Ayuntamiento de Córdoba</div>
+                            <div class="alerta-motivo">Importe de 77.574.602€ - 481% sobre la media</div>
+                            <small>Córdoba · Impacto MUY ALTO</small>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2023-3889" target="_blank" class="alerta-link">
+                        <div class="alerta-item critica">
+                            <span class="alerta-tipo">🔴 CRÍTICA</span>
+                            <div class="alerta-msg">SUBVENCIÓN EXTREMA: Ayuntamiento de Melilla</div>
+                            <div class="alerta-motivo">Importe de 75.654.450€ - 466% sobre la media</div>
+                            <small>Melilla · Impacto MUY ALTO</small>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2025-6875" target="_blank" class="alerta-link">
+                        <div class="alerta-item critica">
+                            <span class="alerta-tipo">🔴 CRÍTICA</span>
+                            <div class="alerta-msg">SUBVENCIÓN EXTREMA: Ayuntamiento de Las Palmas</div>
+                            <div class="alerta-motivo">Importe de 74.680.939€ - 459% sobre la media</div>
+                            <small>Las Palmas · Impacto MUY ALTO</small>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2025-1718" target="_blank" class="alerta-link">
+                        <div class="alerta-item critica">
+                            <span class="alerta-tipo">🔴 CRÍTICA</span>
+                            <div class="alerta-msg">SUBVENCIÓN EXTREMA: Ayuntamiento de La Rioja</div>
+                            <div class="alerta-motivo">Importe de 73.681.906€ - 452% sobre la media</div>
+                            <small>La Rioja · Impacto MUY ALTO</small>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2024-6770" target="_blank" class="alerta-link">
+                        <div class="alerta-item critica">
+                            <span class="alerta-tipo">🔴 CRÍTICA</span>
+                            <div class="alerta-msg">SUBVENCIÓN EXTREMA: Sistemas Informáticos...</div>
+                            <div class="alerta-motivo">Importe de 67.624.517€ - 406% sobre la media</div>
+                            <small>Palencia · Impacto MUY ALTO</small>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2026-1190" target="_blank" class="alerta-link">
+                        <div class="alerta-item critica">
+                            <span class="alerta-tipo">🔴 CRÍTICA</span>
+                            <div class="alerta-msg">SUBVENCIÓN EXTREMA: Tecnologías del Futuro SL</div>
+                            <div class="alerta-motivo">Importe de 63.772.027€ - 377% sobre la media</div>
+                            <small>Barcelona · Impacto MUY ALTO</small>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2023-4688" target="_blank" class="alerta-link">
+                        <div class="alerta-item critica">
+                            <span class="alerta-tipo">🕸️ CRÍTICA</span>
+                            <div class="alerta-msg">RED EMPRESARIAL DETECTADA: GRUPO CONSTRUCCIONES MARTÍNEZ</div>
+                            <div class="alerta-motivo">3 empresas vinculadas · 210.221.500€ total</div>
+                            <small>MÚLTIPLES · Impacto MUY ALTO</small>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2025-7192" target="_blank" class="alerta-link">
+                        <div class="alerta-item critica">
+                            <span class="alerta-tipo">🕸️ CRÍTICA</span>
+                            <div class="alerta-msg">RED EMPRESARIAL DETECTADA: GRUPO TECNOLÓGICO AVANZADO</div>
+                            <div class="alerta-motivo">4 empresas vinculadas · 202.798.032€ total</div>
+                            <small>MÚLTIPLES · Impacto MUY ALTO</small>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2024-1698" target="_blank" class="alerta-link">
+                        <div class="alerta-item critica">
+                            <span class="alerta-tipo">🕸️ CRÍTICA</span>
+                            <div class="alerta-msg">RED EMPRESARIAL DETECTADA: GRUPO CONSULTORÍA PÚBLICA</div>
+                            <div class="alerta-motivo">4 empresas vinculadas · 54.325.315€ total</div>
+                            <small>MÚLTIPLES · Impacto MUY ALTO</small>
+                        </div>
+                    </a>
+                    
+                </div>
+            </div>
         </div>
 
-        <div class="main-grid">
-            <div id="mapa" class="tab-content" style="display: grid; gap: 16px;">
-                <div class="obs-card">
-                    <h2>🗺️ Mapa de Riesgo de Corrupción</h2>
-                    <div id="map" style="height: 400px;"></div>
-                    <div class="leyenda-mapa">
-                        <div class="leyenda-item"><span class="color-box" style="background:#10b981;"></span> Riesgo bajo</div>
-                        <div class="leyenda-item"><span class="color-box" style="background:#eab308;"></span> Riesgo medio</div>
-                        <div class="leyenda-item"><span class="color-box" style="background:#f59e0b;"></span> Riesgo alto</div>
-                        <div class="leyenda-item"><span class="color-box" style="background:#ef4444;"></span> Riesgo muy alto</div>
-                        <div class="leyenda-item">⚠️ Municipio con alerta activa</div>
+        <div id="promesas" class="tab-content" style="display:none;">
+            <div class="obs-card">
+                <h2>📊 Promesas vs Realidad</h2>
+                <canvas id="graficoPromesas" class="grafico-container"></canvas>
+                
+                <div style="margin:15px 0; padding:10px; background:var(--bg); border-radius:8px;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span>Aumentar gasto sanitario en 5% anual</span>
+                        <span class="badge" style="background:green">100%</span>
                     </div>
-                    <p style="font-size:0.8rem; color:var(--text-light); margin-top:8px;">
-                        Intensidad del color = nivel de riesgo · Haz clic en cualquier municipio para ver detalles
-                    </p>
+                    <div class="progress"><div class="progress-bar" style="width:100%"></div></div>
+                    <small>PSOE · BOE</small>
                 </div>
+                
+                <div style="margin:15px 0; padding:10px; background:var(--bg); border-radius:8px;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span>100.000 viviendas públicas</span>
+                        <span class="badge" style="background:orange">12.0%</span>
+                    </div>
+                    <div class="progress"><div class="progress-bar" style="width:12.0%"></div></div>
+                    <small>PP · MITMA</small>
+                </div>
+                
+            </div>
+        </div>
 
-                <!-- Alertas destacadas -->
-                <div class="obs-card">
-                    <h2>🚨 Alertas Críticas</h2>
-                    <div class="alertas-container">
-                        
-                        <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2023-2387" target="_blank" style="text-decoration: none; color: inherit;">
-                            <div class="alerta-item critica">
-                                <span class="alerta-tipo">🔴 CRÍTICA</span>
-                                <div class="alerta-msg">SUBVENCIÓN EXTREMA: Diputación de San Sebastián...</div>
-                                <div class="alerta-motivo">Importe de 79.959.161€ - 462% sobre la media</div>
-                                <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
-                                    Impacto: MUY ALTO · San Sebastián de los Reyes
-                                </div>
-                                <span class="enlace-detalle">Investigar →</span>
-                            </div>
-                        </a>
-                        
-                        <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2025-4901" target="_blank" style="text-decoration: none; color: inherit;">
-                            <div class="alerta-item critica">
-                                <span class="alerta-tipo">🔴 CRÍTICA</span>
-                                <div class="alerta-msg">SUBVENCIÓN EXTREMA: Diputación de Cuenca</div>
-                                <div class="alerta-motivo">Importe de 79.774.756€ - 461% sobre la media</div>
-                                <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
-                                    Impacto: MUY ALTO · Cuenca
-                                </div>
-                                <span class="enlace-detalle">Investigar →</span>
-                            </div>
-                        </a>
-                        
-                        <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2023-4252" target="_blank" style="text-decoration: none; color: inherit;">
-                            <div class="alerta-item critica">
-                                <span class="alerta-tipo">🔴 CRÍTICA</span>
-                                <div class="alerta-msg">SUBVENCIÓN EXTREMA: Fundación Sevilla</div>
-                                <div class="alerta-motivo">Importe de 77.064.353€ - 442% sobre la media</div>
-                                <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
-                                    Impacto: MUY ALTO · Sevilla
-                                </div>
-                                <span class="enlace-detalle">Investigar →</span>
-                            </div>
-                        </a>
-                        
-                        <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2024-2567" target="_blank" style="text-decoration: none; color: inherit;">
-                            <div class="alerta-item critica">
-                                <span class="alerta-tipo">🔴 CRÍTICA</span>
-                                <div class="alerta-msg">SUBVENCIÓN EXTREMA: Ayuntamiento de El Ejido</div>
-                                <div class="alerta-motivo">Importe de 72.144.719€ - 407% sobre la media</div>
-                                <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
-                                    Impacto: MUY ALTO · El Ejido
-                                </div>
-                                <span class="enlace-detalle">Investigar →</span>
-                            </div>
-                        </a>
-                        
-                        <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2024-9904" target="_blank" style="text-decoration: none; color: inherit;">
-                            <div class="alerta-item critica">
-                                <span class="alerta-tipo">🔴 CRÍTICA</span>
-                                <div class="alerta-msg">SUBVENCIÓN EXTREMA: Ayuntamiento de Huesca</div>
-                                <div class="alerta-motivo">Importe de 72.090.600€ - 407% sobre la media</div>
-                                <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
-                                    Impacto: MUY ALTO · Huesca
-                                </div>
-                                <span class="enlace-detalle">Investigar →</span>
-                            </div>
-                        </a>
-                        
-                        <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2024-4549" target="_blank" style="text-decoration: none; color: inherit;">
-                            <div class="alerta-item critica">
-                                <span class="alerta-tipo">🔴 CRÍTICA</span>
-                                <div class="alerta-msg">SUBVENCIÓN EXTREMA: Ayuntamiento de Gerona</div>
-                                <div class="alerta-motivo">Importe de 68.747.717€ - 384% sobre la media</div>
-                                <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
-                                    Impacto: MUY ALTO · Gerona
-                                </div>
-                                <span class="enlace-detalle">Investigar →</span>
-                            </div>
-                        </a>
-                        
-                        <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-2026-1726" target="_blank" style="text-decoration: none; color: inherit;">
-                            <div class="alerta-item critica">
-                                <span class="alerta-tipo">🔴 CRÍTICA</span>
-                                <div class="alerta-msg">SUBVENCIÓN EXTREMA: Universidad de Salamanca</div>
-                                <div class="alerta-motivo">Importe de 68.719.343€ - 383% sobre la media</div>
-                                <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
-                                    Impacto: MUY ALTO · Talavera de la Reina
-                                </div>
-                                <span class="enlace-detalle">Investigar →</span>
-                            </div>
-                        </a>
-                        
-                    </div>
+        <div id="redes" class="tab-content" style="display:none;">
+            <div class="obs-card">
+                <h2>🕸️ Redes Empresariales Detectadas</h2>
+                
+                <div style="margin:10px 0; padding:15px; background:#fee2e2; border-radius:8px;">
+                    <span class="alerta-tipo">🕸️ RED EMPRESARIAL DETECTADA: GRUPO CONSTRUCCIONES MARTÍNEZ</span>
+                    <p>3 empresas vinculadas · 210.221.500€ total</p>
                 </div>
+                
+                <div style="margin:10px 0; padding:15px; background:#fee2e2; border-radius:8px;">
+                    <span class="alerta-tipo">🕸️ RED EMPRESARIAL DETECTADA: GRUPO TECNOLÓGICO AVANZADO</span>
+                    <p>4 empresas vinculadas · 202.798.032€ total</p>
+                </div>
+                
+                <div style="margin:10px 0; padding:15px; background:#fee2e2; border-radius:8px;">
+                    <span class="alerta-tipo">🕸️ RED EMPRESARIAL DETECTADA: GRUPO CONSULTORÍA PÚBLICA</span>
+                    <p>4 empresas vinculadas · 54.325.315€ total</p>
+                </div>
+                
             </div>
         </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="dashboard.js"></script>
     <script>
-        let startY = 0;
-        let pulling = false;
-        const pullIndicator = document.getElementById('pullIndicator');
-        
-        document.addEventListener('touchstart', (e) => {
-            startY = e.touches[0].pageY;
-            pulling = window.scrollY === 0;
-        }, {passive: true});
-        
-        document.addEventListener('touchmove', (e) => {
-            if (pulling && window.scrollY === 0 && e.touches[0].pageY > startY + 40) {
-                pullIndicator.classList.add('show');
+        // Gráfico de promesas
+        new Chart(document.getElementById('graficoPromesas'), {
+            type: 'bar',
+            data: {
+                labels: ["Aumentar gasto sanit...", "100.000 viviendas p\u00fa..."],
+                datasets: [{
+                    label: '% Cumplimiento',
+                    data: [100, 12.0],
+                    backgroundColor: '#3b82f6'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true, max: 100 } }
             }
-        }, {passive: true});
-        
-        document.addEventListener('touchend', () => {
-            if (pullIndicator.classList.contains('show')) {
-                pullIndicator.innerHTML = '⟳ Actualizando...';
-                setTimeout(() => location.reload(), 300);
-            }
-            pullIndicator.classList.remove('show');
         });
-
-        function showTab(tabName) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
-            event.target.classList.add('active');
-            document.getElementById(tabName).style.display = 'grid';
-        }
-
-        document.getElementById('refreshBtn')?.addEventListener('click', () => location.reload());
 
         // Inicializar mapa
         var map = L.map('map').setView([40.4168, -3.7038], 6);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
-        }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         
-        // Cargar GeoJSON con datos de riesgo
         fetch('datos/municipios.geojson')
             .then(r => r.json())
             .then(data => {
                 L.geoJSON(data, {
                     style: (feature) => {
+                        const riesgo = feature.properties.riesgo || 0;
+                        let color = '#10b981';
+                        if (riesgo >= 70) color = '#ef4444';
+                        else if (riesgo >= 40) color = '#f59e0b';
+                        else if (riesgo >= 20) color = '#eab308';
                         return {
-                            fillColor: feature.properties.color_riesgo || '#10b981',
+                            fillColor: color,
                             fillOpacity: 0.7,
                             color: '#2563eb',
-                            weight: feature.properties.tiene_alerta ? 3 : 1.5,
-                            opacity: 0.8,
-                            dashArray: feature.properties.tiene_alerta ? '5, 5' : null
+                            weight: feature.properties.tiene_alerta ? 3 : 1
                         };
-                    },
-                    onEachFeature: (feature, layer) => {
-                        const p = feature.properties;
-                        const alertaIcon = p.tiene_alerta ? ' ⚠️' : '';
-                        layer.bindPopup(`
-                            <b>${p.name}${alertaIcon}</b><br>
-                            <span style="color:#2563eb;">${p.subvenciones} subvenciones</span><br>
-                            <b>${p.importe_total.toLocaleString('es-ES')}€</b><br>
-                            <span style="color:${p.color_riesgo};">Riesgo: ${p.nivel_riesgo}</span><br>
-                            <small>${p.beneficiarios} beneficiarios · ${p.ministerios} ministerios</small><br>
-                            <a href="${p.url_info}" target="_blank" style="color:#2563eb;">Ver ayuntamiento →</a>
-                        `);
                     }
                 }).addTo(map);
-                
-                // Añadir marcadores para alertas críticas
-                const alertasCriticas = [{"tipo": "CRÍTICA", "icono": "🔴", "msg": "SUBVENCIÓN EXTREMA: Diputación de San Sebastián...", "motivo": "Importe de 79.959.161€ - 462% sobre la media", "impacto": "MUY ALTO", "fecha": "2025-06-28", "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2023-2387", "municipio": "San Sebastián de los Reyes", "importe": 79959161, "categoria": "outlier"}, {"tipo": "CRÍTICA", "icono": "🔴", "msg": "SUBVENCIÓN EXTREMA: Diputación de Cuenca", "motivo": "Importe de 79.774.756€ - 461% sobre la media", "impacto": "MUY ALTO", "fecha": "2026-01-12", "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2025-4901", "municipio": "Cuenca", "importe": 79774756, "categoria": "outlier"}, {"tipo": "CRÍTICA", "icono": "🔴", "msg": "SUBVENCIÓN EXTREMA: Fundación Sevilla", "motivo": "Importe de 77.064.353€ - 442% sobre la media", "impacto": "MUY ALTO", "fecha": "2025-04-27", "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2023-4252", "municipio": "Sevilla", "importe": 77064353, "categoria": "outlier"}, {"tipo": "CRÍTICA", "icono": "🔴", "msg": "SUBVENCIÓN EXTREMA: Ayuntamiento de El Ejido", "motivo": "Importe de 72.144.719€ - 407% sobre la media", "impacto": "MUY ALTO", "fecha": "2025-10-21", "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2024-2567", "municipio": "El Ejido", "importe": 72144719, "categoria": "outlier"}, {"tipo": "CRÍTICA", "icono": "🔴", "msg": "SUBVENCIÓN EXTREMA: Ayuntamiento de Huesca", "motivo": "Importe de 72.090.600€ - 407% sobre la media", "impacto": "MUY ALTO", "fecha": "2025-07-10", "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2024-9904", "municipio": "Huesca", "importe": 72090600, "categoria": "outlier"}, {"tipo": "CRÍTICA", "icono": "🔴", "msg": "SUBVENCIÓN EXTREMA: Ayuntamiento de Gerona", "motivo": "Importe de 68.747.717€ - 384% sobre la media", "impacto": "MUY ALTO", "fecha": "2025-12-01", "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2024-4549", "municipio": "Gerona", "importe": 68747717, "categoria": "outlier"}, {"tipo": "CRÍTICA", "icono": "🔴", "msg": "SUBVENCIÓN EXTREMA: Universidad de Salamanca", "motivo": "Importe de 68.719.343€ - 383% sobre la media", "impacto": "MUY ALTO", "fecha": "2025-10-24", "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-2026-1726", "municipio": "Talavera de la Reina", "importe": 68719343, "categoria": "outlier"}];
-                alertasCriticas.forEach(a => {
-                    // Buscar coordenadas del municipio
-                    const feature = data.features.find(f => f.properties.name === a.municipio);
-                    if (feature && feature.geometry.coordinates[0][0]) {
-                        const coords = feature.geometry.coordinates[0][0];
-                        L.marker([coords[1], coords[0]], {
-                            icon: L.divIcon({
-                                html: '🔴',
-                                className: 'marcador-alerta',
-                                iconSize: [20, 20]
-                            })
-                        }).addTo(map).bindPopup(`
-                            <b>⚠️ ALERTA CRÍTICA</b><br>
-                            ${a.msg}<br>
-                            <small>${a.motivo}</small><br>
-                            <a href="${a.url}" target="_blank">Investigar →</a>
-                        `);
-                    }
-                });
             });
     </script>
 </body>

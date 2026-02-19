@@ -30,13 +30,5 @@
     "variacion_anual": "+7.8%",
     "partidas": 98,
     "url": "https://www.defensa.gob.es/presupuestos"
-  },
-  {
-    "concepto": "Ciencia",
-    "importe": 3450000000,
-    "ministerio": "Ministerio de Ciencia",
-    "variacion_anual": "+12.3%",
-    "partidas": 76,
-    "url": "https://www.ciencia.gob.es/presupuestos"
   }
 ]
