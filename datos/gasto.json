@@ -1,452 +1,452 @@
 [
   {
     "id": "GAS0000",
-    "concepto": "Desempleo",
-    "importe": 8832664,
+    "concepto": "Defensa",
+    "importe": 72228518,
     "ministerio": "Ministerio de Sanidad",
-    "trimestre": 4,
-    "ano": 2024,
-    "ejecucion": 76
-  },
-  {
-    "id": "GAS0001",
-    "concepto": "Defensa",
-    "importe": 73685170,
-    "ministerio": "Ministerio de Transportes",
-    "trimestre": 2,
-    "ano": 2024,
-    "ejecucion": 66
-  },
-  {
-    "id": "GAS0002",
-    "concepto": "I+D",
-    "importe": 14740503,
-    "ministerio": "Ministerio de Hacienda",
-    "trimestre": 1,
-    "ano": 2024,
-    "ejecucion": 81
-  },
-  {
-    "id": "GAS0003",
-    "concepto": "Defensa",
-    "importe": 18282086,
-    "ministerio": "Ministerio de Hacienda",
-    "trimestre": 3,
-    "ano": 2024,
-    "ejecucion": 96
-  },
-  {
-    "id": "GAS0004",
-    "concepto": "Defensa",
-    "importe": 27558104,
-    "ministerio": "Ministerio del Interior",
-    "trimestre": 2,
-    "ano": 2024,
-    "ejecucion": 65
-  },
-  {
-    "id": "GAS0005",
-    "concepto": "I+D",
-    "importe": 73152890,
-    "ministerio": "Ministerio de Educación",
-    "trimestre": 1,
-    "ano": 2024,
-    "ejecucion": 63
-  },
-  {
-    "id": "GAS0006",
-    "concepto": "Educación",
-    "importe": 50866402,
-    "ministerio": "Ministerio de Hacienda",
-    "trimestre": 2,
-    "ano": 2024,
-    "ejecucion": 79
-  },
-  {
-    "id": "GAS0007",
-    "concepto": "Cultura",
-    "importe": 26161894,
-    "ministerio": "Ministerio de Transportes",
-    "trimestre": 1,
-    "ano": 2024,
-    "ejecucion": 96
-  },
-  {
-    "id": "GAS0008",
-    "concepto": "Cultura",
-    "importe": 87375731,
-    "ministerio": "Ministerio del Interior",
-    "trimestre": 1,
-    "ano": 2024,
-    "ejecucion": 72
-  },
-  {
-    "id": "GAS0009",
-    "concepto": "Defensa",
-    "importe": 33850014,
-    "ministerio": "Ministerio de Sanidad",
-    "trimestre": 4,
-    "ano": 2024,
-    "ejecucion": 81
-  },
-  {
-    "id": "GAS0010",
-    "concepto": "Infraestructuras",
-    "importe": 46243242,
-    "ministerio": "Ministerio de Hacienda",
     "trimestre": 4,
     "ano": 2024,
     "ejecucion": 67
   },
   {
-    "id": "GAS0011",
-    "concepto": "Defensa",
-    "importe": 80512760,
+    "id": "GAS0001",
+    "concepto": "Desempleo",
+    "importe": 75121183,
     "ministerio": "Ministerio de Educación",
-    "trimestre": 4,
-    "ano": 2024,
-    "ejecucion": 74
-  },
-  {
-    "id": "GAS0012",
-    "concepto": "Infraestructuras",
-    "importe": 80876266,
-    "ministerio": "Ministerio del Interior",
-    "trimestre": 3,
-    "ano": 2024,
-    "ejecucion": 84
-  },
-  {
-    "id": "GAS0013",
-    "concepto": "Sanidad",
-    "importe": 1735643,
-    "ministerio": "Ministerio de Educación",
-    "trimestre": 4,
-    "ano": 2024,
-    "ejecucion": 62
-  },
-  {
-    "id": "GAS0014",
-    "concepto": "Educación",
-    "importe": 29456313,
-    "ministerio": "Ministerio de Transportes",
-    "trimestre": 3,
-    "ano": 2024,
-    "ejecucion": 84
-  },
-  {
-    "id": "GAS0015",
-    "concepto": "Sanidad",
-    "importe": 61385691,
-    "ministerio": "Ministerio de Transportes",
-    "trimestre": 1,
-    "ano": 2024,
-    "ejecucion": 79
-  },
-  {
-    "id": "GAS0016",
-    "concepto": "Educación",
-    "importe": 1976244,
-    "ministerio": "Ministerio de Educación",
-    "trimestre": 3,
-    "ano": 2024,
-    "ejecucion": 78
-  },
-  {
-    "id": "GAS0017",
-    "concepto": "Pensiones",
-    "importe": 32799720,
-    "ministerio": "Ministerio de Transportes",
-    "trimestre": 1,
-    "ano": 2024,
-    "ejecucion": 64
-  },
-  {
-    "id": "GAS0018",
-    "concepto": "Pensiones",
-    "importe": 15955103,
-    "ministerio": "Ministerio de Defensa",
-    "trimestre": 2,
-    "ano": 2024,
-    "ejecucion": 100
-  },
-  {
-    "id": "GAS0019",
-    "concepto": "Sanidad",
-    "importe": 45653449,
-    "ministerio": "Ministerio de Defensa",
-    "trimestre": 3,
-    "ano": 2024,
-    "ejecucion": 100
-  },
-  {
-    "id": "GAS0020",
-    "concepto": "Cultura",
-    "importe": 26114989,
-    "ministerio": "Ministerio de Hacienda",
     "trimestre": 1,
     "ano": 2024,
     "ejecucion": 71
   },
   {
-    "id": "GAS0021",
-    "concepto": "Cultura",
-    "importe": 69759162,
-    "ministerio": "Ministerio de Hacienda",
-    "trimestre": 1,
-    "ano": 2024,
-    "ejecucion": 83
-  },
-  {
-    "id": "GAS0022",
-    "concepto": "Defensa",
-    "importe": 45680924,
+    "id": "GAS0002",
+    "concepto": "Educación",
+    "importe": 26350079,
     "ministerio": "Ministerio de Transportes",
-    "trimestre": 1,
+    "trimestre": 3,
     "ano": 2024,
-    "ejecucion": 83
+    "ejecucion": 85
   },
   {
-    "id": "GAS0023",
-    "concepto": "Sanidad",
-    "importe": 56024874,
+    "id": "GAS0003",
+    "concepto": "Desempleo",
+    "importe": 7883193,
+    "ministerio": "Ministerio de Sanidad",
+    "trimestre": 3,
+    "ano": 2024,
+    "ejecucion": 63
+  },
+  {
+    "id": "GAS0004",
+    "concepto": "I+D",
+    "importe": 75604940,
+    "ministerio": "Ministerio de Educación",
+    "trimestre": 4,
+    "ano": 2024,
+    "ejecucion": 94
+  },
+  {
+    "id": "GAS0005",
+    "concepto": "Pensiones",
+    "importe": 90942894,
     "ministerio": "Ministerio del Interior",
-    "trimestre": 2,
+    "trimestre": 4,
     "ano": 2024,
     "ejecucion": 81
   },
   {
-    "id": "GAS0024",
-    "concepto": "Desempleo",
-    "importe": 97290474,
-    "ministerio": "Ministerio de Transportes",
-    "trimestre": 3,
-    "ano": 2024,
-    "ejecucion": 95
-  },
-  {
-    "id": "GAS0025",
-    "concepto": "I+D",
-    "importe": 85248081,
-    "ministerio": "Ministerio de Hacienda",
+    "id": "GAS0006",
+    "concepto": "Cultura",
+    "importe": 25283027,
+    "ministerio": "Ministerio de Educación",
     "trimestre": 2,
     "ano": 2024,
-    "ejecucion": 83
+    "ejecucion": 69
   },
   {
-    "id": "GAS0026",
-    "concepto": "Defensa",
-    "importe": 19607396,
-    "ministerio": "Ministerio de Transportes",
+    "id": "GAS0007",
+    "concepto": "Infraestructuras",
+    "importe": 89410155,
+    "ministerio": "Ministerio de Sanidad",
+    "trimestre": 2,
+    "ano": 2024,
+    "ejecucion": 98
+  },
+  {
+    "id": "GAS0008",
+    "concepto": "Pensiones",
+    "importe": 56898191,
+    "ministerio": "Ministerio de Sanidad",
     "trimestre": 4,
+    "ano": 2024,
+    "ejecucion": 63
+  },
+  {
+    "id": "GAS0009",
+    "concepto": "Cultura",
+    "importe": 29197839,
+    "ministerio": "Ministerio de Educación",
+    "trimestre": 3,
+    "ano": 2024,
+    "ejecucion": 89
+  },
+  {
+    "id": "GAS0010",
+    "concepto": "Cultura",
+    "importe": 24715889,
+    "ministerio": "Ministerio de Hacienda",
+    "trimestre": 3,
+    "ano": 2024,
+    "ejecucion": 92
+  },
+  {
+    "id": "GAS0011",
+    "concepto": "Educación",
+    "importe": 68845205,
+    "ministerio": "Ministerio de Hacienda",
+    "trimestre": 3,
+    "ano": 2024,
+    "ejecucion": 79
+  },
+  {
+    "id": "GAS0012",
+    "concepto": "Sanidad",
+    "importe": 73861918,
+    "ministerio": "Ministerio de Sanidad",
+    "trimestre": 3,
     "ano": 2024,
     "ejecucion": 67
   },
   {
-    "id": "GAS0027",
-    "concepto": "Cultura",
-    "importe": 22069573,
-    "ministerio": "Ministerio de Transportes",
-    "trimestre": 4,
-    "ano": 2024,
-    "ejecucion": 65
-  },
-  {
-    "id": "GAS0028",
+    "id": "GAS0013",
     "concepto": "Pensiones",
-    "importe": 20639956,
+    "importe": 68544961,
+    "ministerio": "Ministerio del Interior",
+    "trimestre": 1,
+    "ano": 2024,
+    "ejecucion": 92
+  },
+  {
+    "id": "GAS0014",
+    "concepto": "Pensiones",
+    "importe": 29827640,
+    "ministerio": "Ministerio de Defensa",
+    "trimestre": 2,
+    "ano": 2024,
+    "ejecucion": 88
+  },
+  {
+    "id": "GAS0015",
+    "concepto": "Desempleo",
+    "importe": 55717847,
+    "ministerio": "Ministerio de Sanidad",
+    "trimestre": 2,
+    "ano": 2024,
+    "ejecucion": 69
+  },
+  {
+    "id": "GAS0016",
+    "concepto": "Cultura",
+    "importe": 94326554,
+    "ministerio": "Ministerio del Interior",
+    "trimestre": 1,
+    "ano": 2024,
+    "ejecucion": 77
+  },
+  {
+    "id": "GAS0017",
+    "concepto": "Infraestructuras",
+    "importe": 15508509,
     "ministerio": "Ministerio de Transportes",
     "trimestre": 4,
     "ano": 2024,
-    "ejecucion": 82
+    "ejecucion": 85
   },
   {
-    "id": "GAS0029",
-    "concepto": "Desempleo",
-    "importe": 77959077,
+    "id": "GAS0018",
+    "concepto": "Defensa",
+    "importe": 81895976,
     "ministerio": "Ministerio de Transportes",
     "trimestre": 1,
     "ano": 2024,
-    "ejecucion": 99
+    "ejecucion": 60
   },
   {
-    "id": "GAS0030",
-    "concepto": "Educación",
-    "importe": 59368726,
+    "id": "GAS0019",
+    "concepto": "Defensa",
+    "importe": 91774957,
     "ministerio": "Ministerio de Educación",
     "trimestre": 2,
+    "ano": 2024,
+    "ejecucion": 66
+  },
+  {
+    "id": "GAS0020",
+    "concepto": "Desempleo",
+    "importe": 68634849,
+    "ministerio": "Ministerio de Sanidad",
+    "trimestre": 3,
+    "ano": 2024,
+    "ejecucion": 69
+  },
+  {
+    "id": "GAS0021",
+    "concepto": "Defensa",
+    "importe": 97648880,
+    "ministerio": "Ministerio de Transportes",
+    "trimestre": 4,
+    "ano": 2024,
+    "ejecucion": 100
+  },
+  {
+    "id": "GAS0022",
+    "concepto": "Desempleo",
+    "importe": 71802020,
+    "ministerio": "Ministerio de Educación",
+    "trimestre": 2,
+    "ano": 2024,
+    "ejecucion": 85
+  },
+  {
+    "id": "GAS0023",
+    "concepto": "Pensiones",
+    "importe": 50521074,
+    "ministerio": "Ministerio de Defensa",
+    "trimestre": 4,
+    "ano": 2024,
+    "ejecucion": 86
+  },
+  {
+    "id": "GAS0024",
+    "concepto": "Sanidad",
+    "importe": 85999637,
+    "ministerio": "Ministerio de Transportes",
+    "trimestre": 4,
+    "ano": 2024,
+    "ejecucion": 89
+  },
+  {
+    "id": "GAS0025",
+    "concepto": "Sanidad",
+    "importe": 29096946,
+    "ministerio": "Ministerio de Defensa",
+    "trimestre": 3,
+    "ano": 2024,
+    "ejecucion": 69
+  },
+  {
+    "id": "GAS0026",
+    "concepto": "Sanidad",
+    "importe": 59250847,
+    "ministerio": "Ministerio de Educación",
+    "trimestre": 2,
+    "ano": 2024,
+    "ejecucion": 75
+  },
+  {
+    "id": "GAS0027",
+    "concepto": "Sanidad",
+    "importe": 93347516,
+    "ministerio": "Ministerio de Transportes",
+    "trimestre": 1,
+    "ano": 2024,
+    "ejecucion": 84
+  },
+  {
+    "id": "GAS0028",
+    "concepto": "Cultura",
+    "importe": 12582892,
+    "ministerio": "Ministerio de Educación",
+    "trimestre": 3,
     "ano": 2024,
     "ejecucion": 61
   },
   {
-    "id": "GAS0031",
-    "concepto": "Desempleo",
-    "importe": 6397728,
-    "ministerio": "Ministerio del Interior",
-    "trimestre": 4,
-    "ano": 2024,
-    "ejecucion": 78
-  },
-  {
-    "id": "GAS0032",
-    "concepto": "Pensiones",
-    "importe": 14662465,
+    "id": "GAS0029",
+    "concepto": "Cultura",
+    "importe": 44537807,
     "ministerio": "Ministerio de Transportes",
     "trimestre": 3,
     "ano": 2024,
-    "ejecucion": 64
+    "ejecucion": 60
   },
   {
-    "id": "GAS0033",
-    "concepto": "Infraestructuras",
-    "importe": 47908638,
-    "ministerio": "Ministerio de Sanidad",
+    "id": "GAS0030",
+    "concepto": "Desempleo",
+    "importe": 72320697,
+    "ministerio": "Ministerio de Educación",
     "trimestre": 3,
     "ano": 2024,
     "ejecucion": 72
   },
   {
-    "id": "GAS0034",
-    "concepto": "Infraestructuras",
-    "importe": 77157753,
+    "id": "GAS0031",
+    "concepto": "Defensa",
+    "importe": 78046292,
+    "ministerio": "Ministerio del Interior",
+    "trimestre": 1,
+    "ano": 2024,
+    "ejecucion": 70
+  },
+  {
+    "id": "GAS0032",
+    "concepto": "Cultura",
+    "importe": 73671271,
+    "ministerio": "Ministerio de Hacienda",
+    "trimestre": 1,
+    "ano": 2024,
+    "ejecucion": 98
+  },
+  {
+    "id": "GAS0033",
+    "concepto": "Defensa",
+    "importe": 65637128,
     "ministerio": "Ministerio de Transportes",
     "trimestre": 1,
     "ano": 2024,
-    "ejecucion": 69
+    "ejecucion": 93
+  },
+  {
+    "id": "GAS0034",
+    "concepto": "Educación",
+    "importe": 35105017,
+    "ministerio": "Ministerio de Transportes",
+    "trimestre": 1,
+    "ano": 2024,
+    "ejecucion": 67
   },
   {
     "id": "GAS0035",
-    "concepto": "Sanidad",
-    "importe": 60375081,
-    "ministerio": "Ministerio de Hacienda",
+    "concepto": "Defensa",
+    "importe": 85525958,
+    "ministerio": "Ministerio del Interior",
     "trimestre": 3,
     "ano": 2024,
-    "ejecucion": 97
+    "ejecucion": 93
   },
   {
     "id": "GAS0036",
-    "concepto": "I+D",
-    "importe": 10337698,
-    "ministerio": "Ministerio de Educación",
-    "trimestre": 1,
-    "ano": 2024,
-    "ejecucion": 69
-  },
-  {
-    "id": "GAS0037",
-    "concepto": "I+D",
-    "importe": 23884468,
+    "concepto": "Infraestructuras",
+    "importe": 8179031,
     "ministerio": "Ministerio de Defensa",
     "trimestre": 1,
     "ano": 2024,
-    "ejecucion": 85
+    "ejecucion": 64
+  },
+  {
+    "id": "GAS0037",
+    "concepto": "Cultura",
+    "importe": 7038833,
+    "ministerio": "Ministerio de Sanidad",
+    "trimestre": 1,
+    "ano": 2024,
+    "ejecucion": 94
   },
   {
     "id": "GAS0038",
     "concepto": "Pensiones",
-    "importe": 93000931,
-    "ministerio": "Ministerio de Hacienda",
-    "trimestre": 4,
+    "importe": 7433160,
+    "ministerio": "Ministerio de Sanidad",
+    "trimestre": 2,
     "ano": 2024,
-    "ejecucion": 61
+    "ejecucion": 92
   },
   {
     "id": "GAS0039",
-    "concepto": "Cultura",
-    "importe": 97895104,
-    "ministerio": "Ministerio de Educación",
-    "trimestre": 3,
+    "concepto": "Infraestructuras",
+    "importe": 98058683,
+    "ministerio": "Ministerio de Sanidad",
+    "trimestre": 2,
     "ano": 2024,
-    "ejecucion": 66
+    "ejecucion": 95
   },
   {
     "id": "GAS0040",
-    "concepto": "Cultura",
-    "importe": 28039923,
-    "ministerio": "Ministerio de Educación",
-    "trimestre": 3,
+    "concepto": "Pensiones",
+    "importe": 67504249,
+    "ministerio": "Ministerio de Transportes",
+    "trimestre": 4,
     "ano": 2024,
-    "ejecucion": 96
+    "ejecucion": 83
   },
   {
     "id": "GAS0041",
-    "concepto": "I+D",
-    "importe": 51929174,
+    "concepto": "Cultura",
+    "importe": 99858193,
     "ministerio": "Ministerio de Transportes",
-    "trimestre": 3,
+    "trimestre": 4,
     "ano": 2024,
-    "ejecucion": 100
+    "ejecucion": 68
   },
   {
     "id": "GAS0042",
-    "concepto": "Cultura",
-    "importe": 88113756,
-    "ministerio": "Ministerio de Defensa",
-    "trimestre": 3,
+    "concepto": "Defensa",
+    "importe": 37915116,
+    "ministerio": "Ministerio de Hacienda",
+    "trimestre": 2,
     "ano": 2024,
-    "ejecucion": 65
+    "ejecucion": 70
   },
   {
     "id": "GAS0043",
     "concepto": "Infraestructuras",
-    "importe": 77591114,
-    "ministerio": "Ministerio de Educación",
-    "trimestre": 4,
+    "importe": 58267189,
+    "ministerio": "Ministerio de Sanidad",
+    "trimestre": 1,
     "ano": 2024,
-    "ejecucion": 69
+    "ejecucion": 68
   },
   {
     "id": "GAS0044",
-    "concepto": "Pensiones",
-    "importe": 22661254,
-    "ministerio": "Ministerio de Educación",
-    "trimestre": 3,
+    "concepto": "Sanidad",
+    "importe": 40181852,
+    "ministerio": "Ministerio de Defensa",
+    "trimestre": 4,
     "ano": 2024,
-    "ejecucion": 84
+    "ejecucion": 85
   },
   {
     "id": "GAS0045",
-    "concepto": "Desempleo",
-    "importe": 20478619,
-    "ministerio": "Ministerio de Sanidad",
-    "trimestre": 3,
+    "concepto": "I+D",
+    "importe": 8693226,
+    "ministerio": "Ministerio de Defensa",
+    "trimestre": 2,
     "ano": 2024,
-    "ejecucion": 61
+    "ejecucion": 97
   },
   {
     "id": "GAS0046",
-    "concepto": "I+D",
-    "importe": 98083864,
+    "concepto": "Cultura",
+    "importe": 57085933,
     "ministerio": "Ministerio de Hacienda",
-    "trimestre": 4,
+    "trimestre": 3,
     "ano": 2024,
-    "ejecucion": 76
+    "ejecucion": 88
   },
   {
     "id": "GAS0047",
     "concepto": "Desempleo",
-    "importe": 67604339,
-    "ministerio": "Ministerio del Interior",
-    "trimestre": 3,
-    "ano": 2024,
-    "ejecucion": 99
-  },
-  {
-    "id": "GAS0048",
-    "concepto": "Cultura",
-    "importe": 92952215,
-    "ministerio": "Ministerio de Hacienda",
-    "trimestre": 1,
-    "ano": 2024,
-    "ejecucion": 90
-  },
-  {
-    "id": "GAS0049",
-    "concepto": "I+D",
-    "importe": 27104730,
+    "importe": 50283336,
     "ministerio": "Ministerio de Sanidad",
     "trimestre": 4,
     "ano": 2024,
-    "ejecucion": 92
+    "ejecucion": 83
+  },
+  {
+    "id": "GAS0048",
+    "concepto": "I+D",
+    "importe": 15913877,
+    "ministerio": "Ministerio del Interior",
+    "trimestre": 4,
+    "ano": 2024,
+    "ejecucion": 85
+  },
+  {
+    "id": "GAS0049",
+    "concepto": "Cultura",
+    "importe": 91549937,
+    "ministerio": "Ministerio de Hacienda",
+    "trimestre": 1,
+    "ano": 2024,
+    "ejecucion": 80
   }
 ]
