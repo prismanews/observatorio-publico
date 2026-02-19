@@ -9,39 +9,38 @@ os.makedirs("datos", exist_ok=True)
 print("Generando Observatorio...")
 
 # =========================================================
-# 1️⃣ SUBVENCIONES AUTOMÁTICAS DESDE DATOS ABIERTOS
+# 1️⃣ SUBVENCIONES AUTOMÁTICAS (datos abiertos)
 # =========================================================
 
 subvenciones = []
+alertas = []
 
 try:
     url = "https://datos.gob.es/apidata/catalog/dataset?q=subvenciones"
-
     r = requests.get(url, timeout=30)
 
     if r.status_code == 200:
-        data = r.json()
+        datasets = r.json().get("result", {}).get("items", [])
 
-        datasets = data.get("result", {}).get("items", [])
-
-        for d in datasets[:10]:
-            subvenciones.append({
+        for d in datasets[:15]:
+            registro = {
                 "organismo": d.get("publisher", {}).get("label", "Organismo público"),
                 "objeto": d.get("title", ""),
                 "importe": 0
-            })
+            }
 
-        print(f"Datasets subvenciones detectados: {len(subvenciones)}")
+            subvenciones.append(registro)
 
-    else:
-        print("Error API datos abiertos:", r.status_code)
+            # ALERTA AUTOMÁTICA (ejemplo base)
+            if "millones" in registro["objeto"].lower():
+                alertas.append(registro)
 
 except Exception as e:
     print("Error subvenciones:", e)
 
 
 # =========================================================
-# 2️⃣ BOE RSS
+# 2️⃣ BOE SIMPLIFICADO
 # =========================================================
 
 boe_docs = []
@@ -49,14 +48,29 @@ boe_docs = []
 try:
     feed = feedparser.parse("https://www.boe.es/rss/boe.php")
 
-    for entry in feed.entries[:15]:
+    for entry in feed.entries[:20]:
+
+        titulo = entry.title.lower()
+
+        categoria = "General"
+
+        if "subvencion" in titulo:
+            categoria = "Subvenciones"
+        elif "ley" in titulo:
+            categoria = "Legislación"
+        elif "presupuesto" in titulo:
+            categoria = "Economía"
+        elif "real decreto" in titulo:
+            categoria = "Normativa"
+
+        resumen_simple = entry.title.split(":")[0]
+
         boe_docs.append({
             "titulo": entry.title,
             "link": entry.link,
-            "fecha": entry.published
+            "categoria": categoria,
+            "resumen": resumen_simple
         })
-
-    print("BOE OK")
 
 except Exception as e:
     print("Error BOE:", e)
@@ -66,15 +80,18 @@ except Exception as e:
 # 3️⃣ GUARDAR JSON
 # =========================================================
 
-with open("datos/subvenciones.json", "w", encoding="utf-8") as f:
-    json.dump(subvenciones, f, ensure_ascii=False, indent=2)
+json.dump(subvenciones, open("datos/subvenciones.json", "w", encoding="utf-8"),
+          ensure_ascii=False, indent=2)
 
-with open("datos/boe.json", "w", encoding="utf-8") as f:
-    json.dump(boe_docs, f, ensure_ascii=False, indent=2)
+json.dump(alertas, open("datos/alertas.json", "w", encoding="utf-8"),
+          ensure_ascii=False, indent=2)
+
+json.dump(boe_docs, open("datos/boe.json", "w", encoding="utf-8"),
+          ensure_ascii=False, indent=2)
 
 
 # =========================================================
-# 4️⃣ HTML
+# 4️⃣ HTML + SEO + DASHBOARD
 # =========================================================
 
 timestamp = datetime.utcnow().strftime("%d %B %Y · %H:%M UTC")
@@ -83,9 +100,17 @@ html = f"""
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
-<title>Observatorio Público</title>
+<title>Observatorio de Transparencia Pública</title>
+
+<meta name="description" content="Observatorio independiente de subvenciones públicas, BOE simplificado y transparencia institucional.">
+<meta name="keywords" content="subvenciones públicas, BOE explicado, transparencia pública, gasto público España">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link rel="stylesheet" href="estilo.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
@@ -98,21 +123,31 @@ html = f"""
 
 <section class="obs-card">
 
-<h2>Subvenciones detectadas</h2>
+<h2>📊 Dashboard</h2>
+<canvas id="graficoSubvenciones"></canvas>
+
+<h2>🚨 Alertas subvenciones</h2>
+<ul id="alertas"></ul>
+
+<h2>📜 BOE simplificado</h2>
 <ul>
 """
 
-for s in subvenciones:
-    html += f"<li>{s['organismo']} — {s['objeto']}</li>"
+for b in boe_docs[:10]:
+    html += f"<li><b>[{b['categoria']}]</b> {b['resumen']}</li>"
 
-html += "</ul><h2>BOE reciente</h2><ul>"
+html += """
 
-for b in boe_docs:
-    html += f"<li><a href='{b['link']}'>{b['titulo']}</a></li>"
+</ul>
 
-html += "</ul></section></div></body></html>"
+<script src="dashboard.js"></script>
 
-with open("index.html", "w", encoding="utf-8") as f:
-    f.write(html)
+</section>
+</div>
+</body>
+</html>
+"""
+
+open("index.html", "w", encoding="utf-8").write(html)
 
 print("Observatorio actualizado")
