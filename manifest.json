@@ -1,7 +1,6 @@
 {
-  "name": "Observatorio de Transparencia Pública",
+  "name": "Observatorio de Transparencia",
   "short_name": "ObsPub",
-  "description": "Seguimiento de transparencia, subvenciones y gasto público",
   "start_url": "/observatorio-publico/",
   "display": "standalone",
   "background_color": "#f8fafc",
@@ -10,11 +9,6 @@
     {
       "src": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
       "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-      "sizes": "512x512",
       "type": "image/png"
     }
   ]

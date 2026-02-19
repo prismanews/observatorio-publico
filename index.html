@@ -2,113 +2,341 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ObsPub">
     <title>Observatorio de Transparencia Pública</title>
     <meta name="description" content="Seguimiento de transparencia, subvenciones y gasto público en España">
     <meta name="theme-color" content="#0f172a">
     
-    <!-- PWA -->
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
-    
-    <!-- CSS -->
     <link rel="stylesheet" href="estilo.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Pull to refresh indicator */
+        .pull-indicator {
+            height: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 0.8rem;
+            transition: height 0.2s;
+        }
+        .pull-indicator.show {
+            height: 40px;
+        }
+        /* Ajuste para iPhone 13 */
+        @media (max-width: 390px) {
+            .obs-header h1 { font-size: 1.5rem; }
+            .stat-value { font-size: 1.4rem; }
+            .btn { padding: 10px 12px; }
+        }
+    </style>
 </head>
 <body>
+    <div class="pull-indicator" id="pullIndicator">Suelta para actualizar</div>
+    
     <div class="container">
         <header class="obs-header">
-            <h1>🏛️ Observatorio de Transparencia Pública</h1>
+            <h1>🏛️ Observatorio de Transparencia</h1>
             <p>Monitorizando la actividad del sector público español</p>
-            <div style="display: flex; gap: 10px; justify-content: center;">
-                <span class="badge" style="background: #10b981;">Última actualización: 19/02/2026 10:00</span>
-                <a href="datos/informe_transparencia.pdf" class="btn btn-primary" download>
-                    📥 Descargar Informe PDF
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <span class="badge" style="background: #10b981; padding: 6px 12px;">19/02/2026 10:14</span>
+                <a href="datos/informe_transparencia.pdf" class="btn" download>
+                    📥 Informe PDF
                 </a>
-                <button class="btn btn-outline" id="refresh-btn">
-                    🔄 Actualizar
+                <button class="btn btn-outline" id="refreshBtn" style="background: rgba(255,255,255,0.2);">
+                    🔄
                 </button>
             </div>
         </header>
 
         <!-- Estadísticas rápidas -->
-        <div class="obs-card" style="margin-bottom: 20px;" id="estadisticas">
-            <!-- Se llena con JS -->
+        <div class="obs-card" style="margin-bottom: 16px; padding: 12px;">
+            <div class="stat-grid">
+                <div class="stat-item">
+                    <div class="stat-value">10</div>
+                    <div class="stat-label">Alertas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">40</div>
+                    <div class="stat-label">BOE</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">100</div>
+                    <div class="stat-label">Subvenciones</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">654,033,624€</div>
+                    <div class="stat-label">Total</div>
+                </div>
+            </div>
         </div>
 
-        <!-- Tabs de navegación -->
+        <!-- Tabs navegación -->
         <div class="tabs">
-            <div class="tab active" data-tab="resumen">📊 Resumen</div>
-            <div class="tab" data-tab="subvenciones">💰 Subvenciones</div>
-            <div class="tab" data-tab="gasto">💶 Gasto Público</div>
-            <div class="tab" data-tab="boe">📜 BOE</div>
-            <div class="tab" data-tab="promesas">🗳️ Promesas</div>
+            <div class="tab active" onclick="showTab('resumen')">📊 Resumen</div>
+            <div class="tab" onclick="showTab('alertas')">🚨 Alertas</div>
+            <div class="tab" onclick="showTab('subvenciones')">💰 Subvenciones</div>
+            <div class="tab" onclick="showTab('boe')">📜 BOE</div>
+            <div class="tab" onclick="showTab('promesas')">🗳️ Promesas</div>
         </div>
 
+        <!-- Contenido principal -->
         <div class="main-grid">
-            <!-- Alertas -->
-            <div class="obs-card">
-                <h2 data-icon="🚨">Alertas de Riesgo</h2>
-                <div class="alertas-container" id="alertas-box">
-                    <div class="loading"></div>
+            <!-- Sección Resumen (visible por defecto) -->
+            <div id="resumen" class="tab-content" style="display: grid; gap: 16px;">
+                <!-- Alertas (horizontal scroll) -->
+                <div class="obs-card">
+                    <h2>🚨 Alertas de Riesgo</h2>
+                    <div class="alertas-container">
+                        
+                        <div class="alerta-item aviso">
+                            <span class="alerta-tipo">AVISO</span>
+                            <div class="alerta-msg">Concentración de subvenciones: Confederación de Málaga......</div>
+                            <div class="alerta-motivo">Ha recibido 5 subvenciones en el último año</div>
+                            <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
+                                Impacto: ALTO
+                            </div>
+                        </div>
+                        
+                        <div class="alerta-item aviso">
+                            <span class="alerta-tipo">AVISO</span>
+                            <div class="alerta-msg">Beneficiario con múltiples ministerios: Empresa Municipal Bilbao......</div>
+                            <div class="alerta-motivo">Recibe de 3 ministerios diferentes</div>
+                            <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
+                                Impacto: MEDIO
+                            </div>
+                        </div>
+                        
+                        <div class="alerta-item aviso">
+                            <span class="alerta-tipo">AVISO</span>
+                            <div class="alerta-msg">Beneficiario con múltiples ministerios: Diputación de Bilbao......</div>
+                            <div class="alerta-motivo">Recibe de 3 ministerios diferentes</div>
+                            <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
+                                Impacto: MEDIO
+                            </div>
+                        </div>
+                        
+                        <div class="alerta-item aviso">
+                            <span class="alerta-tipo">AVISO</span>
+                            <div class="alerta-msg">Beneficiario con múltiples ministerios: Confederación de Málaga......</div>
+                            <div class="alerta-motivo">Recibe de 4 ministerios diferentes</div>
+                            <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
+                                Impacto: MEDIO
+                            </div>
+                        </div>
+                        
+                        <div class="alerta-item aviso">
+                            <span class="alerta-tipo">AVISO</span>
+                            <div class="alerta-msg">Beneficiario con múltiples ministerios: Confederación de Murcia......</div>
+                            <div class="alerta-motivo">Recibe de 3 ministerios diferentes</div>
+                            <div style="font-size:0.7rem; color: var(--text-light); margin-top:6px;">
+                                Impacto: MEDIO
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
-            </div>
 
-            <!-- Mapa -->
-            <div class="obs-card">
-                <h2 data-icon="📍">Mapa Municipal</h2>
-                <div id="map"></div>
-                <p class="alerta-motivo" style="margin-top: 10px;">
-                    Intensidad de color = volumen de subvenciones
-                </p>
-            </div>
-
-            <!-- Subvenciones -->
-            <div class="obs-card">
-                <h2 data-icon="💰">Subvenciones Recientes</h2>
-                <div id="subvenciones-lista">
-                    <div class="loading"></div>
+                <!-- Mapa -->
+                <div class="obs-card">
+                    <h2>📍 Mapa Municipal</h2>
+                    <div id="map"></div>
+                    <p style="font-size:0.8rem; color:var(--text-light); margin-top:8px;">
+                        Intensidad = volumen de subvenciones
+                    </p>
                 </div>
-            </div>
 
-            <!-- Gasto Público -->
-            <div class="obs-card">
-                <h2 data-icon="💶">Gasto Público</h2>
-                <div id="gasto-lista">
-                    <div class="loading"></div>
+                <!-- Subvenciones recientes -->
+                <div class="obs-card">
+                    <h2>💰 Subvenciones Recientes</h2>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead><tr><th>Beneficiario</th><th>Importe</th><th>Municipio</th></tr></thead>
+                            <tbody>
+                                
+                                <tr>
+                                    <td>Empresa Municip...</td>
+                                    <td>65,096€</td>
+                                    <td>Valladolid</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Diputación de B...</td>
+                                    <td>12,743,269€</td>
+                                    <td>Alicante</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Diputación de M...</td>
+                                    <td>2,372,139€</td>
+                                    <td>Gijón</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Universidad de ...</td>
+                                    <td>113,075€</td>
+                                    <td>Murcia</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Universidad de ...</td>
+                                    <td>313,461€</td>
+                                    <td>Málaga</td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-            <!-- BOE -->
-            <div class="obs-card" style="grid-column: span 2;">
-                <h2 data-icon="📜">BOE Analizado</h2>
-                <div id="boe-lista">
-                    <div class="loading"></div>
+                <!-- Gasto Público -->
+                <div class="obs-card">
+                    <h2>💶 Gasto Público</h2>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead><tr><th>Concepto</th><th>Importe</th><th>Variación</th></tr></thead>
+                            <tbody>
+                                
+                                <tr>
+                                    <td>Sanidad</td>
+                                    <td>12,450,000,000€</td>
+                                    <td style="color: green">+5.2%</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Educación</td>
+                                    <td>8,720,000,000€</td>
+                                    <td style="color: green">+3.1%</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Transportes</td>
+                                    <td>6,540,000,000€</td>
+                                    <td style="color: red">-1.4%</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Defensa</td>
+                                    <td>9,870,000,000€</td>
+                                    <td style="color: green">+7.8%</td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Promesas Políticas -->
-            <div class="obs-card" style="grid-column: span 2;">
-                <h2 data-icon="🗳️">Seguimiento de Promesas</h2>
-                <div id="promesas-lista">
-                    <div class="loading"></div>
+                <!-- BOE -->
+                <div class="obs-card">
+                    <h2>📜 Último BOE</h2>
+                    <div>
+                        
+                        <div style="padding: 8px; background: var(--bg); border-radius: 8px;">
+                            <span class="badge" style="background: #3b82f6;">ADMINISTRATIVO</span>
+                            <div style="margin-top:4px;">Sumario...</div>
+                            <a href="https://www.boe.es/boe/dias/2026/02/19/" target="_blank" style="color:var(--secondary);">Ver en BOE →</a>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <!-- Promesas -->
+                <div class="obs-card">
+                    <h2>🗳️ Promesas</h2>
+                    <div>
+                        
+                        <div style="margin-bottom:8px;">
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>Creación de 500,000 emple...</span>
+                                <span class="badge" style="background:orange">45%</span>
+                            </div>
+                            <div class="progress"><div class="progress-bar" style="width:45%"></div></div>
+                        </div>
+                        
+                        <div style="margin-bottom:8px;">
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>100,000 viviendas pública...</span>
+                                <span class="badge" style="background:orange">12%</span>
+                            </div>
+                            <div class="progress"><div class="progress-bar" style="width:12%"></div></div>
+                        </div>
+                        
+                        <div style="margin-bottom:8px;">
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>Reducción listas de esper...</span>
+                                <span class="badge" style="background:orange">28%</span>
+                            </div>
+                            <div class="progress"><div class="progress-bar" style="width:28%"></div></div>
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="dashboard.js"></script>
-    
-    <!-- Service Worker para PWA -->
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(console.error);
+        // Pull to refresh
+        let startY = 0;
+        const pullIndicator = document.getElementById('pullIndicator');
+        
+        document.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].pageY;
+        }, {passive: true});
+        
+        document.addEventListener('touchmove', (e) => {
+            if (window.scrollY === 0 && e.touches[0].pageY > startY + 50) {
+                pullIndicator.classList.add('show');
+            }
+        }, {passive: true});
+        
+        document.addEventListener('touchend', () => {
+            if (pullIndicator.classList.contains('show')) {
+                location.reload();
+            }
+            pullIndicator.classList.remove('show');
+        });
+
+        // Tabs móvil
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Aquí puedes implementar cambio de contenido si quieres
+            console.log('Tab:', tabName);
         }
+
+        // Botón refresh
+        document.getElementById('refreshBtn')?.addEventListener('click', () => location.reload());
+
+        // Mapa Leaflet
+        var map = L.map('map').setView([40.4168, -3.7038], 6);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        
+        // Cargar GeoJSON
+        fetch('datos/municipios.geojson')
+            .then(r => r.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    style: {
+                        fillColor: '#3b82f6',
+                        fillOpacity: 0.2,
+                        color: '#2563eb',
+                        weight: 1
+                    },
+                    onEachFeature: (feature, layer) => {
+                        const nombre = feature.properties.name;
+                        layer.bindPopup(`<b>${nombre}</b><br>Ver detalles`);
+                    }
+                }).addTo(map);
+            });
     </script>
 </body>
 </html>
