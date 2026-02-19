@@ -1,289 +1,88 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Observatorio de Gasto Municipal</title>
-    <link rel="stylesheet" href="estilo.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Observatorio Público · Gasto Municipal</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilo.css">
+
 </head>
 <body>
-    <div class="container">
-        <h1>¿Tu ayuntamiento gasta bien?</h1>
-        <div class="subtitulo">Introduce el código postal del municipio</div>
-        
-        <div class="input-group">
-            <input type="text" id="codigoPostal" placeholder="28001" maxlength="5" inputmode="numeric">
-            <button id="consultarBtn">Consultar</button>
-        </div>
-        
-        <div class="ejemplos">
-            <button class="ejemplo-btn" data-cp="28001">Madrid</button>
-            <button class="ejemplo-btn" data-cp="08001">Barcelona</button>
-            <button class="ejemplo-btn" data-cp="41001">Sevilla</button>
-            <button class="ejemplo-btn" data-cp="46001">Valencia</button>
-            <button class="ejemplo-btn" data-cp="29001">Málaga</button>
-            <button class="ejemplo-btn" data-cp="15001">A Coruña</button>
-            <button class="ejemplo-btn" data-cp="28942">Fuenlabrada</button>
-        </div>
-        
-        <div class="cargando" id="cargando">
-            <div class="spinner"></div>
-            <div>Analizando datos municipales...</div>
-        </div>
-        
-        <div class="resultado" id="resultado">
-            <div class="municipio" id="municipio"></div>
-            <div class="provincia" id="provincia"></div>
-            
-            <div class="veredicto" id="veredicto"></div>
-            
-            <div class="stats" id="stats"></div>
-            
-            <div class="ia-explicacion" id="iaExplicacion"></div>
-        </div>
-        
-        <div class="error" id="error"></div>
-        
-        <div class="footer">
-            Datos simulados con fines ilustrativos · Basado en patrones de gasto público
-        </div>
+
+<div class="background"></div>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Observatorio Público</h1>
+        <p class="tagline">Transparencia y análisis del gasto municipal en España</p>
     </div>
 
-    <script>
-        // Mapeo real de códigos postales a municipios (los más comunes)
-        const mapaCP = {
-            // Madrid
-            '28001': { municipio: 'Madrid', provincia: 'Madrid' },
-            '28002': { municipio: 'Madrid', provincia: 'Madrid' },
-            '28003': { municipio: 'Madrid', provincia: 'Madrid' },
-            '28004': { municipio: 'Madrid', provincia: 'Madrid' },
-            '28005': { municipio: 'Madrid', provincia: 'Madrid' },
-            '28006': { municipio: 'Madrid', provincia: 'Madrid' },
-            '28007': { municipio: 'Madrid', provincia: 'Madrid' },
-            '28008': { municipio: 'Madrid', provincia: 'Madrid' },
-            '28009': { municipio: 'Madrid', provincia: 'Madrid' },
-            '28010': { municipio: 'Madrid', provincia: 'Madrid' },
-            '28942': { municipio: 'Fuenlabrada', provincia: 'Madrid' }, // Fuenlabrada
-            '28941': { municipio: 'Fuenlabrada', provincia: 'Madrid' },
-            '28940': { municipio: 'Fuenlabrada', provincia: 'Madrid' },
-            '28945': { municipio: 'Humanes de Madrid', provincia: 'Madrid' },
-            // Barcelona
-            '08001': { municipio: 'Barcelona', provincia: 'Barcelona' },
-            '08002': { municipio: 'Barcelona', provincia: 'Barcelona' },
-            '08003': { municipio: 'Barcelona', provincia: 'Barcelona' },
-            '08004': { municipio: 'Barcelona', provincia: 'Barcelona' },
-            '08005': { municipio: 'Barcelona', provincia: 'Barcelona' },
-            '08901': { municipio: 'L\'Hospitalet de Llobregat', provincia: 'Barcelona' },
-            '08902': { municipio: 'L\'Hospitalet de Llobregat', provincia: 'Barcelona' },
-            // Valencia
-            '46001': { municipio: 'Valencia', provincia: 'Valencia' },
-            '46002': { municipio: 'Valencia', provincia: 'Valencia' },
-            '46003': { municipio: 'Valencia', provincia: 'Valencia' },
-            '46004': { municipio: 'Valencia', provincia: 'Valencia' },
-            '46005': { municipio: 'Valencia', provincia: 'Valencia' },
-            // Sevilla
-            '41001': { municipio: 'Sevilla', provincia: 'Sevilla' },
-            '41002': { municipio: 'Sevilla', provincia: 'Sevilla' },
-            '41003': { municipio: 'Sevilla', provincia: 'Sevilla' },
-            '41004': { municipio: 'Sevilla', provincia: 'Sevilla' },
-            // Málaga
-            '29001': { municipio: 'Málaga', provincia: 'Málaga' },
-            '29002': { municipio: 'Málaga', provincia: 'Málaga' },
-            '29003': { municipio: 'Málaga', provincia: 'Málaga' },
-            '29004': { municipio: 'Málaga', provincia: 'Málaga' },
-            // A Coruña
-            '15001': { municipio: 'A Coruña', provincia: 'A Coruña' },
-            '15002': { municipio: 'A Coruña', provincia: 'A Coruña' },
-            '15003': { municipio: 'A Coruña', provincia: 'A Coruña' },
-            '15004': { municipio: 'A Coruña', provincia: 'A Coruña' },
-            // Zaragoza
-            '50001': { municipio: 'Zaragoza', provincia: 'Zaragoza' },
-            '50002': { municipio: 'Zaragoza', provincia: 'Zaragoza' },
-            '50003': { municipio: 'Zaragoza', provincia: 'Zaragoza' },
-            // Bilbao
-            '48001': { municipio: 'Bilbao', provincia: 'Vizcaya' },
-            '48002': { municipio: 'Bilbao', provincia: 'Vizcaya' },
-            '48003': { municipio: 'Bilbao', provincia: 'Vizcaya' },
-            // Murcia
-            '30001': { municipio: 'Murcia', provincia: 'Murcia' },
-            '30002': { municipio: 'Murcia', provincia: 'Murcia' },
-            // Valladolid
-            '47001': { municipio: 'Valladolid', provincia: 'Valladolid' },
-            '47002': { municipio: 'Valladolid', provincia: 'Valladolid' },
-        };
+    <div class="search-box">
+        <input type="text" id="busqueda" placeholder="Introduce código postal o municipio..." autocomplete="off">
+        <div id="sugerencias" class="sugerencias"></div>
+    </div>
 
-        // Para códigos no mapeados, deducir provincia por prefijo (primeros 2 dígitos)
-        const prefijosProvincia = {
-            '01': 'Álava', '02': 'Albacete', '03': 'Alicante', '04': 'Almería', '05': 'Ávila',
-            '06': 'Badajoz', '07': 'Baleares', '08': 'Barcelona', '09': 'Burgos', '10': 'Cáceres',
-            '11': 'Cádiz', '12': 'Castellón', '13': 'Ciudad Real', '14': 'Córdoba', '15': 'A Coruña',
-            '16': 'Cuenca', '17': 'Girona', '18': 'Granada', '19': 'Guadalajara', '20': 'Guipúzcoa',
-            '21': 'Huelva', '22': 'Huesca', '23': 'Jaén', '24': 'León', '25': 'Lleida',
-            '26': 'La Rioja', '27': 'Lugo', '28': 'Madrid', '29': 'Málaga', '30': 'Murcia',
-            '31': 'Navarra', '32': 'Ourense', '33': 'Asturias', '34': 'Palencia', '35': 'Las Palmas',
-            '36': 'Pontevedra', '37': 'Salamanca', '38': 'Santa Cruz de Tenerife', '39': 'Cantabria',
-            '40': 'Segovia', '41': 'Sevilla', '42': 'Soria', '43': 'Tarragona', '44': 'Teruel',
-            '45': 'Toledo', '46': 'Valencia', '47': 'Valladolid', '48': 'Vizcaya', '49': 'Zamora',
-            '50': 'Zaragoza', '51': 'Ceuta', '52': 'Melilla'
-        };
+    <div class="resultado" id="resultado"></div>
 
-        function obtenerDatosPorCP(cp) {
-            // Primero buscamos en el mapa manual
-            if (mapaCP[cp]) {
-                return {
-                    municipio: mapaCP[cp].municipio,
-                    provincia: mapaCP[cp].provincia
-                };
-            }
-            
-            // Si no está, usamos el prefijo para determinar provincia
-            const prefijo = cp.substring(0, 2);
-            const provincia = prefijosProvincia[prefijo] || 'Provincia desconocida';
-            // Generamos un nombre de municipio genérico
-            return {
-                municipio: `Municipio ${cp}`,
-                provincia: provincia
-            };
-        }
+    <div class="footer">
+        Datos simulados con fines ilustrativos · Proyecto Prisma News
+    </div>
 
-        function generarDatosPresupuesto(cp, municipio, provincia) {
-            // Usamos el cp como semilla para generar datos coherentes
-            const semilla = parseInt(cp, 10) || 28001;
-            const hash = (semilla * 9301 + 49297) % 233280; // pequeño algoritmo pseudoaleatorio fijo
-            
-            const gastoBase = 800 + (hash % 600);
-            const mediaNac = 1100;
-            const deudaBase = 400 + (hash % 800);
-            const ingresosBase = 850 + (hash % 450);
-            
-            // Ajustes por provincia (para que no sea completamente aleatorio)
-            let factor = 1.0;
-            if (provincia.includes('Madrid') || provincia.includes('Barcelona')) factor = 1.2;
-            if (provincia.includes('Valencia')) factor = 1.1;
-            
-            return {
-                gasto_per_capita: Math.round(gastoBase * factor),
-                media_nacional: mediaNac,
-                deuda: Math.round(deudaBase * factor),
-                ingresos: Math.round(ingresosBase * factor),
-                educacion: Math.round(180 + (hash % 220) * factor),
-                sanidad: Math.round(230 + (hash % 270) * factor),
-                infraestructuras: Math.round(90 + (hash % 210) * factor),
-                cultura: Math.round(40 + (hash % 160) * factor),
-                transparencia: (3 + (hash % 70) / 10).toFixed(1)
-            };
-        }
+</div>
 
-        function determinarVeredicto(datos) {
-            const ratio = datos.gasto_per_capita / datos.media_nacional;
-            
-            if (datos.deuda > datos.ingresos * 1.4) {
-                return {
-                    texto: '🔴 Alerta por deuda',
-                    clase: 'mal',
-                    explicacion: `La deuda (${datos.deuda}€/hab) supera ampliamente los ingresos (${datos.ingresos}€/hab).`
-                };
-            } else if (datos.deuda > datos.ingresos * 0.9) {
-                return {
-                    texto: '🟡 Deuda elevada',
-                    clase: 'regular',
-                    explicacion: `La deuda (${datos.deuda}€/hab) está cerca de los ingresos anuales.`
-                };
-            } else if (ratio < 0.85) {
-                return {
-                    texto: '✅ Gasto eficiente',
-                    clase: 'bien',
-                    explicacion: `Gasta un ${Math.round((1-ratio)*100)}% menos que la media. Buen control presupuestario.`
-                };
-            } else if (ratio > 1.2) {
-                return {
-                    texto: '⚠️ Gasto elevado',
-                    clase: 'mal',
-                    explicacion: `Gasta un ${Math.round((ratio-1)*100)}% más que la media. Revisar partidas.`
-                };
-            } else {
-                return {
-                    texto: '⚖️ En la media',
-                    clase: 'regular',
-                    explicacion: 'Gasto similar a la media nacional. Sin desviaciones significativas.'
-                };
-            }
-        }
+<script>
 
-        function mostrarResultado(datosGeo, datosPres, veredicto) {
-            document.getElementById('municipio').textContent = datosGeo.municipio;
-            document.getElementById('provincia').textContent = datosGeo.provincia.toUpperCase();
-            document.getElementById('veredicto').textContent = veredicto.texto;
-            document.getElementById('veredicto').className = `veredicto ${veredicto.clase}`;
-            
-            document.getElementById('stats').innerHTML = `
-                <div class="stat-item"><span class="stat-label">Gasto por habitante</span><span class="stat-value">${datosPres.gasto_per_capita}€</span></div>
-                <div class="stat-item"><span class="stat-label">Media nacional</span><span class="stat-value">${datosPres.media_nacional}€</span></div>
-                <div class="stat-item"><span class="stat-label">Diferencia</span><span class="stat-value">${Math.round((datosPres.gasto_per_capita/datosPres.media_nacional-1)*100)}%</span></div>
-                <div class="stat-item"><span class="stat-label">Deuda por habitante</span><span class="stat-value">${datosPres.deuda}€</span></div>
-                <div class="stat-item"><span class="stat-label">Ingresos por habitante</span><span class="stat-value">${datosPres.ingresos}€</span></div>
-            `;
-            
-            document.getElementById('iaExplicacion').innerHTML = `
-                <strong>Análisis de ${datosGeo.municipio} (${datosGeo.provincia})</strong><br><br>
-                • 💰 <strong>Gasto por habitante:</strong> ${datosPres.gasto_per_capita}€ (media nacional: ${datosPres.media_nacional}€)<br>
-                • 💳 <strong>Deuda:</strong> ${datosPres.deuda}€/hab | <strong>Ingresos:</strong> ${datosPres.ingresos}€/hab<br>
-                • 📚 <strong>Educación:</strong> ${datosPres.educacion}€/hab<br>
-                • 🏥 <strong>Sanidad:</strong> ${datosPres.sanidad}€/hab<br>
-                • 🛣️ <strong>Infraestructuras:</strong> ${datosPres.infraestructuras}€/hab<br>
-                • 🎭 <strong>Cultura:</strong> ${datosPres.cultura}€/hab<br>
-                • 🔍 <strong>Índice de transparencia:</strong> ${datosPres.transparencia}/10<br><br>
-                ${veredicto.explicacion}
-            `;
-        }
+// Simulación inicial (luego lo conectamos a JSON real)
+let codigos = [
+    { cp: "28001", municipio: "Madrid", provincia: "Madrid" },
+    { cp: "08001", municipio: "Barcelona", provincia: "Barcelona" },
+    { cp: "41001", municipio: "Sevilla", provincia: "Sevilla" },
+    { cp: "46001", municipio: "Valencia", provincia: "Valencia" },
+    { cp: "29001", municipio: "Málaga", provincia: "Málaga" },
+    { cp: "15001", municipio: "A Coruña", provincia: "A Coruña" },
+    { cp: "28942", municipio: "Fuenlabrada", provincia: "Madrid" }
+];
 
-        // Eventos
-        document.getElementById('consultarBtn').addEventListener('click', consultar);
-        document.querySelectorAll('.ejemplo-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.getElementById('codigoPostal').value = btn.dataset.cp;
-                consultar();
-            });
-        });
-        document.getElementById('codigoPostal').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') consultar();
-        });
+const input = document.getElementById("busqueda");
+const sugerencias = document.getElementById("sugerencias");
 
-        function consultar() {
-            const cp = document.getElementById('codigoPostal').value.trim();
-            
-            if (!/^\d{5}$/.test(cp)) {
-                mostrarError('El código postal debe tener 5 dígitos');
-                return;
-            }
-            
-            document.getElementById('error').style.display = 'none';
-            document.getElementById('cargando').style.display = 'block';
-            document.getElementById('resultado').style.display = 'none';
-            
-            setTimeout(() => {
-                try {
-                    const datosGeo = obtenerDatosPorCP(cp);
-                    const datosPres = generarDatosPresupuesto(cp, datosGeo.municipio, datosGeo.provincia);
-                    const veredicto = determinarVeredicto(datosPres);
-                    
-                    mostrarResultado(datosGeo, datosPres, veredicto);
-                    document.getElementById('resultado').style.display = 'block';
-                } catch (e) {
-                    mostrarError('Error al procesar los datos');
-                } finally {
-                    document.getElementById('cargando').style.display = 'none';
-                }
-            }, 800); // Simulamos latencia
-        }
+input.addEventListener("input", function() {
+    const valor = this.value.toLowerCase();
+    sugerencias.innerHTML = "";
 
-        function mostrarError(msg) {
-            document.getElementById('error').textContent = msg;
-            document.getElementById('error').style.display = 'block';
-            document.getElementById('cargando').style.display = 'none';
-            document.getElementById('resultado').style.display = 'none';
-        }
-    </script>
+    if (valor.length < 2) return;
+
+    const filtrados = codigos.filter(item =>
+        item.cp.includes(valor) ||
+        item.municipio.toLowerCase().includes(valor)
+    );
+
+    filtrados.slice(0, 8).forEach(item => {
+        const div = document.createElement("div");
+        div.classList.add("item-sugerencia");
+        div.textContent = `${item.cp} · ${item.municipio} (${item.provincia})`;
+        div.onclick = () => mostrarResultado(item);
+        sugerencias.appendChild(div);
+    });
+});
+
+function mostrarResultado(item) {
+    sugerencias.innerHTML = "";
+    input.value = `${item.cp} - ${item.municipio}`;
+
+    document.getElementById("resultado").innerHTML = `
+        <div class="card">
+            <h2>${item.municipio}</h2>
+            <span>${item.provincia}</span>
+            <div class="badge">Análisis generado</div>
+        </div>
+    `;
+}
+
+</script>
+
 </body>
 </html>
