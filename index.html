@@ -1,37 +1,114 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Observatorio Público</title>
+    <title>Observatorio de Transparencia Pública</title>
+    <meta name="description" content="Seguimiento de transparencia, subvenciones y gasto público en España">
+    <meta name="theme-color" content="#0f172a">
+    
+    <!-- PWA -->
     <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+    
+    <!-- CSS -->
     <link rel="stylesheet" href="estilo.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <header class="obs-header">
-            <h1>Observatorio de Transparencia</h1>
-            <p>Estado de la Administración: 19/02/2026 08:28</p>
-            <a href="datos/informe_transparencia.pdf" class="btn-pdf" download>📥 Descargar Informe PDF</a>
+            <h1>🏛️ Observatorio de Transparencia Pública</h1>
+            <p>Monitorizando la actividad del sector público español</p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <span class="badge" style="background: #10b981;">Última actualización: 19/02/2026 08:48</span>
+                <a href="datos/informe_transparencia.pdf" class="btn btn-primary" download>
+                    📥 Descargar Informe PDF
+                </a>
+                <button class="btn btn-outline" id="refresh-btn">
+                    🔄 Actualizar
+                </button>
+            </div>
         </header>
+
+        <!-- Estadísticas rápidas -->
+        <div class="obs-card" style="margin-bottom: 20px;" id="estadisticas">
+            <!-- Se llena con JS -->
+        </div>
+
+        <!-- Tabs de navegación -->
+        <div class="tabs">
+            <div class="tab active" data-tab="resumen">📊 Resumen</div>
+            <div class="tab" data-tab="subvenciones">💰 Subvenciones</div>
+            <div class="tab" data-tab="gasto">💶 Gasto Público</div>
+            <div class="tab" data-tab="boe">📜 BOE</div>
+            <div class="tab" data-tab="promesas">🗳️ Promesas</div>
+        </div>
+
         <div class="main-grid">
+            <!-- Alertas -->
             <div class="obs-card">
-                <h2>🚨 Alertas de Riesgo</h2>
-                <div id="alertas-box">Buscando anomalías...</div>
+                <h2 data-icon="🚨">Alertas de Riesgo</h2>
+                <div class="alertas-container" id="alertas-box">
+                    <div class="loading"></div>
+                </div>
             </div>
+
+            <!-- Mapa -->
             <div class="obs-card">
-                <h2>📍 Mapa Municipal (Actividad)</h2>
-                <div id="map" style="height: 350px; border-radius: 8px;"></div>
+                <h2 data-icon="📍">Mapa Municipal</h2>
+                <div id="map"></div>
+                <p class="alerta-motivo" style="margin-top: 10px;">
+                    Intensidad de color = volumen de subvenciones
+                </p>
             </div>
+
+            <!-- Subvenciones -->
+            <div class="obs-card">
+                <h2 data-icon="💰">Subvenciones Recientes</h2>
+                <div id="subvenciones-lista">
+                    <div class="loading"></div>
+                </div>
+            </div>
+
+            <!-- Gasto Público -->
+            <div class="obs-card">
+                <h2 data-icon="💶">Gasto Público</h2>
+                <div id="gasto-lista">
+                    <div class="loading"></div>
+                </div>
+            </div>
+
+            <!-- BOE -->
             <div class="obs-card" style="grid-column: span 2;">
-                <h2>📜 BOE Analizado Automáticamente</h2>
-                <div id="boe-lista"></div>
+                <h2 data-icon="📜">BOE Analizado</h2>
+                <div id="boe-lista">
+                    <div class="loading"></div>
+                </div>
+            </div>
+
+            <!-- Promesas Políticas -->
+            <div class="obs-card" style="grid-column: span 2;">
+                <h2 data-icon="🗳️">Seguimiento de Promesas</h2>
+                <div id="promesas-lista">
+                    <div class="loading"></div>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="dashboard.js"></script>
+    
+    <!-- Service Worker para PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(console.error);
+        }
+    </script>
 </body>
 </html>

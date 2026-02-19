@@ -1,1 +1,173 @@
-[]
+[
+  {
+    "id": "3b526aac",
+    "tipo": "AVISO",
+    "msg": "Aplicación provisional del Acuerdo Internacional entre el Reino de España y la Organización de las Naciones Unidas para la Educación, la Ciencia y la ...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3813",
+    "fecha": "2026-02-19",
+    "impacto": "ALTO"
+  },
+  {
+    "id": "2009fb9b",
+    "tipo": "AVISO",
+    "msg": "Real Decreto 123/2026, de 11 de febrero, por el que se nombra Presidente del Tribunal Superior de Justicia de Illes Balears a don Carlos Gómez Martíne...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3816",
+    "fecha": "2026-02-19",
+    "impacto": "BAJO"
+  },
+  {
+    "id": "a65c111d",
+    "tipo": "AVISO",
+    "msg": "Orden PJC/103/2026, de 9 de febrero, por la que se nombra personal funcionario del Cuerpo de Tramitación Procesal y Administrativa de la Administració...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3818",
+    "fecha": "2026-02-19",
+    "impacto": "MEDIO"
+  },
+  {
+    "id": "a4e86f28",
+    "tipo": "AVISO",
+    "msg": "Orden PJC/104/2026, de 9 de febrero, por la que se otorga destino al personal funcionario del Cuerpo de Tramitación Procesal y Administrativa de la Ad...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3819",
+    "fecha": "2026-02-19",
+    "impacto": "ALTO"
+  },
+  {
+    "id": "8d84bc29",
+    "tipo": "AVISO",
+    "msg": "Orden de 9 de febrero de 2026, del Departamento de Justicia y Derechos Humanos, por la que se otorga destino al personal funcionario del Cuerpo de Tra...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3823",
+    "fecha": "2026-02-19",
+    "impacto": "ALTO"
+  },
+  {
+    "id": "c1b0591c",
+    "tipo": "AVISO",
+    "msg": "Resolución de 9 de febrero de 2026, del Departamento de Justicia y Calidad Democrática, por la que se otorga destino al personal funcionario del Cuerp...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3824",
+    "fecha": "2026-02-19",
+    "impacto": "BAJO"
+  },
+  {
+    "id": "ad5c6368",
+    "tipo": "AVISO",
+    "msg": "Resolución de 9 de febrero de 2026, de la Consejería de Hacienda, Justicia y Asuntos Europeos, por la que se otorga destino al personal funcionario de...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3825",
+    "fecha": "2026-02-19",
+    "impacto": "MEDIO"
+  },
+  {
+    "id": "f4844d88",
+    "tipo": "AVISO",
+    "msg": "Resolución 201/2026, de 9 de febrero, de la Dirección General de Justicia e Interior, de la Consejería de Salud y Políticas Sociales, por la que se ot...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3826",
+    "fecha": "2026-02-19",
+    "impacto": "ALTO"
+  },
+  {
+    "id": "c499dd0d",
+    "tipo": "AVISO",
+    "msg": "Resolución de 9 de febrero de 2026, de la Dirección General de Justicia y Autogobierno, de la Consellería de Justicia, Transparencia y Participación, ...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3827",
+    "fecha": "2026-02-19",
+    "impacto": "BAJO"
+  },
+  {
+    "id": "ae9caa70",
+    "tipo": "AVISO",
+    "msg": "Resolución de 9 de febrero de 2026, de la Dirección General de Justicia, del Departamento de Presidencia, Economía y Justicia, por la que se otorga de...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3828",
+    "fecha": "2026-02-19",
+    "impacto": "MEDIO"
+  },
+  {
+    "id": "35b06d72",
+    "tipo": "AVISO",
+    "msg": "Resolución de 9 de febrero de 2026, de la Dirección General de Relaciones con la Administración de Justicia, de la Consejería de Administraciones Públ...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3829",
+    "fecha": "2026-02-19",
+    "impacto": "ALTO"
+  },
+  {
+    "id": "46852512",
+    "tipo": "AVISO",
+    "msg": "Resolución de 9 de febrero de 2026, de la Dirección General de Justicia, del Departamento de Interior, Función Pública y Justicia, por la que se otorg...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3830",
+    "fecha": "2026-02-19",
+    "impacto": "MEDIO"
+  },
+  {
+    "id": "de6c92c2",
+    "tipo": "AVISO",
+    "msg": "Resolución de 9 de febrero de 2026, de la Dirección General de Recursos Humanos y Relaciones con la Administración de Justicia de la Consejería de Pre...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3831",
+    "fecha": "2026-02-19",
+    "impacto": "MEDIO"
+  },
+  {
+    "id": "42ed1c49",
+    "tipo": "AVISO",
+    "msg": "Resolución de 5 de febrero de 2026, de la Universidad Nacional de Educación a Distancia, por la que se nombra Catedrática de Universidad a doña Inés G...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3836",
+    "fecha": "2026-02-19",
+    "impacto": "MEDIO"
+  },
+  {
+    "id": "3ac8c0d0",
+    "tipo": "AVISO",
+    "msg": "Resolución de 11 de febrero de 2026, de la Secretaría de Estado de Justicia, por la que se convoca la provisión de puesto de trabajo por el sistema de...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3841",
+    "fecha": "2026-02-19",
+    "impacto": "ALTO"
+  },
+  {
+    "id": "f1e6ff0a",
+    "tipo": "AVISO",
+    "msg": "Resolución de 12 de febrero de 2026, de la Secretaría de Estado de Justicia, por la que se convoca la provisión de puesto de trabajo por el sistema de...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3842",
+    "fecha": "2026-02-19",
+    "impacto": "ALTO"
+  },
+  {
+    "id": "c19b2033",
+    "tipo": "AVISO",
+    "msg": "Resolución de 10 de febrero de 2026, de la Subsecretaría, por la que se corrigen errores en la de 27 de noviembre de 2025, por la que se convoca proce...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3843",
+    "fecha": "2026-02-19",
+    "impacto": "ALTO"
+  },
+  {
+    "id": "a235aaa8",
+    "tipo": "AVISO",
+    "msg": "Acuerdo de 27 de enero de 2026, de la Comisión Permanente del Consejo General del Poder Judicial, por el que se publica el Acuerdo de 12 de diciembre ...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3856",
+    "fecha": "2026-02-19",
+    "impacto": "BAJO"
+  },
+  {
+    "id": "0ab17144",
+    "tipo": "AVISO",
+    "msg": "Resolución 1A0/38058/2026, de 29 de enero, del Centro Criptológico Nacional, por la que se certifica la seguridad del producto «Mi eID eSIGN v1.3», so...",
+    "motivo": "Sector estratégico",
+    "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3858",
+    "fecha": "2026-02-19",
+    "impacto": "BAJO"
+  }
+]
