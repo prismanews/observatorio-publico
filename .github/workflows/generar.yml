@@ -1,9 +1,9 @@
-name: Observatorio Público
+name: Observatorio Anticorrupción
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "0 */6 * * *"  # Cada 6 horas
   push:
     branches: [ main ]
 
@@ -15,84 +15,30 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 📥 Checkout
-        uses: actions/checkout@v4
-
-      - name: 🐍 Configurar Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: 'pip'
-
-      - name: 📦 Instalar dependencias
-        run: |
-          python -m pip install --upgrade pip
-          # Si existe requirements.txt, lo usa
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          else
-            # Instalación manual si no hay requirements.txt
-            pip install feedparser reportlab requests pandas beautifulsoup4 lxml numpy matplotlib
-          fi
-
-      - name: 📁 Preparar directorios
-        run: |
-          mkdir -p datos
-          mkdir -p api
-          mkdir -p assets
-          echo "✅ Directorios listos"
-
-      - name: 🚀 Verificar y ejecutar generador
-        run: |
-          # Buscar el archivo Python (ignore espacios y números)
-          PYTHON_FILE=$(ls generar_datos*.py 2>/dev/null | head -n 1)
           
-          if [ -f "$PYTHON_FILE" ]; then
-            echo "✅ Ejecutando: $PYTHON_FILE"
-            python "$PYTHON_FILE"
-          else
-            echo "❌ No se encuentra generar_datos.py"
-            echo "Archivos en directorio:"
-            ls -la
-            exit 1
-          fi
+      - name: Instalar dependencias
+        run: |
+          pip install feedparser reportlab requests beautifulsoup4 lxml
+          
+      - name: Crear directorios
+        run: |
+          mkdir -p datos api/v1 informes
+          
+      - name: Ejecutar generador
+        run: python generar_datos.py
         env:
           TZ: 'Europe/Madrid'
-
-      - name: ✅ Validar archivos generados
-        run: |
-          echo "📊 Verificando archivos generados:"
           
-          # Verificar cada archivo necesario
-          if [ -f datos/boe.json ]; then
-            echo "✅ BOE: $(jq length datos/boe.json 2>/dev/null || echo '0') documentos"
-          else
-            echo "⚠️ datos/boe.json no encontrado"
-          fi
-          
-          if [ -f datos/alertas.json ]; then
-            echo "✅ Alertas: $(jq length datos/alertas.json 2>/dev/null || echo '0')"
-          else
-            echo "⚠️ datos/alertas.json no encontrado"
-          fi
-          
-          if [ -f index.html ]; then
-            echo "✅ index.html generado"
-          else
-            echo "⚠️ index.html no encontrado"
-          fi
-
-      - name: 💾 Commit automático
+      - name: Commit automático
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          
           git add .
-          
-          if git diff --staged --quiet; then
-            echo "📭 Sin cambios para commit"
-          else
-            git commit -m "🤖 Actualización automática $(date +'%d/%m/%Y')"
-            git push
-            echo "✅ Cambios subidos"
-          fi
+          git diff --quiet && git diff --staged --quiet || git commit -m "🤖 Actualización $(date +'%d/%m/%Y %H:%M')"
+          git push
