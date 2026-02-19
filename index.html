@@ -234,7 +234,6 @@
     <script>
         document.getElementById('consultarBtn').addEventListener('click', consultar);
         
-        // Botones de ejemplo
         document.querySelectorAll('.ejemplo-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.getElementById('codigoPostal').value = btn.dataset.cp;
@@ -242,7 +241,6 @@
             });
         });
         
-        // Enter en el input
         document.getElementById('codigoPostal').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') consultar();
         });
@@ -255,62 +253,53 @@
                 return;
             }
             
-            // Mostrar carga
             document.getElementById('cargando').style.display = 'block';
             document.getElementById('resultado').style.display = 'none';
             document.getElementById('error').style.display = 'none';
             
             try {
-                // PASO 1: Obtener municipio desde el código postal
-                const respuestaGeo = await fetch(`https://datos.gob.es/apidata/nti-concept/representation/identifier/elp-codigo-postal-${cp}`);
-                const datosGeo = await respuestaGeo.json();
+                // Simular tiempo de carga (para que se vea el "cargando")
+                await new Promise(r => setTimeout(r, 1500));
                 
-                // Simular respuesta (en producción sería una API real)
-                await new Promise(r => setTimeout(r, 1500)); // Simular latencia
+                // Datos simulados para cualquier código postal
+                const provincias = [
+                    'Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Zaragoza', 
+                    'Málaga', 'Murcia', 'Palma', 'Bilbao', 'Alicante'
+                ];
                 
-                // Datos simulados (en producción vendrían de una API real)
-                const municipios = {
-                    '28001': { nombre: 'Madrid', provincia: 'Madrid', gasto_per_capita: 1245, media_nacional: 1100, deuda: 850, ingresos: 1350, educacion: 320, sanidad: 410, infraestructuras: 280, cultura: 180, transparencia: 7.5 },
-                    '08001': { nombre: 'Barcelona', provincia: 'Barcelona', gasto_per_capita: 1380, media_nacional: 1100, deuda: 920, ingresos: 1480, educacion: 350, sanidad: 440, infraestructuras: 310, cultura: 210, transparencia: 8.2 },
-                    '41001': { nombre: 'Sevilla', provincia: 'Sevilla', gasto_per_capita: 890, media_nacional: 1100, deuda: 1250, ingresos: 980, educacion: 240, sanidad: 310, infraestructuras: 170, cultura: 140, transparencia: 5.3 },
-                    '46001': { nombre: 'Valencia', provincia: 'Valencia', gasto_per_capita: 1050, media_nacional: 1100, deuda: 1450, ingresos: 1150, educacion: 280, sanidad: 360, infraestructuras: 220, cultura: 160, transparencia: 6.1 },
-                    '29001': { nombre: 'Málaga', provincia: 'Málaga', gasto_per_capita: 970, media_nacional: 1100, deuda: 980, ingresos: 1050, educacion: 260, sanidad: 330, infraestructuras: 190, cultura: 150, transparencia: 6.8 }
+                // Generar datos coherentes basados en el código postal (para que no sean siempre aleatorios)
+                const hash = parseInt(cp) || 28001;
+                const indice = hash % provincias.length;
+                
+                const datos = {
+                    nombre: `Municipio ${cp}`,
+                    provincia: provincias[indice],
+                    gasto_per_capita: 800 + (hash % 600),           // Entre 800 y 1400
+                    media_nacional: 1100,
+                    deuda: 500 + (hash % 800),                       // Entre 500 y 1300
+                    ingresos: 900 + (hash % 400),                    // Entre 900 y 1300
+                    educacion: 200 + (hash % 200),                   // Entre 200 y 400
+                    sanidad: 250 + (hash % 250),                     // Entre 250 y 500
+                    infraestructuras: 100 + (hash % 200),            // Entre 100 y 300
+                    cultura: 50 + (hash % 150),                      // Entre 50 y 200
+                    transparencia: (hash % 10) + (hash % 100) / 100  // Entre 0 y 10
                 };
                 
-                // Si no está en nuestra simulación, generar datos aleatorios realistas
-                let datos = municipios[cp];
-                if (!datos) {
-                    const provincias = ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Málaga', 'Murcia', 'Zaragoza', 'Bilbao', 'Alicante'];
-                    datos = {
-                        nombre: `Municipio ${cp}`,
-                        provincia: provincias[Math.floor(Math.random() * provincias.length)],
-                        gasto_per_capita: Math.floor(Math.random() * 800) + 700,
-                        media_nacional: 1100,
-                        deuda: Math.floor(Math.random() * 1000) + 400,
-                        ingresos: Math.floor(Math.random() * 600) + 800,
-                        educacion: Math.floor(Math.random() * 200) + 150,
-                        sanidad: Math.floor(Math.random() * 250) + 200,
-                        infraestructuras: Math.floor(Math.random() * 150) + 100,
-                        cultura: Math.floor(Math.random() * 100) + 50,
-                        transparencia: Math.random() * 5 + 3
-                    };
-                }
-                
-                // PASO 2: Determinar veredicto
+                // Determinar veredicto
                 let veredicto = '';
                 let claseVeredicto = '';
                 let explicacion = '';
                 
                 const ratioGasto = datos.gasto_per_capita / datos.media_nacional;
                 
-                if (ratioGasto < 0.9) {
+                if (ratioGasto < 0.85) {
                     veredicto = '✅ GASTA BIEN';
                     claseVeredicto = 'bien';
-                    explicacion = `Gasta un ${Math.round((1-ratioGasto)*100)}% menos que la media nacional, pero manteniendo servicios. Eficiencia destacable.`;
+                    explicacion = `Gasta un ${Math.round((1-ratioGasto)*100)}% menos que la media nacional, manteniendo servicios básicos.`;
                 } else if (ratioGasto > 1.2) {
                     veredicto = '⚠️ GASTA MAL';
                     claseVeredicto = 'mal';
-                    explicacion = `Gasta un ${Math.round((ratioGasto-1)*100)}% más que la media nacional. Revisa partidas.`;
+                    explicacion = `Gasta un ${Math.round((ratioGasto-1)*100)}% más que la media nacional. Revisa partidas de personal y eventos.`;
                 } else {
                     veredicto = '🟡 DENTRO DE LO NORMAL';
                     claseVeredicto = 'regular';
@@ -318,23 +307,25 @@
                 }
                 
                 // Ajustar por deuda
-                if (datos.deuda > datos.ingresos * 1.5) {
+                if (datos.deuda > datos.ingresos * 1.3) {
                     veredicto = '🔴 ALERTA POR DEUDA';
                     claseVeredicto = 'mal';
-                    explicacion = `La deuda municipal supera en ${Math.round((datos.deuda/datos.ingresos)*100)}% los ingresos anuales.`;
+                    explicacion = `La deuda municipal (${datos.deuda}€/hab) supera los ingresos anuales (${datos.ingresos}€/hab).`;
                 }
                 
-                // PASO 3: Generar explicación con IA (simulada)
+                // Generar explicación con IA simulada
                 const explicacionIA = `
-                    <strong>📊 Análisis del presupuesto de ${datos.nombre}:</strong><br><br>
-                    • ${datos.educacion}€ por habitante en educación (${datos.educacion > 300 ? 'por encima' : 'por debajo'} de lo recomendado).<br>
-                    • ${datos.sanidad}€ en sanidad (${datos.sanidad > 380 ? 'bien financiada' : 'podría mejorar'}).<br>
-                    • ${datos.infraestructuras}€ en infraestructuras (${datos.infraestructuras > 250 ? 'inversión activa' : 'inversión baja'}).<br>
-                    • Transparencia: ${datos.transparencia}/10 (${datos.transparencia > 7 ? 'buena' : 'mejorable'}).<br><br>
+                    <strong>📊 Análisis del presupuesto de ${datos.nombre} (${datos.provincia}):</strong><br><br>
+                    • 💶 <strong>Gasto por habitante:</strong> ${datos.gasto_per_capita}€ (media nacional: ${datos.media_nacional}€)<br>
+                    • 🏛️ <strong>Deuda municipal:</strong> ${datos.deuda}€ por habitante (${datos.deuda > datos.ingresos ? 'supera los ingresos' : 'controlada'})<br>
+                    • 📚 <strong>Educación:</strong> ${datos.educacion}€/hab (${datos.educacion > 300 ? 'inversión alta' : 'inversión baja'})<br>
+                    • 🏥 <strong>Sanidad:</strong> ${datos.sanidad}€/hab (${datos.sanidad > 350 ? 'bien financiada' : 'podría mejorar'})<br>
+                    • 🛣️ <strong>Infraestructuras:</strong> ${datos.infraestructuras}€/hab<br>
+                    • 🎭 <strong>Cultura:</strong> ${datos.cultura}€/hab<br>
+                    • 🔍 <strong>Transparencia:</strong> ${datos.transparencia.toFixed(1)}/10 (${datos.transparencia > 6 ? 'buena' : 'mejorable'})<br><br>
                     ${explicacion}
                 `;
                 
-                // PASO 4: Mostrar resultados
                 document.getElementById('municipio').textContent = datos.nombre;
                 document.getElementById('provincia').textContent = datos.provincia;
                 document.getElementById('veredicto').textContent = veredicto;
@@ -350,12 +341,11 @@
                 
                 document.getElementById('iaExplicacion').innerHTML = explicacionIA;
                 
-                // Mostrar resultado
                 document.getElementById('resultado').style.display = 'block';
                 
             } catch (error) {
                 console.error(error);
-                mostrarError('No hemos podido obtener los datos. Inténtalo más tarde.');
+                mostrarError('Error inesperado. Inténtalo más tarde.');
             } finally {
                 document.getElementById('cargando').style.display = 'none';
             }
