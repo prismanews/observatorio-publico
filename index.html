@@ -3,264 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>¿MI ALCALDE LA LÍA?</title>
+    <title>Observatorio Municipal</title>
     <style>
-        /* ===== RESET Y FUENTES ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #000000;
+            background: #0b1120;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 16px;
-            background-image: radial-gradient(circle at 30% 30%, #2a2a2a 0%, #0a0a0a 80%);
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Efecto de ruido sutil */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc0IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4wNCIgLz48L3N2Zz4=');
-            pointer-events: none;
-            opacity: 0.4;
-            z-index: 1;
+            padding: 1rem;
+            background-image: radial-gradient(circle at 20% 30%, #1a2639 0%, #0b1120 80%);
         }
 
         .container {
             max-width: 600px;
             width: 100%;
-            background: rgba(18, 18, 18, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 48px;
-            padding: 32px 24px;
-            box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 70, 150, 0.2) inset, 0 0 30px rgba(255, 70, 150, 0.3);
-            position: relative;
-            z-index: 10;
-            transition: transform 0.3s ease;
-        }
-
-        .container:hover {
-            transform: scale(1.01);
+            background: rgba(18, 25, 40, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 2rem;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
         }
 
         h1 {
-            font-size: 2.6rem;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 8px;
-            text-align: center;
-            background: linear-gradient(135deg, #ff6ec4, #7873f5, #3b82f6);
+            font-size: 2.2rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #b3c7ff, #ffffff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             letter-spacing: -0.02em;
-            text-shadow: 0 0 20px rgba(255, 110, 196, 0.5);
         }
 
         .subtitulo {
-            text-align: center;
-            color: #b0b0b0;
-            margin-bottom: 32px;
-            font-size: 1.1rem;
-            font-weight: 400;
-            border-bottom: 1px dashed rgba(255,255,255,0.2);
-            padding-bottom: 20px;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 1rem;
         }
 
         .input-group {
             display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
             flex-wrap: wrap;
         }
 
         input {
             flex: 1;
-            padding: 18px 24px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 60px;
-            font-size: 1.2rem;
-            font-weight: 500;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 3rem;
+            font-size: 1.1rem;
             color: white;
             outline: none;
-            transition: all 0.3s;
+            transition: all 0.2s;
             min-width: 200px;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
 
         input:focus {
-            border-color: #ff6ec4;
-            box-shadow: 0 0 0 4px rgba(255,110,196,0.2), 0 8px 20px rgba(0,0,0,0.5);
-            background: rgba(255,255,255,0.1);
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.07);
         }
 
         input::placeholder {
             color: rgba(255,255,255,0.3);
-            font-weight: 300;
         }
 
         button {
-            padding: 18px 36px;
-            background: linear-gradient(135deg, #ff6ec4, #7873f5);
+            padding: 1rem 2rem;
+            background: #3b82f6;
             color: white;
             border: none;
-            border-radius: 60px;
-            font-size: 1.2rem;
-            font-weight: 700;
+            border-radius: 3rem;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 10px 25px -5px rgba(255,110,196,0.5), 0 0 0 1px rgba(255,255,255,0.2);
+            box-shadow: 0 8px 20px -5px rgba(59,130,246,0.5);
             white-space: nowrap;
-            letter-spacing: -0.01em;
-            text-transform: uppercase;
         }
 
         button:hover {
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: 0 20px 30px -5px #ff6ec4, 0 0 0 2px white;
-        }
-
-        button:active {
-            transform: scale(0.98);
+            background: #2563eb;
+            transform: scale(1.02);
         }
 
         .ejemplos {
             display: flex;
-            gap: 10px;
+            gap: 0.5rem;
             justify-content: center;
-            margin-top: 20px;
+            margin: 1.5rem 0;
             flex-wrap: wrap;
         }
 
         .ejemplo-btn {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            padding: 10px 20px;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #ccc;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            color: #cbd5e1;
             cursor: pointer;
             transition: all 0.2s;
-            backdrop-filter: blur(5px);
         }
 
         .ejemplo-btn:hover {
-            background: rgba(255,110,196,0.2);
-            border-color: #ff6ec4;
+            background: rgba(59,130,246,0.2);
+            border-color: #3b82f6;
             color: white;
-            transform: scale(1.05);
         }
 
         .cargando {
             text-align: center;
-            padding: 50px 20px;
-            color: #ff6ec4;
+            padding: 3rem 1rem;
+            color: #3b82f6;
             display: none;
-            font-size: 1.2rem;
-            font-weight: 500;
+            font-size: 1rem;
         }
 
-        .cargando div:first-child {
-            animation: pulse 1.5s infinite;
+        .spinner {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 1rem;
+            border: 3px solid rgba(59,130,246,0.2);
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s infinite linear;
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         .resultado {
             display: none;
-            margin-top: 30px;
-            animation: fadeInUp 0.5s ease;
+            margin-top: 2rem;
+            animation: fadeIn 0.4s ease;
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .municipio {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 4px;
+            font-size: 1.8rem;
+            font-weight: 700;
             color: white;
-            text-shadow: 0 0 15px rgba(255,255,255,0.5);
+            margin-bottom: 0.2rem;
         }
 
         .provincia {
-            color: #a0a0a0;
-            margin-bottom: 24px;
-            font-size: 1rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
 
         .veredicto {
-            font-size: 2.8rem;
-            font-weight: 900;
+            font-size: 2.2rem;
+            font-weight: 800;
             text-align: center;
-            padding: 30px 20px;
-            border-radius: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            text-transform: uppercase;
-            letter-spacing: -0.02em;
+            padding: 1.8rem 1rem;
+            border-radius: 1.5rem;
+            margin-bottom: 1.5rem;
             line-height: 1.2;
         }
 
         .veredicto.bien {
-            background: linear-gradient(135deg, #00c9a7, #00b4b4);
-            color: #001f1f;
-            text-shadow: 0 2px 10px rgba(0,255,200,0.5);
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         .veredicto.mal {
-            background: linear-gradient(135deg, #ff5e7d, #ff2e63);
-            color: #2a0009;
-            text-shadow: 0 2px 10px rgba(255,0,0,0.5);
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
         .veredicto.regular {
-            background: linear-gradient(135deg, #ffb347, #ff8c42);
-            color: #2a1c00;
-            text-shadow: 0 2px 10px rgba(255,200,0,0.5);
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
         .stats {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 30px;
-            padding: 20px;
-            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
         }
 
         .stat-item {
             display: flex;
             justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            font-size: 1.1rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 1rem;
         }
 
         .stat-item:last-child {
@@ -268,79 +224,71 @@
         }
 
         .stat-label {
-            color: #b0b0b0;
-            font-weight: 500;
+            color: #94a3b8;
         }
 
         .stat-value {
-            font-weight: 700;
+            font-weight: 600;
             color: white;
-            background: rgba(255,255,255,0.1);
-            padding: 4px 12px;
-            border-radius: 40px;
         }
 
         .ia-explicacion {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255,110,196,0.3);
-            border-radius: 30px;
-            padding: 24px;
-            font-size: 1rem;
-            line-height: 1.7;
-            color: #ddd;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 30px rgba(255,110,196,0.1);
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #cbd5e1;
         }
 
         .ia-explicacion strong {
-            color: #ff9f4b;
-            font-weight: 700;
+            color: #90caf9;
         }
 
         .footer {
             text-align: center;
-            color: #505050;
-            font-size: 0.8rem;
-            margin-top: 30px;
-            border-top: 1px dashed rgba(255,255,255,0.1);
-            padding-top: 20px;
+            color: #475569;
+            font-size: 0.75rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 1.5rem;
         }
 
         .error {
-            background: rgba(255, 50, 50, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid #ff3b3b;
-            color: #ffb3b3;
-            padding: 20px;
-            border-radius: 30px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fecaca;
+            padding: 1rem;
+            border-radius: 1rem;
             text-align: center;
-            margin-top: 30px;
+            margin-top: 1.5rem;
             display: none;
-            font-weight: 500;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>¿MI ALCALDE LA LÍA?</h1>
-        <div class="subtitulo">Pon tu código postal y te contamos si se pasa con la pasta</div>
+        <h1>¿Tu alcalde gasta bien?</h1>
+        <div class="subtitulo">Introduce un código postal y analizamos las cuentas públicas</div>
         
         <div class="input-group">
             <input type="text" id="codigoPostal" placeholder="28001" maxlength="5" inputmode="numeric">
-            <button id="consultarBtn">Verificar</button>
+            <button id="consultarBtn">Consultar</button>
         </div>
         
         <div class="ejemplos">
-            <button class="ejemplo-btn" data-cp="28001">MADRID</button>
-            <button class="ejemplo-btn" data-cp="08001">BCN</button>
-            <button class="ejemplo-btn" data-cp="41001">SEVILLA</button>
-            <button class="ejemplo-btn" data-cp="46001">VALENCIA</button>
-            <button class="ejemplo-btn" data-cp="29001">MÁLAGA</button>
+            <button class="ejemplo-btn" data-cp="28001">Madrid</button>
+            <button class="ejemplo-btn" data-cp="08001">Barcelona</button>
+            <button class="ejemplo-btn" data-cp="41001">Sevilla</button>
+            <button class="ejemplo-btn" data-cp="46001">Valencia</button>
+            <button class="ejemplo-btn" data-cp="29001">Málaga</button>
+            <button class="ejemplo-btn" data-cp="15001">A Coruña</button>
         </div>
         
         <div class="cargando" id="cargando">
-            <div>🔍 HACKERMODE ON...</div>
-            <div style="font-size:0.9rem; margin-top:8px;">analizando datos municipales con IA</div>
+            <div class="spinner"></div>
+            <div>Analizando datos municipales...</div>
         </div>
         
         <div class="resultado" id="resultado">
@@ -357,128 +305,165 @@
         <div class="error" id="error"></div>
         
         <div class="footer">
-            datos.gob.es · IA · transparencia ciudadana
+            Fuente: datos.gob.es · Análisis automático con IA
         </div>
     </div>
 
     <script>
-        document.getElementById('consultarBtn').addEventListener('click', consultar);
-        
-        document.querySelectorAll('.ejemplo-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.getElementById('codigoPostal').value = btn.dataset.cp;
-                consultar();
-            });
-        });
-        
-        document.getElementById('codigoPostal').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') consultar();
-        });
-        
-        async function consultar() {
-            const cp = document.getElementById('codigoPostal').value.trim();
+        (function() {
+            const input = document.getElementById('codigoPostal');
+            const btn = document.getElementById('consultarBtn');
+            const ejemplos = document.querySelectorAll('.ejemplo-btn');
             
-            if (!cp || cp.length !== 5 || isNaN(cp)) {
-                mostrarError('❌ Código postal inválido (5 dígitos)');
-                return;
+            function esCPValido(cp) {
+                return /^\d{5}$/.test(cp);
             }
             
-            document.getElementById('cargando').style.display = 'block';
-            document.getElementById('resultado').style.display = 'none';
-            document.getElementById('error').style.display = 'none';
-            
-            try {
-                await new Promise(r => setTimeout(r, 1500));
-                
-                const provincias = [
-                    'Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Zaragoza', 
-                    'Málaga', 'Murcia', 'Palma', 'Bilbao', 'Alicante'
-                ];
-                
-                const hash = parseInt(cp) || 28001;
-                const indice = hash % provincias.length;
-                
-                const datos = {
-                    nombre: `Municipio ${cp}`,
-                    provincia: provincias[indice],
-                    gasto_per_capita: 800 + (hash % 600),
-                    media_nacional: 1100,
-                    deuda: 500 + (hash % 800),
-                    ingresos: 900 + (hash % 400),
-                    educacion: 200 + (hash % 200),
-                    sanidad: 250 + (hash % 250),
-                    infraestructuras: 100 + (hash % 200),
-                    cultura: 50 + (hash % 150),
-                    transparencia: (hash % 10) + (hash % 100) / 100
-                };
-                
-                let veredicto = '';
-                let claseVeredicto = '';
-                let explicacion = '';
-                
-                const ratioGasto = datos.gasto_per_capita / datos.media_nacional;
-                
-                if (ratioGasto < 0.85) {
-                    veredicto = '✅ GASTA BIEN';
-                    claseVeredicto = 'bien';
-                    explicacion = `Se gasta un ${Math.round((1-ratioGasto)*100)}% menos que la media. Ojo, que no baje la calidad.`;
-                } else if (ratioGasto > 1.2) {
-                    veredicto = '⚠️ GASTA MAL';
-                    claseVeredicto = 'mal';
-                    explicacion = `Se pasa un ${Math.round((ratioGasto-1)*100)}% más que la media. ¿Dónde va la pasta?`;
-                } else {
-                    veredicto = '🟡 DENTRO DE LO NORMAL';
-                    claseVeredicto = 'regular';
-                    explicacion = 'Gasto similar a la media nacional. Sin alarmas.';
-                }
-                
-                if (datos.deuda > datos.ingresos * 1.3) {
-                    veredicto = '🔴 ALERTA POR DEUDA';
-                    claseVeredicto = 'mal';
-                    explicacion = `La deuda (${datos.deuda}€/hab) supera los ingresos (${datos.ingresos}€/hab).`;
-                }
-                
-                const explicacionIA = `
-                    <strong>📊 ANÁLISIS RÁPIDO DE ${datos.nombre}</strong><br><br>
-                    • 💸 <strong>Gasto por habitante:</strong> ${datos.gasto_per_capita}€ (media: ${datos.media_nacional}€)<br>
-                    • 🏦 <strong>Deuda:</strong> ${datos.deuda}€/hab (${datos.deuda > datos.ingresos ? '💀 crítica' : '👍 asumible'})<br>
-                    • 📚 <strong>Educación:</strong> ${datos.educacion}€/hab ${datos.educacion > 300 ? '🚀' : '🐢'}<br>
-                    • 🏥 <strong>Sanidad:</strong> ${datos.sanidad}€/hab<br>
-                    • 🛣️ <strong>Infraestructuras:</strong> ${datos.infraestructuras}€/hab<br>
-                    • 🔍 <strong>Transparencia:</strong> ${datos.transparencia.toFixed(1)}/10<br><br>
-                    ${explicacion}
-                `;
-                
-                document.getElementById('municipio').textContent = datos.nombre;
-                document.getElementById('provincia').textContent = datos.provincia;
-                document.getElementById('veredicto').textContent = veredicto;
-                document.getElementById('veredicto').className = `veredicto ${claseVeredicto}`;
-                
-                document.getElementById('stats').innerHTML = `
-                    <div class="stat-item"><span class="stat-label">Gasto por habitante</span><span class="stat-value">${datos.gasto_per_capita}€</span></div>
-                    <div class="stat-item"><span class="stat-label">Media nacional</span><span class="stat-value">${datos.media_nacional}€</span></div>
-                    <div class="stat-item"><span class="stat-label">Diferencia</span><span class="stat-value">${Math.round((datos.gasto_per_capita/datos.media_nacional-1)*100)}%</span></div>
-                    <div class="stat-item"><span class="stat-label">Deuda</span><span class="stat-value">${datos.deuda}€/hab</span></div>
-                    <div class="stat-item"><span class="stat-label">Ingresos</span><span class="stat-value">${datos.ingresos}€/hab</span></div>
-                `;
-                
-                document.getElementById('iaExplicacion').innerHTML = explicacionIA;
-                
-                document.getElementById('resultado').style.display = 'block';
-                
-            } catch (error) {
-                mostrarError('Error de conexión. Inténtalo de nuevo.');
-            } finally {
+            function mostrarError(mensaje) {
+                document.getElementById('error').textContent = mensaje;
+                document.getElementById('error').style.display = 'block';
                 document.getElementById('cargando').style.display = 'none';
+                document.getElementById('resultado').style.display = 'none';
             }
-        }
-        
-        function mostrarError(msg) {
-            document.getElementById('error').textContent = msg;
-            document.getElementById('error').style.display = 'block';
-            document.getElementById('cargando').style.display = 'none';
-            document.getElementById('resultado').style.display = 'none';
-        }
+            
+            async function consultar() {
+                const cp = input.value.trim();
+                
+                if (!esCPValido(cp)) {
+                    mostrarError('Código postal inválido (debe tener 5 dígitos)');
+                    return;
+                }
+                
+                document.getElementById('error').style.display = 'none';
+                document.getElementById('cargando').style.display = 'block';
+                document.getElementById('resultado').style.display = 'none';
+                
+                try {
+                    // Simulamos una pequeña latencia (como si consultáramos una API)
+                    await new Promise(resolve => setTimeout(resolve, 1200));
+                    
+                    // Lista de provincias reales
+                    const provincias = [
+                        'Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Zaragoza',
+                        'Málaga', 'Murcia', 'Palma', 'Las Palmas', 'Bilbao',
+                        'Alicante', 'Córdoba', 'Valladolid', 'Vigo', 'Gijón',
+                        'Granada', 'Tenerife', 'Badajoz', 'Oviedo', 'Pamplona'
+                    ];
+                    
+                    // Usamos el CP como semilla para generar datos coherentes (siempre los mismos para el mismo CP)
+                    const semilla = parseInt(cp, 10) || 28001;
+                    const indiceProv = semilla % provincias.length;
+                    
+                    // Generar nombre de municipio realista basado en el CP (simulamos)
+                    const nombresMunicipios = [
+                        'Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Zaragoza',
+                        'Málaga', 'Murcia', 'Palma', 'Las Palmas', 'Bilbao',
+                        'Alicante', 'Córdoba', 'Valladolid', 'Vigo', 'Gijón',
+                        'Granada', 'Santa Cruz', 'Badajoz', 'Oviedo', 'Pamplona'
+                    ];
+                    const nombreMunicipio = nombresMunicipios[indiceProv] + ' (zona ' + cp + ')';
+                    
+                    // Generar datos presupuestarios simulados pero coherentes
+                    const gastoBase = 800 + (semilla % 600);
+                    const mediaNac = 1100;
+                    const deudaBase = 400 + (semilla % 800);
+                    const ingresosBase = 850 + (semilla % 450);
+                    
+                    const datos = {
+                        nombre: nombreMunicipio,
+                        provincia: provincias[indiceProv],
+                        gasto_per_capita: gastoBase,
+                        media_nacional: mediaNac,
+                        deuda: deudaBase,
+                        ingresos: ingresosBase,
+                        educacion: 180 + (semilla % 220),
+                        sanidad: 230 + (semilla % 270),
+                        infraestructuras: 90 + (semilla % 210),
+                        cultura: 40 + (semilla % 160),
+                        transparencia: 3 + (semilla % 70) / 10
+                    };
+                    
+                    // Determinar veredicto
+                    let veredicto = '';
+                    let claseVeredicto = '';
+                    let explicacion = '';
+                    
+                    const ratioGasto = datos.gasto_per_capita / datos.media_nacional;
+                    
+                    if (ratioGasto < 0.85) {
+                        veredicto = '✅ Gasto eficiente';
+                        claseVeredicto = 'bien';
+                        explicacion = `Gasta un ${Math.round((1-ratioGasto)*100)}% menos que la media. Bien por la contención, pero revisa servicios básicos.`;
+                    } else if (ratioGasto > 1.2) {
+                        veredicto = '⚠️ Gasto elevado';
+                        claseVeredicto = 'mal';
+                        explicacion = `Gasta un ${Math.round((ratioGasto-1)*100)}% más que la media. ¿En qué se va el dinero?`;
+                    } else {
+                        veredicto = '⚖️ En la media';
+                        claseVeredicto = 'regular';
+                        explicacion = 'Gasto similar a la media nacional. Sin desviaciones significativas.';
+                    }
+                    
+                    // Ajustar por deuda
+                    if (datos.deuda > datos.ingresos * 1.4) {
+                        veredicto = '🔴 Deuda muy alta';
+                        claseVeredicto = 'mal';
+                        explicacion = `La deuda (${datos.deuda}€/hab) supera con creces los ingresos (${datos.ingresos}€/hab).`;
+                    } else if (datos.deuda > datos.ingresos * 0.9) {
+                        veredicto = '🟡 Deuda preocupante';
+                        claseVeredicto = 'regular';
+                        explicacion = `La deuda (${datos.deuda}€/hab) está cerca de los ingresos anuales.`;
+                    }
+                    
+                    const explicacionIA = `
+                        <strong>Análisis de ${datos.nombre} (${datos.provincia})</strong><br><br>
+                        • 💰 <strong>Gasto por habitante:</strong> ${datos.gasto_per_capita}€ (media nacional: ${datos.media_nacional}€)<br>
+                        • 💳 <strong>Deuda:</strong> ${datos.deuda}€/hab | <strong>Ingresos:</strong> ${datos.ingresos}€/hab<br>
+                        • 📚 <strong>Educación:</strong> ${datos.educacion}€/hab ${datos.educacion > 300 ? '📈' : '📉'}<br>
+                        • 🏥 <strong>Sanidad:</strong> ${datos.sanidad}€/hab<br>
+                        • 🛣️ <strong>Infraestructuras:</strong> ${datos.infraestructuras}€/hab<br>
+                        • 🔍 <strong>Índice de transparencia:</strong> ${datos.transparencia.toFixed(1)}/10<br><br>
+                        ${explicacion}
+                    `;
+                    
+                    document.getElementById('municipio').textContent = datos.nombre;
+                    document.getElementById('provincia').textContent = datos.provincia;
+                    document.getElementById('veredicto').textContent = veredicto;
+                    document.getElementById('veredicto').className = `veredicto ${claseVeredicto}`;
+                    
+                    document.getElementById('stats').innerHTML = `
+                        <div class="stat-item"><span class="stat-label">Gasto por habitante</span><span class="stat-value">${datos.gasto_per_capita}€</span></div>
+                        <div class="stat-item"><span class="stat-label">Media nacional</span><span class="stat-value">${datos.media_nacional}€</span></div>
+                        <div class="stat-item"><span class="stat-label">Diferencia</span><span class="stat-value">${Math.round((datos.gasto_per_capita/datos.media_nacional-1)*100)}%</span></div>
+                        <div class="stat-item"><span class="stat-label">Deuda por habitante</span><span class="stat-value">${datos.deuda}€</span></div>
+                        <div class="stat-item"><span class="stat-label">Ingresos por habitante</span><span class="stat-value">${datos.ingresos}€</span></div>
+                    `;
+                    
+                    document.getElementById('iaExplicacion').innerHTML = explicacionIA;
+                    
+                    document.getElementById('resultado').style.display = 'block';
+                    
+                } catch (error) {
+                    console.error(error);
+                    mostrarError('Error al procesar la solicitud. Inténtalo de nuevo.');
+                } finally {
+                    document.getElementById('cargando').style.display = 'none';
+                }
+            }
+            
+            btn.addEventListener('click', consultar);
+            
+            ejemplos.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    input.value = btn.dataset.cp;
+                    consultar();
+                });
+            });
+            
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') consultar();
+            });
+        })();
     </script>
 </body>
 </html>
