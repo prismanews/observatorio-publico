@@ -1,162 +1,53 @@
-/* ==========================================================================
-   VARIABLES Y CONFIGURACIÓN
-   ========================================================================== */
 :root {
   --primary: #0b132b;
   --secondary: #1c2541;
   --accent: #5bc0be;
-  --bg-body: #f0f2f5;
+  --bg-body: #f4f6f9;
   --white: #ffffff;
-  --error: #e74c3c;
-  --text-muted: #666;
   --radius: 12px;
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow: 0 6px 20px rgba(0,0,0,0.08);
 }
 
-/* ==========================================================================
-   ESTILOS BASE
-   ========================================================================== */
 body {
-  background-color: var(--bg-body);
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg-body);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   margin: 0;
   padding: 20px;
-  line-height: 1.6;
   color: var(--primary);
 }
 
 .container {
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: 1000px;
+  margin: auto;
 }
 
-/* ==========================================================================
-   CABECERA (HEADER)
-   ========================================================================== */
 .obs-header {
-  background: var(--primary);
-  color: var(--white);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
   padding: 40px 20px;
   border-radius: var(--radius) var(--radius) 0 0;
   text-align: center;
   box-shadow: var(--shadow);
 }
 
-.obs-header__title {
-  margin: 0;
-  font-size: 1.8rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-.obs-header__sync {
-  font-size: 0.85rem;
-  opacity: 0.7;
-  margin-top: 10px;
-  display: block;
-}
-
-/* ==========================================================================
-   TARJETA PRINCIPAL (CARD)
-   ========================================================================== */
 .obs-card {
-  background: var(--white);
+  background: white;
   border-radius: 0 0 var(--radius) var(--radius);
-  padding: 20px;
+  padding: 30px;
   box-shadow: var(--shadow);
 }
 
-/* Estadísticas rápidas */
 .obs-stats {
   display: flex;
-  gap: 15px;
+  gap: 20px;
+  flex-wrap: wrap;
   margin-bottom: 30px;
-  padding: 0 10px;
 }
 
 .obs-stats__item {
   flex: 1;
-  background: #f8f9fa;
+  min-width: 200px;
+  background: #fafafa;
   padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  border: 1px solid #eee;
-}
-
-.obs-stats__label {
-  display: block;
-  font-size: 0.75rem;
-  font-weight: bold;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  margin-bottom: 5px;
-}
-
-.obs-stats__value {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--secondary);
-}
-
-/* ==========================================================================
-   VISUALIZACIÓN Y ALERTAS
-   ========================================================================== */
-.obs-content {
-  padding: 20px;
-}
-
-.obs-content__title {
-  font-size: 1.2rem;
-  border-bottom: 2px solid var(--accent);
-  padding-bottom: 8px;
-  margin-bottom: 20px;
-}
-
-.obs-alert {
-  background: #fff5f5;
-  color: var(--error);
-  padding: 15px;
-  border-left: 5px solid var(--error);
-  border-radius: 4px;
-  margin: 20px 0;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-/* ==========================================================================
-   ACCIONES Y BOTONES
-   ========================================================================== */
-.obs-actions {
-  padding: 0 20px 20px;
-}
-
-.btn {
-  display: block;
-  width: 100%;
-  padding: 15px;
-  text-align: center;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  box-sizing: border-box;
-}
-
-.btn--primary {
-  background: var(--primary);
-  color: var(--white);
-}
-
-.btn--primary:hover {
-  background: var(--secondary);
-  transform: translateY(-2px);
-}
-
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
-@media (max-width: 600px) {
-  .obs-stats {
-    flex-direction: column;
-  }
-}
+  border-radius: 10px;
+  text
