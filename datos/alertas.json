@@ -6,7 +6,7 @@
     "motivo": "Sector estratégico",
     "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3813",
     "fecha": "2026-02-19",
-    "impacto": "BAJO"
+    "impacto": "ALTO"
   },
   {
     "id": "2009fb9b",
@@ -15,7 +15,7 @@
     "motivo": "Sector estratégico",
     "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3816",
     "fecha": "2026-02-19",
-    "impacto": "MEDIO"
+    "impacto": "ALTO"
   },
   {
     "id": "a65c111d",
@@ -24,7 +24,7 @@
     "motivo": "Sector estratégico",
     "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3818",
     "fecha": "2026-02-19",
-    "impacto": "BAJO"
+    "impacto": "MEDIO"
   },
   {
     "id": "a4e86f28",
@@ -69,7 +69,7 @@
     "motivo": "Sector estratégico",
     "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3826",
     "fecha": "2026-02-19",
-    "impacto": "BAJO"
+    "impacto": "MEDIO"
   },
   {
     "id": "c499dd0d",
@@ -96,7 +96,7 @@
     "motivo": "Sector estratégico",
     "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3829",
     "fecha": "2026-02-19",
-    "impacto": "MEDIO"
+    "impacto": "ALTO"
   },
   {
     "id": "46852512",
@@ -105,7 +105,7 @@
     "motivo": "Sector estratégico",
     "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3830",
     "fecha": "2026-02-19",
-    "impacto": "MEDIO"
+    "impacto": "BAJO"
   },
   {
     "id": "de6c92c2",
@@ -123,7 +123,7 @@
     "motivo": "Sector estratégico",
     "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3836",
     "fecha": "2026-02-19",
-    "impacto": "ALTO"
+    "impacto": "BAJO"
   },
   {
     "id": "3ac8c0d0",
@@ -132,7 +132,7 @@
     "motivo": "Sector estratégico",
     "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3841",
     "fecha": "2026-02-19",
-    "impacto": "BAJO"
+    "impacto": "ALTO"
   },
   {
     "id": "f1e6ff0a",
@@ -141,7 +141,7 @@
     "motivo": "Sector estratégico",
     "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3842",
     "fecha": "2026-02-19",
-    "impacto": "ALTO"
+    "impacto": "MEDIO"
   },
   {
     "id": "c19b2033",
@@ -168,6 +168,6 @@
     "motivo": "Sector estratégico",
     "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3858",
     "fecha": "2026-02-19",
-    "impacto": "MEDIO"
+    "impacto": "ALTO"
   }
 ]

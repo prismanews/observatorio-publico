@@ -3,80 +3,80 @@
     "id": "499a88f1",
     "promesa": "Creación de 500,000 empleos",
     "partido": "SUMAR",
-    "fecha": "05/10/2025",
-    "cumplimiento": 18,
+    "fecha": "21/08/2025",
+    "cumplimiento": 36,
     "estado": "En progreso",
-    "inversion": 5197790,
-    "beneficiarios": 317201
+    "inversion": 18598780,
+    "beneficiarios": 424394
   },
   {
     "id": "d0c59337",
     "promesa": "Construcción de viviendas públicas",
-    "partido": "PSOE",
-    "fecha": "25/11/2023",
-    "cumplimiento": 43,
+    "partido": "JUNTS",
+    "fecha": "20/08/2024",
+    "cumplimiento": 29,
     "estado": "En progreso",
-    "inversion": 27685650,
-    "beneficiarios": 740177
+    "inversion": 42261320,
+    "beneficiarios": 252572
   },
   {
     "id": "ba98ab39",
     "promesa": "Mejora de la sanidad pública",
-    "partido": "PSOE",
-    "fecha": "04/02/2024",
-    "cumplimiento": 2,
+    "partido": "JUNTS",
+    "fecha": "28/05/2023",
+    "cumplimiento": 35,
     "estado": "En progreso",
-    "inversion": 2361590,
-    "beneficiarios": 699325
+    "inversion": 27125560,
+    "beneficiarios": 761293
   },
   {
     "id": "010609f6",
     "promesa": "Reducción de impuestos",
-    "partido": "VOX",
-    "fecha": "10/01/2025",
-    "cumplimiento": 55,
+    "partido": "JUNTS",
+    "fecha": "06/04/2024",
+    "cumplimiento": 16,
     "estado": "En progreso",
-    "inversion": 32172470,
-    "beneficiarios": 982246
+    "inversion": 16833030,
+    "beneficiarios": 937080
   },
   {
     "id": "9b5c8e80",
     "promesa": "Inversión en energías renovables",
-    "partido": "PP",
-    "fecha": "03/01/2026",
-    "cumplimiento": 27,
+    "partido": "VOX",
+    "fecha": "28/07/2025",
+    "cumplimiento": 43,
     "estado": "En progreso",
-    "inversion": 1596540,
-    "beneficiarios": 276784
+    "inversion": 45555810,
+    "beneficiarios": 233851
   },
   {
     "id": "a24be1c0",
     "promesa": "Aumento de becas educativas",
-    "partido": "JUNTS",
-    "fecha": "24/07/2024",
-    "cumplimiento": 65,
+    "partido": "ERC",
+    "fecha": "23/11/2025",
+    "cumplimiento": 63,
     "estado": "En progreso",
-    "inversion": 18166810,
-    "beneficiarios": 986490
+    "inversion": 44702010,
+    "beneficiarios": 494411
   },
   {
     "id": "d10f612f",
     "promesa": "Modernización de infraestructuras",
-    "partido": "PP",
-    "fecha": "13/08/2025",
-    "cumplimiento": 4,
+    "partido": "ERC",
+    "fecha": "10/03/2024",
+    "cumplimiento": 39,
     "estado": "En progreso",
-    "inversion": 22755640,
-    "beneficiarios": 227110
+    "inversion": 10757840,
+    "beneficiarios": 684436
   },
   {
     "id": "9883894b",
     "promesa": "Lucha contra la corrupción",
     "partido": "VOX",
-    "fecha": "09/10/2024",
-    "cumplimiento": 47,
-    "estado": "En progreso",
-    "inversion": 18617830,
-    "beneficiarios": 611858
+    "fecha": "11/07/2025",
+    "cumplimiento": 100,
+    "estado": "Completada",
+    "inversion": 30100490,
+    "beneficiarios": 202642
   }
 ]
