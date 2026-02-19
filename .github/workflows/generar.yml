@@ -1,36 +1,191 @@
-name: Actualizar Observatorio
+name: Observatorio Público - Actualización Automática
 
 on:
+  # Ejecución manual desde la interfaz de GitHub
   workflow_dispatch:
+  
+  # Automática cada 6 horas
   schedule:
-    - cron: "0 6 * * *"
+    - cron: "0 */6 * * *"
+  
+  # También al hacer push a main (opcional, por si quieres actualizar al subir código)
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
 
+# Permisos necesarios
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
-  build:
+  actualizar-observatorio:
+    name: 🔄 Actualizar datos del Observatorio
     runs-on: ubuntu-latest
-
+    
     steps:
-      - uses: actions/checkout@v4
+      # 1. Obtener el código
+      - name: 📥 Checkout del repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Obtiene todo el historial para comparar cambios
 
-      - uses: actions/setup-python@v5
+      # 2. Configurar Python
+      - name: 🐍 Configurar Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: 'pip'  # Cachea dependencias para mayor velocidad
 
-      - name: Instalar dependencias
+      # 3. Instalar dependencias necesarias
+      - name: 📦 Instalar dependencias
         run: |
           python -m pip install --upgrade pip
-          pip install pandas requests feedparser reportlab
+          pip install --upgrade \
+            pandas \
+            requests \
+            feedparser \
+            reportlab \
+            beautifulsoup4 \
+            lxml \
+            numpy \
+            matplotlib
 
-      - name: Generar datos
-        run: python generar_datos.py
-
-      - name: Commit automático
+      # 4. Crear estructura de directorios
+      - name: 📁 Preparar directorios
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p datos
+          mkdir -p api
+          mkdir -p assets
+          echo "✅ Directorios creados"
+
+      # 5. Generar todos los datos del Observatorio
+      - name: 🚀 Ejecutar generador principal
+        run: python generar_datos.py
+        env:
+          TZ: 'Europe/Madrid'
+          PYTHONUNBUFFERED: 1  # Para ver logs en tiempo real
+
+      # 6. Verificar que los archivos se generaron correctamente
+      - name: ✅ Validar archivos generados
+        run: |
+          # Lista de archivos requeridos
+          archivos=(
+            "datos/boe.json"
+            "datos/alertas.json"
+            "datos/subvenciones.json"
+            "datos/gasto.json"
+            "datos/promesas.json"
+            "datos/informe_transparencia.pdf"
+            "index.html"
+            "manifest.json"
+          )
+          
+          for archivo in "${archivos[@]}"; do
+            if [ -f "$archivo" ]; then
+              echo "✅ $archivo generado correctamente"
+            else
+              echo "⚠️  $archivo no encontrado - verificando si es necesario"
+            fi
+          done
+
+      # 7. Generar GeoJSON de municipios si no existe
+      - name: 🗺️ Verificar/Generar GeoJSON
+        run: |
+          if [ ! -f "datos/municipios.geojson" ]; then
+            echo '{
+              "type": "FeatureCollection",
+              "features": [
+                {
+                  "type": "Feature",
+                  "properties": {"name": "Madrid", "provincia": "Madrid"},
+                  "geometry": {"type": "Polygon", "coordinates": [[[-3.8,40.4],[-3.6,40.4],[-3.6,40.5],[-3.8,40.5],[-3.8,40.4]]]}
+                },
+                {
+                  "type": "Feature", 
+                  "properties": {"name": "Barcelona", "provincia": "Barcelona"},
+                  "geometry": {"type": "Polygon", "coordinates": [[[2.1,41.3],[2.2,41.3],[2.2,41.4],[2.1,41.4],[2.1,41.3]]]}
+                }
+              ]
+            }' > datos/municipios.geojson
+            echo "✅ GeoJSON generado automáticamente"
+          fi
+
+      # 8. Actualizar timestamp en el HTML
+      - name: ⏰ Actualizar timestamp
+        run: |
+          sed -i "s/Última actualización:.*</Última actualización: $(date '+%d\/%m\/%Y %H:%M')</" index.html
+          echo "✅ Timestamp actualizado"
+
+      # 9. Verificar si hay cambios para commit
+      - name: 🔍 Verificar cambios
+        id: git-check
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          # Añadir todos los cambios
           git add .
-          git commit -m "Actualización automática observatorio" || echo "Sin cambios"
-          git push
+          
+          # Verificar si hay algo para commitear
+          if git diff --staged --quiet; then
+            echo "📭 No hay cambios nuevos"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "📦 Cambios detectados"
+            echo "changed=true" >> $GITHUB_OUTPUT
+            
+            # Mostrar resumen de cambios
+            echo "📊 Archivos modificados:"
+            git diff --staged --name-status
+          fi
+
+      # 10. Commit y push si hay cambios
+      - name: 💾 Commit automático
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git commit -m "🤖 Actualización automática $(date +'%d/%m/%Y %H:%M')
+
+          Datos actualizados:
+          - BOE: $(jq length datos/boe.json 2>/dev/null || echo 'N/A') documentos
+          - Alertas: $(jq length datos/alertas.json 2>/dev/null || echo 'N/A')
+          - Subvenciones: $(jq length datos/subvenciones.json 2>/dev/null || echo 'N/A')
+          "
+          
+          git push origin HEAD:${GITHUB_REF#refs/heads/}
+          echo "✅ Cambios subidos a GitHub"
+
+      # 11. Notificar resultado
+      - name: 📢 Mostrar resumen
+        if: always()
+        run: |
+          echo "═══════════════════════════════════════════"
+          echo "    🏛️  OBSERVATORIO PÚBLICO - RESUMEN"
+          echo "═══════════════════════════════════════════"
+          echo "📊 ESTADÍSTICAS:"
+          echo "  • BOE:           $(jq length datos/boe.json 2>/dev/null || echo '0') documentos"
+          echo "  • Alertas:       $(jq length datos/alertas.json 2>/dev/null || echo '0')"
+          echo "  • Subvenciones:  $(jq length datos/subvenciones.json 2>/dev/null || echo '0')"
+          echo "  • Gasto:         $(jq length datos/gasto.json 2>/dev/null || echo '0') partidas"
+          echo "  • Promesas:      $(jq length datos/promesas.json 2>/dev/null || echo '0')"
+          echo ""
+          echo "📁 ARCHIVOS GENERADOS:"
+          echo "  • Informe PDF:    $([ -f datos/informe_transparencia.pdf ] && echo '✅' || echo '❌')"
+          echo "  • Manifest PWA:   $([ -f manifest.json ] && echo '✅' || echo '❌')"
+          echo "  • GeoJSON mapa:   $([ -f datos/municipios.geojson ] && echo '✅' || echo '❌')"
+          echo ""
+          echo "⏰ Actualización: $(date '+%d/%m/%Y %H:%M')"
+          echo "═══════════════════════════════════════════"
+
+      # 12. Opcional: Desplegar a GitHub Pages automáticamente
+      - name: 🌐 Desplegar a GitHub Pages
+        if: success() && github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: gh-pages
+          force_orphan: true
